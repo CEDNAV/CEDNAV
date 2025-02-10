@@ -1,0 +1,543 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.wrap {
+    margin: auto;
+    width: 90%;
+    max-width: 1900px;
+}
+
+.wrap p {
+    font-size: 18px;
+}
+
+header {
+    width: 100%;
+    position: fixed;
+}
+
+.header-top {
+    width: 100%;
+    max-width: 1800px;
+	position: absolute;
+}
+
+.header-top h1{
+
+    font-size: 60px;
+    color:white;
+}
+
+
+.index-top {
+    width: 100%;
+    max-width: 1800px;
+	position: absolute;
+}
+
+header nav ul li span {
+    margin-right: 10px;
+}
+
+header nav ul li a:hover {
+    background: #273642;
+}
+
+header nav ul li a {
+    color: #EAE4E5;
+    padding: 20px;
+    display: block;
+    text-decoration: none;
+    font-family: "Anonymous Pro";
+}
+
+header nav ul li {
+    float: right;
+}
+
+header nav ul img{
+    padding: 0;
+    float: right;
+    width: 50px;
+    height: 50px;
+    margin: auto;
+    position: relative;
+}
+
+header nav ul {
+    overflow: hidden;
+    list-style: none;
+}
+
+header nav {
+    background-color: rgba(39, 73, 88, 0.9);
+    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.22);
+    position: relative;
+}
+
+/* Estilo para el contenedor */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-left: 20%;
+}
+
+/* Estilo del botón */
+.dropdown-button {
+    background-color: #007BFF;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-button:hover {
+    background-color: #0056b3;
+}
+
+
+.menu_btn a, .menu_btn {
+    display: none;
+
+}
+
+.logo img {
+    width: 10%;
+    height: auto;
+    margin-top: 5px;
+    margin-left: 20px;
+    box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.28);
+}
+
+.navegacion {
+    width: 90%;
+    max-width: 1000px;
+    margin: auto;
+    padding: 12px 0;
+    margin-top: 4%;
+    
+}
+
+.index_navegacion {
+    width: 90%;
+    max-width: 1000px;
+    margin: auto;
+    padding: 12px 0;
+    margin-top: 4%;
+}
+
+input[type="search"] {
+    display: flex;
+    position: relative;
+    padding: 10px 25px 10px 10px;
+    border: none;
+    font-family: "Anonymous Pro";
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.search {
+    width: 35%;
+    max-width: 1000px;
+    margin: auto;
+    background: #fff;
+    padding: 0 10px 5px;
+    max-height: 85%;
+    overflow-x: hidden;
+    display: none;
+    font-family: "Anonymous Pro";
+
+}
+
+.search-table {
+    margin-top: 10%;
+    width: 100%;
+}
+
+tbody tr td {
+    width: 100%;
+}
+
+tbody tr td a {
+    text-decoration: none;
+    font-size: 18px;
+    color: #737373;
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 20px 0 20px 20px;
+    border: none;
+}
+
+
+ tr td a:hover {
+    border: 1px solid #378FD9;
+}
+
+.search::-webkit-scrollbar {
+    background: transparent;
+
+}
+
+.search::-webkit-scrollbar-thumb {
+    background: #C1C1C1;
+}
+
+.dataTables_length,
+.dataTables_filter,
+.dataTables_info,
+.dataTables_paginate {
+    display: none;
+}
+
+.videosPromo img {
+    margin-top: 7%;
+}
+
+
+header{
+	position: relative;
+}
+
+.sdoParrafo h4{
+    text-align:justify;
+    font-family: "Anonymous Pro";
+  }
+  
+  .sdoParrafo h4{
+    margin-top: 1%;
+    text-align: justify;
+    font-family: "Anonymous Pro";
+  }
+
+@media screen and (max-width: 800px) {
+    header nav {
+        width: 100%;
+        height: 100%;
+        left: -100%;
+
+        position: fixed;
+    }
+
+    header nav ul{
+        margin-top: 60%;
+        
+    }
+
+    header nav ul li {
+        display: block;
+        float: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3); 
+    }
+
+
+    .menu_btn {
+        display: block;
+        width: 100%;
+        background: #e2e2e2;
+    }
+
+    .menu_btn .boton {
+        display: block;
+        padding: 20px;
+        background-color: rgba(39, 73, 88, 0.9);
+        text-decoration: none;
+        color: #EAE4E5;
+        font-weight: bold;
+        font-size: 25px;
+        font-family: "Anonymous Pro";
+    }
+
+    .menu_btn span {
+        float: right;
+        font-size: 38px;
+    }
+
+    .slider ul {
+        display: flex;
+        padding: 0;
+        width: 400%;
+        animation: cambio 20s infinite;
+    }
+
+    .wrap a {
+        font-size: 58%;
+    }
+
+    nav img {
+        width: 10px;
+        height: 10px;
+        box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.28);
+    }
+
+    .videosPromo img {
+        margin-top: 20%;
+    }
+
+    /*index-------------------*/
+
+.products-list_index {
+ 
+    display: block;
+    width: 25%; 
+    height: auto;
+    margin-top: 26%;
+    margin-left : none;
+    justify-content: space-between; /* Espacio entre imágenes (puedes cambiarlo a `center` o `flex-start`) */
+    align-items: center; /* Alinea verticalmente si las imágenes tienen diferentes alturas */
+    gap: 0px; /* Espaciado entre imágenes */
+    opacity: 0.6; /* Transparencia: 0 es completamente transparente, 1 es completamente opaco */
+  }
+  
+  .products-list .products-item_index {
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.22);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: "Anonymous Pro";
+    padding: 0%;
+  }
+  
+  .products-item_index iframe {
+    max-width: 800px;    /* Limita el tamaño máximo del video */
+    aspect-ratio: 16 / 9; /* Mantiene la relación de aspecto 16:9 */
+  }
+  
+  
+  /*------------------------*/
+
+
+  .products-list{
+ 
+    flex-direction: column;
+    display: flex;
+    width: auto;
+    height: auto;
+    font-family: "Anonymous Pro";
+    font-size: 5%;
+    align-items: center; /* Alinea verticalmente si las imágenes tienen diferentes alturas */
+    gap: 1px; /* Espaciado entre imágenes */
+    /*opacity: 0.7;  Transparencia: 0 es completamente transparente, 1 es completamente opaco */
+    position:static;
+  }
+
+  .products-list p{
+ 
+    font-family: "Anonymous Pro";
+    font-size: 15px;
+  }
+
+  .products-list h2{
+ 
+    font-family: "Anonymous Pro";
+    font-size: 15px;
+  }
+
+  .products-list h1{
+ 
+    font-family: "Anonymous Pro";
+    font-size: 15px;
+  }
+
+  .products-list li{
+ 
+    font-family: "Anonymous Pro";
+    font-size: 15px;
+  }
+
+
+  .products-list .products-item {
+    margin: 0%;
+    margin-left: 1%;
+    width: 77%;
+    margin-bottom: 2%;
+    display: flex;
+    flex-direction: column;
+    font-family: "Anonymous Pro";
+  }
+  
+  
+  .products-list .products-item img,
+  .products-item img {
+    width: 100%;
+    height: auto;
+    position: static;
+  }
+  
+  .products-list .products-item a {
+    position: static;
+    display: block;
+    width: 100%;
+    padding: 20px 0;
+    color: grey;
+    text-align: center;
+    text-decoration: none;
+    font-size: 30px;
+  }
+
+
+  
+/* Estilo para el contenedor */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin: 2px;
+}
+
+/* Estilo del botón */
+.dropdown-button {
+    background-color: #007BFF;
+    color: white;
+    padding: 20% 30%;
+    font-size: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-button:hover {
+    background-color: #0056b3;
+}
+
+/* Estilo del menú */
+.dropdown-menu {
+    display: none; /* Oculto por defecto */
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+/* Estilo para los elementos de la lista */
+.dropdown-menu li {
+    border-bottom: 1px solid #ddd;
+}
+
+.dropdown-menu li:last-child {
+    border-bottom: none;
+}
+
+.dropdown-menu li a {
+    color: black;
+    padding: 10px 15px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-menu li a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Mostrar el menú cuando se active */
+.dropdown.active .dropdown-menu {
+    display: block;
+}
+
+.header-top h1{
+    margin-top: 4%;
+    margin-right: 20%;
+    font-size: 20px;
+    color:white;
+}
+
+.category_list {
+    width: 100px;
+    font-size: 100%;
+  }
+
+  .logo_imge img{
+    width: 70px;
+    margin-left: 20px;
+  }
+
+  .wrap .index_navegacion{
+    position: absolute;
+    margin-top: -40%;
+  }
+  
+  .index_navegacion h2{
+    margin-top: 0%;
+    margin-left: 5%;
+    margin-right: 35%;
+    font-size: 25px;
+    color:white;
+    font-family: "Anonymous Pro";
+    text-align:left;
+  }
+
+  .dropdown{
+    margin-top: 0%;
+    margin-left: 5%;
+  }
+
+
+  .products-item .escudo img {
+    width:55%;
+    margin-left: 20%;
+    height: auto;
+    position: static;
+  }
+
+  .products-list{
+    display: flex;
+    padding: 1%;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: center; /* Centra verticalmente */
+    position: static;
+  }
+
+  .staticImg{
+    display: flex;
+    padding: 0;
+    width: 0%;
+    margin-top: 0%;
+    animation: cambio 80s infinite;
+  } 
+
+
+  .centraImg img{
+    width: 100%;
+    margin-left: 0%;
+    margin-right: auto;
+  }
+
+  .sdoParrafo h4{
+    text-align:justify;
+    font-family: "Anonymous Pro";
+  }
+  
+  .sdoParrafo h4{
+    margin-top: 1%;
+    text-align: justify;
+    font-family: "Anonymous Pro";
+  }
+
+  .sdoParrafo p{
+    margin-top: 1%;
+    text-align: justify;
+    font-family: "Anonymous Pro";
+    margin-left: 2%;
+    margin-left: 2%;
+  }
+
+  .search-table {
+    margin-top: 60%;
+    width: 100%;
+}
+}
+

@@ -1,0 +1,380 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+.wrap {
+  max-width: 3000px;
+  width: 90%;
+  margin: auto;
+  
+}
+
+.wrap h1 {
+  color: #494b4d;
+  font-weight: 400;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin: 15px 0;
+}
+
+h2{
+  color: #000;
+}
+
+p{
+  color: #000;
+}
+
+.wrap h1:after {
+  content: '';
+  width: 100%;
+  height: 1px;
+  background: #c7c7c7;
+}
+
+.wrap a {
+  font-size: 15px;
+}
+
+.store-wrapper {
+  display: flex;
+}
+
+.category_list {
+  display: flex;
+  flex-direction: column;
+  width: 18%;
+  font-size: 50%;
+}
+
+.category_list img{
+margin-right: 10%;
+}
+
+.category_list .category_item {
+  display: block;
+  width: 90%;
+  padding: 14px 0;
+  margin-bottom: 20px;
+  background-color: rgba(1, 1, 1, 0.8);
+  box-shadow: 0 0 6px rgba(200, 200, 200, 0.3);
+  font-family: "Anonymous Pro";
+  text-align: center;
+  text-decoration: none;
+  color: #EAE4E5;
+}
+
+
+.category_list .ct_item-active {
+  background-color: rgba(39, 73, 88, 0.9);
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.25);
+}
+
+/*index-------------------*/
+
+.products-list_index {
+ 
+  display: flex;
+  width: auto;
+  height: auto;
+  position: absolute;
+  margin-top: 45%;
+  margin-left: 65%;
+  justify-content: space-between; /* Espacio entre imágenes (puedes cambiarlo a `center` o `flex-start`) */
+  align-items: center; /* Alinea verticalmente si las imágenes tienen diferentes alturas */
+  gap: 1px; /* Espaciado entre imágenes */
+  opacity: 0.7; /* Transparencia: 0 es completamente transparente, 1 es completamente opaco */
+}
+
+.products-list .products-item_index {
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.22);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Anonymous Pro";
+}
+
+.products-item_index iframe {
+  width: 100%;         /* El video se ajusta al 100% del contenedor */
+  height: auto;        /* La altura se ajusta automáticamente */
+  max-width: 800px;    /* Limita el tamaño máximo del video */
+  aspect-ratio: 16 / 9; /* Mantiene la relación de aspecto 16:9 */
+}
+
+
+/*------------------------*/
+
+.products-list {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.logo_imge img{
+  width: 50px;
+  margin-top: 1px;
+  margin-left: 230px;
+}
+
+.products-list .products-item {
+  text-align: justify;
+  align-items: center; /* Centra verticalmente */
+  margin-left: 5%;
+  width: 45%;
+  padding: 1%;
+  margin-top: 1%;
+  /*box-shadow: 0 0 6px rgba(0, 0, 0, 0.22);*/
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Anonymous Pro";
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+}
+
+.products-list .staticImg{
+  display: flex;
+  padding: 1%;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+}
+
+.products-list .products-item img,
+.products-item img {
+  width: 100%;
+  height: auto;
+  position: relative;
+
+}
+
+.products-item .escudo img {
+  width:40%;
+  margin-left: 30%;
+  height: auto;
+  position: relative;
+  justify-content: center;
+
+}
+
+
+.products-list .products-item a {
+  display: block;
+  width: 100%;
+  padding: 8px 0;
+  color: grey;
+  text-align: center;
+  text-decoration: none;
+  font-size: 20px;
+}
+
+.wrap .index_navegacion{
+  position: absolute;
+  margin-top: -25%;
+}
+
+.index_navegacion h2{
+  margin-top: -10%;
+  margin-right: 15%;
+  margin-left: 20%;
+  font-size: 70px;
+  color:white;
+  text-decoration: none;
+  font-family: "Anonymous Pro";
+}
+
+.slider,
+.slider2 {
+  width: 100%;
+  margin: auto;
+  overflow: hidden;
+  
+}
+
+.slider ul,
+.slider2 ul {
+  display: flex;
+  padding: 0;
+  width: 400%;
+  margin-top: 0%;
+  animation: cambio 80s infinite;
+}
+
+.slider li,
+.slider2 li {
+  list-style: none;
+}
+
+.slider img,
+.slider2 img {
+  width: 100%;
+}
+
+@keyframes cambio {
+  0%, 20% { margin-left: 0; }
+  25%, 45% { margin-left: -100%; }
+  50%, 70% { margin-left: -200%; }
+  75%, 100% { margin-left: -300%; }
+}
+
+body {
+  font-family: "Anonymous Pro";
+  position: relative; 
+}
+
+.content {
+  background-image: url("img/2348128.jpg");
+  width: 100%;
+  height: 400px;
+  background-size: cover;
+  position: relative;
+}
+
+/* Estilo general para el contenedor de copyright */
+.copyright {
+  display: flex;
+  position: relative;
+  background-color: #f4f4f4;
+  padding: 20px;
+  font-family: "Anonymous Pro";
+  color: #333;
+  border-top: 1px solid #ccc;
+}
+
+/* Estilo para las secciones internas */
+.copyright nav {
+  margin-bottom: 20px;
+}
+
+.copyright .contenedor-copyright,
+.copyright .contenedor-info,
+.copyright .contenedor-redes {
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+/* Listas dentro de cada sección */
+.copyright ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.copyright ul li {
+  flex: 1 1 200px; /* Hace que los elementos se ajusten en una fila y sean responsivos */
+}
+
+.copyright ul li a {
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.copyright ul li a:hover {
+  color: #007BFF; /* Cambia el color al pasar el cursor */
+}
+
+/* Estilo para los íconos */
+.copyright span {
+  font-size: 16px;
+  color: #007BFF;
+}
+
+/* Sección de texto final */
+.finalCopy {
+  background-color: #e9ecef;
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #ccc;
+  margin-top: 20px;
+}
+
+.finalCopy h4 {
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.finalCopy h5 {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+}
+
+.sdoParrafo {
+margin: 3%;
+}
+
+.sdoParrafo h2{
+  margin-top: 1%;
+  text-align: center;
+  font-family: "Anonymous Pro";
+}
+
+.sdoParrafo p{
+  margin-top: 1%;
+  text-align: justify;
+  font-family: "Anonymous Pro";
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .copyright ul {
+      flex-direction: column;
+  }
+
+  .copyright ul li {
+      flex: 1 1 100%;
+  }
+
+  .finalCopy h4, .finalCopy h5 {
+      text-align: justify;
+      font-family: "Anonymous Pro";
+  }
+}
+
+
+h4 {
+  color: #EAE4E5;
+  padding-top: 3%;
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+h5 {
+  color: #EAE4E5;
+  font-size: 10px;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.finalCopy {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.datos,
+.datos2 {
+  margin-bottom: 3%;
+  margin-left: 3%;
+}
+
+.datos img {
+  width: 30%;
+  margin-bottom: 2%;
+}
+
+.centraImg img{
+  width: 70%;
+  margin-left: 15%;
+  margin-right: auto;
+}
+
