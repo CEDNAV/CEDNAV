@@ -146,7 +146,7 @@
 		</p>
 	</div>
 
-	<section class="products-list">
+	<div class="sdoParrafo">
 		<div class="products-item" category="cednav" style="padding-right: 3%;">
 			<h1 style="text-align: center;">Misión<br></h1>
 			<p> <br>
@@ -156,18 +156,20 @@
 				<br>
 			</p>
 		</div>
+	</div>
 
-		<div class="products-item" category="cednav" style="padding-right: 3%;">
-			<h1 style="text-align: center;">Visión<br></h1>
-			<p> <br>
-				Ser el centro de excelencia en Investigación, Desarrollo e Innovación (I+D+i) de la Armada
-				Nacional de Colombia, reconocido como un actor clave en el desarrollo estratégico de los intere-
-				ses nacionales, mediante la innovación tecnológica y la cooperación con el sector académico e
-				industrial.<br>
-				<br>
-			</p>
-		</div>
-	</section>
+	<div class="sdoParrafo">
+		<h1 style="text-align: center;">Visión<br></h1>
+		<p> <br>
+			Ser el centro de excelencia en Investigación, Desarrollo e Innovación (I+D+i) de la Armada
+			Nacional de Colombia, reconocido como un actor clave en el desarrollo estratégico de los intere-
+			ses nacionales, mediante la innovación tecnológica y la cooperación con el sector académico e
+			industrial.<br>
+			<br>
+		</p>
+	</div>
+	</div>
+
 
 	<section class="centraImg"><img src="img\img_index\queESCEDNAV.jpeg" alt=""></section>
 
@@ -203,242 +205,439 @@
 		</p>
 	</div>
 
-	<section class="products-list">
-		<div class="products-item" category="cednav" style="padding-right: 3%; width: 30%;">
-			<img src="img\datosPersonal\fotoCCJIMENEZ1.png" alt="">
-		</div>
-		<div class="products-item" category="cednav" style="text-align: justify;">
-			<h1 style="text-align: center;">CCAIET CRISTIAN JIMENEZ BARRERA<br></h1><br>
+
+
+
+
+
+
+
+
+
+
+	<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Perfiles Responsivos</title>
+  <style>
+    /* Contenedor principal con grid y espacio lateral */
+    .products-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* 3 columnas en pantallas grandes */
+      gap: 20px; /* Espacio entre perfiles */
+      padding: 20px 3%; /* 20px arriba y abajo, 3% a los lados */
+    }
+
+    /* Cada perfil */
+    .profile {
+      text-align: center;
+      border: 1px solid #ddd;
+      padding: 15px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    .profile img {
+      width: 100%; /* La imagen ocupará todo el ancho del contenedor */
+      max-width: 200px; /* Tamaño máximo para evitar que sea muy grande */
+      height: auto;
+      border-radius: 10px;
+      margin: 0 auto; /* Centrar imagen */
+      display: block;
+    }
+
+    .profile h1 {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+
+    .profile ul {
+      text-align: left;
+      font-size: 14px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .profile ul li {
+      margin-bottom: 5px;
+    }
+
+    /* Media Queries para dispositivos medianos y pequeños */
+    @media (max-width: 992px) {
+      .products-list {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en pantallas medianas */
+      }
+    }
+
+    @media (max-width: 600px) {
+      .products-list {
+        grid-template-columns: 1fr; /* 1 columna en pantallas pequeñas (celulares) */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="products-list">
+    <div class="profile">
+      <img src="img/datosPersonal/cc JImenez B.jpg" alt="Foto de Breyner Jiménez Navia">
+      <h1>CCAIIN BREYNER JIMÉNEZ NAVIA</h1>
 			<ul>
-				<li><strong>Cargo Actual: </strong>DIRECTOR CENTRO DE DESARROLLO TECNÓLOGICO NAVAL</li><br>
-				<li><strong>Arma/Cuerpo: </strong>ADMINISTRATIVO</li><br>
-				<li><strong>Especialidad o Habilidad: </strong>INGENIERO</li><br>
-				<li><strong>Área de Conocimiento: </strong>INGENIERO ELECTRÓNICO</li><br>
-				<li><strong>Programa de desempeño actual: </strong>SISTEMA DE ARMAS</li><br>
-				<li><strong>Proyecto desempeño actual:</strong><br> > Investigador: Sistema de Control de Fuego (FCS)
-					BARRACUDA V2.0</li><br>
+				<li><strong>Cargo Actual: </strong>JEFE DIVISIÓN CENTROS TECNOLÓGICOS E INVESTIGACIÓN</li>
+				<li><strong>Área de Conocimiento: </strong>INGENIERÍA INDUSTRIAL</li>
 				<li><strong>Habilidades complementarias: </strong> <br>>
-					Maestría/Magister-Tecnologias de Defensa <br> > Vigilancia Tecnológica <br>> Propiedad
-					Intelectual <br>> Inteligencia Artificial <br>
-					> Lenguaje de programción C++<br></li>
+					Maestría/Magister-Gestión de Innovación Tecnológica <br> > Especialista en Estadística Aplicada <br>> Especialista en Desarrollo Organizacional
+					 <br>> Especialista en Seguridad y Defensa Nacionales <br> > Ingeniería Electrónica <br><strong>> Diplomados:</strong> <br>
+					 Vigilancia Tecnológica / Inteligencia Competitiva<br> Estrategias de información científica<br> Auditoría Tecnológica<br>
+					 Gestión de Proyectos de I+D+i<br></li>
 			</ul>
-		</div>
-		<div class="products-item" category="cednav" style="padding-right: 3%; width: 30%;">
-			<img src="img\datosPersonal\fotoCCLOVO.png" alt="">
-		</div>
-		<div class="products-item" category="cednav" style="text-align: justify;">
+    </div>
+
+    <div class="profile">
+      <img src="img/datosPersonal/fotoCCJIMENEZ1.png" alt="Foto de Cristian Jimenez Barrera">
+      <h1>CCAIET CRISTIAN JIMENEZ BARRERA</h1>
+			<ul>
+				<li><strong>Cargo Actual: </strong>DIRECTOR CENTRO DE DESARROLLO TECNÓLOGICO NAVAL</li>
+				<li><strong>Área de Conocimiento: </strong>INGENIERÍA ELECTRÓNICA</li>
+				<li><strong>Programa de desempeño actual: </strong>SISTEMA DE ARMAS</li>
+				<li><strong>Proyecto desempeño actual:</strong><br> > Investigador: Sistema de Control de Fuego (FCS)
+					BARRACUDA V2.0</li>
+				<li><strong>Habilidades complementarias: </strong> <br>>
+					Maestría/Magister-Tecnológias de Defensa <br> > Ingeniería Electrónica <br><strong>> Diplomados:</strong> <br>  Vigilancia Tecnológica <br> Propiedad
+					Intelectual <br> Inteligencia Artificial <br>
+					 Lenguaje de programción C++<br></li>
+			</ul>
+    </div>
+
+    <div class="profile">
+      <img src="img/datosPersonal/cc BARRETO.png" alt="Foto de Camilo Enrique Barreto">
+      <h1>CC CAMILO ENRIQUE BARRETO</h1>
+			<ul>
+				<li><strong>Cargo Actual: </strong>GESTOR CENTROS TECNOLÓGICOS NAVALES</li
+				<li><strong>Área de Conocimiento: </strong>INGENIERÍA ELECTRÓNICA</li>
+				<li><strong>Programa de desempeño actual: </strong>SISTEMAS DE MANDO Y CONTROL</li>
+				<li><strong>Proyecto desempeño actual:</strong><br>> Inv. Principal: Sistema de Gestión de Combate (CMS)</li>
+				<li><strong>Habilidades complementarias: </strong> <br> > Magister en Ingeniería de sistemas y computación<br> > Especialista en política y estrategia marítima
+				<br> > Ciencias Navales <br><strong>> Diplomados:</strong> <br> Inteligencia artificial</li><br>
+			</ul>
+    </div>
+
+       <div class="profile">
+      <img src="img\datosPersonal\fotoCCLOVO.png" alt="">
 			<h1 style="text-align: center;">CCAIET LOVO AYALA ALDO FRANCISCO<br></h1><br>
 			<ul>
-				<li><strong>Cargo Actual: </strong>JEFE PROGRAMA SIMULACIÓN - CENTRO DE DESARROLLO TECNÓLOGICO NAVAL</li><br>
-				<li><strong>Arma/Cuerpo: </strong>ADMINISTRATIVO</li><br>
-				<li><strong>Especialidad o Habilidad: </strong>INGENIERÍA Y ARQUITECTURA</li><br>
-				<li><strong>Área de Conocimiento: </strong>INGENIERO ELECTRÓNICO</li><br>
-				<li><strong>Programa de desempeño actual: </strong>SISTEMA DE SIMULACIÓN</li><br>
+				<li><strong>Cargo Actual: </strong>JEFE PROGRAMA SIMULACIÓN - CENTRO DE DESARROLLO TECNÓLOGICO NAVAL</li>
+				<li><strong>Área de Conocimiento: </strong>INGENIERÍA ELECTRÓNICA</li>
+				<li><strong>Programa de desempeño actual: </strong>SISTEMA DE SIMULACIÓN</li>
 				<li><strong>Proyecto desempeño actual:</strong><br>> Inv. Principal: Desarrollo de un prototipo de
 					simulador inmersivo para
-					entrenamiento de tripulaciones en bote de combate fluvial <br><br>> Inv. Principal: Consola de
+					entrenamiento de tripulaciones en bote de combate fluvial <br>> Inv. Principal: Consola de
 					Ingeniería de la OPV en Realidad Virtual
-					<br><br> > Inv. Principal: Sistema monitoreo fluvial
-				</li><br>
-				<li><strong>Habilidades complementarias: </strong> <br> > Metodologías Ágiles <br>> Lenguaje de
-					programción C++</li><br>
+					<br> > Inv. Principal: Sistema monitoreo fluvial
+				</li>
+				<li><strong>Habilidades complementarias: </strong> </li>> Magister en Ingeniería Electrónica y de Computación
+					<strong><br> > Diplomados:</strong> <br> Metodologías Ágiles <br> Lenguaje de
+					programción C++
 			</ul>
 		</div>
-		<div class="products-item" category="cednav" style="padding-right: 3%; width: 30%;">
-			<img src="img\datosPersonal\FOTOCCPEDRAZA.jpeg" alt="">
-		</div>
-		<div class="products-item" category="cednav" style="text-align: justify;">
+
+
+    <!-- ------------------------------------------------- -->
+
+
+    <div class="profile">
+      <img src="img\datosPersonal\FOTOCCPEDRAZA.jpeg" alt="">
 			<h1 style="text-align: center;">CCEIN ANDRÉS PEDRAZA LEGUIZAMÓN<br></h1><br>
 			<ul>
-				<li><strong>Cargo Actual: </strong>JEFE DE PROGRAMA - CENTRO DE DESARROLLO TECNOLÓGICO NAVAL</li><br>
-				<li><strong>Arma/Cuerpo: </strong>EJECUTIVO</li><br>
-				<li><strong>Especialidad o Habilidad: </strong>INGENIERÍA</li><br>
-				<li><strong>Área de Conocimiento: </strong>ARQUITECTURA NAVAL E INGENIERÍA MARÍTIMA</li><br>
-				<li><strong>Programa de desempeño actual: </strong>SISTEMA DE PLATAFORMAS</li><br>
+				<li><strong>Cargo Actual: </strong>JEFE DE PROGRAMA - CENTRO DE DESARROLLO TECNOLÓGICO NAVAL</li>
+				<li><strong>Área de Conocimiento: </strong>ARQUITECTURA NAVAL E INGENIERÍA MARÍTIMA</li>
+				<li><strong>Programa de desempeño actual: </strong>SISTEMA DE PLATAFORMAS</li>
 				<li><strong>Proyecto desempeño actual:</strong><br>> Inv. Principal: Proyecto Sistema Integrado de
-					Supervisión y Control de Plataforma Colombiano – SISCP
+					Supervisión y Control de Plataforma Colombiano – SISCP<br>
 				<li><strong>Habilidades complementarias: </strong> <br>> Maestría/Magister-Analítica de Datos <br>>
 					Maestría/Magister-Gerencia de Ingeniería
-					<br>> Especialización-Política y Estrategia Marítima, Seguridad y Defensa <br>> Pregrado-Diseño y
+					<br>> Especialización-Política y Estrategia Marítima, Seguridad y Defensa <br>> Diseño y
 					Automatización Electrónica
-					<br>> Automatizacion Industrial <br>> Programacion De Plc
-					<br>> Diseño y Programacion de Sistemas Scada Hmi<br>> Experto Funcional SAP PM - MII<br>>
+					<br><strong>> Diplomados:</strong> <br> Automatizacion Industrial <br> Programacion De Plc
+					<br> Diseño y Programacion de Sistemas Scada Hmi<br> Experto Funcional SAP PM - MII<br>
 					Metodologías Ágiles
 				</li><br>
 			</ul>
 		</div>
-		<div class="products-item" category="cednav" style="padding-right: 3%; width: 30%;">
-			<img src="img\datosPersonal\fotoTNOLAYA.png" alt="">
-		</div>
-		<div class="products-item" category="cednav" style="text-align: justify;">
-			<h1 style="text-align: center;">TNEIN OSCAR EDUARDO OLAYA VERA<br></h1><br>
+
+
+        <!-- ------------------------------------------------- -->
+
+
+            <!-- ------------------------------------------------- -->
+
+
+    <div class="profile">
+      <img src="img\datosPersonal\TN LERMA.jpg" alt="">
+			<h1 style="text-align: center;">TNESP EVER IVÁN LERMA GÓMEZ<br></h1><br>
 			<ul>
-				<li><strong>Cargo Actual: </strong>JEFE PROGRAMA SISTEMAS DE ARMAS - CENTRO DE DESARROLLO TECNÓLOGICO NAVAL </li><br>
-				<li><strong>Arma/Cuerpo: </strong>EJECUTIVO</li><br>
-				<li><strong>Especialidad o Habilidad: </strong>INGENIERIA NAVAL </li><br>
-				<li><strong>Área de Conocimiento: </strong>INGENIERIA ELECTRÓNICO</li><br>
-				<li><strong>Programa de desempeño actual: </strong>SISTEMA DE ARMAS - SISTEMAS DE PLATAFORMA</li><br>
-				<li><strong>Proyecto desempeño actual:</strong><br>> Investigador: Tulato <br><br>>
-					Investigador: Proyecto Sistema Integrado de Supervisión y Control de Plataforma Colombiano – SISCP
-					<br><br> > Investigador: Sistema de Control de Fuego (FCS) BARRACUDA V2.0
-				</li><br>
-				<li><strong>Habilidades complementarias: </strong> <br>> Doctorado-Ingeniería <br>>
-					Maestría/Magister-Dirección de Proyectos de Innovación <br>> Especialización
-					DIERE EN INSTRUMENTACI-N Y CONTROL INDUSTRIAL <br>> Técnico-ELECTRÓNICO<br> > Vigilancia Tecnológica
-					<br>> Propiedad Intelectual
-					<br>> Inteligencia Artificial <br> > Metodologías Ágiles<br>> Ciencias Navales <br>> Automatización
-					de procesos con plc <br>> Diplomado Articulación y Diseño de Sistemas con C.
-					<br>> Diplomado en Fundamentos de Analítica <br>> Lenguaje de programción C++<br>
+				<li><strong>Cargo Actual: </strong>GESTOR DE PROYECTOS DIVISIÓN CENTROS</li>
+				<li><strong>Área de Conocimiento: </strong>INGENIERÍA EN TELECOMUNICACIONES</li>
+				<li><strong>Programa de desempeño actual: </strong>SISTEMA DE MANDO Y CONTROL</li>
+				<li><strong>Proyecto desempeño actual:</strong><br>> Inv. Sistema de Gestión de Combate (CMS)
 				</li>
+				<li><strong>Habilidades complementarias: </strong> <br> > Maestría/Magister-Sistemas <br> > Maestría/Magister-Seguridad Digital
+				<br>> Ingeniería Telecomunicaciones<br><strong>> Diplomados:</strong> <br>C++<br> Inteligencia Artifical<br> Gestión de Proyectos de I+D+i</li><br>
 			</ul>
 		</div>
-		<div class="products-item" category="cednav" style="padding-right: 3%; width: 30%;">
-			<img src="img\datosPersonal\FOTOTFBRAVO2png" alt="">
-		</div>
-		<div class="products-item" category="cednav" style="text-align: justify;">
+
+
+        <!-- ------------------------------------------------- -->
+
+                    <!-- ------------------------------------------------- -->
+
+
+    <div class="profile">
+     <img src="img\datosPersonal\fotoTNOLAYA.png" alt="">
+			<h1 style="text-align: center;">TNLARM OSCAR EDUARDO OLAYA VERA<br></h1><br>
+			<ul>
+				<li><strong>Cargo Actual: </strong>JEFE PROGRAMA SISTEMAS DE ARMAS - CENTRO DE DESARROLLO TECNÓLOGICO NAVAL </li>
+				<li><strong>Área de Conocimiento: </strong>INGENIERÍA ELECTRÓNICA</li>
+				<li><strong>Programa de desempeño actual: </strong>SISTEMA DE ARMAS - SISTEMAS DE PLATAFORMA</li>
+				<li><strong>Proyecto desempeño actual:</strong><br>> Investigador: Tulato
+					Investigador: Proyecto Sistema Integrado de Supervisión y Control de Plataforma Colombiano – SISCP
+					<br> > Investigador: Sistema de Control de Fuego (FCS) BARRACUDA V2.0
+				</li>
+				<li><strong>Habilidades complementarias: </strong> <br>> Doctorado-Ingeniería <br>>
+					Maestría/Magister-Dirección de Proyectos de Innovación <br>> Especialización
+					en Instrumentación y Control Industrial <br>> Ingeniería-Electrónica<br>
+					<strong>> Diplomados:</strong> <br> Vigilancia Tecnológica
+					<br> Propiedad Intelectual
+					<br> Inteligencia Artificial <br> Metodologías Ágiles<br> Ciencias Navales <br> Automatización
+					de procesos con plc <br> Articulación y Diseño de Sistemas con C.
+					<br> Fundamentos de Analítica <br> Lenguaje de programción C++<br>
+				</li>
+			</ul>
+
+    </div>
+        <!-- ------------------------------------------------- -->
+
+
+<!-- ------------------------------------------------- -->
+
+
+    <div class="profile">
+     <img src="img\datosPersonal\TF CONTRERAS.jpg" alt="">
+			<h1 style="text-align: center;">TFESP JUAN CARLOS CONTRERAS LOPEZ <br></h1><br>
+			<ul>
+				<li><strong>Cargo Actual: </strong>GESTOR DE INVESTIGACIÓN</li>
+				<li><strong>Área de Conocimiento: </strong>INGENIERÍA ELECTRÓNICA</li>
+				<li><strong>Programa de desempeño actual: </strong>SISTEMA DE MANDO Y CONTROL</li>
+				<li><strong>Proyecto desempeño actual:</strong><br> > Investigador Sistema de Gestión de Combate (CMS)</li>
+				<li><strong>Habilidades complementarias: </strong> <br> > Maestría/Magister-Inteligencia Artificial <br>> Ingenieria Electrónica<strong><br>> Diplomados:</strong> <br>Propiedad
+					Intelectual
+					<br> Desarrollo de bases de datos en PotgreSQL
+				</li>
+			</ul>
+
+    </div>
+        <!-- ------------------------------------------------- -->
+
+
+
+
+
+
+
+<!-- ------------------------------------------------- -->
+
+
+    <div class="profile">
+     <img src="img\datosPersonal\FOTOTFBRAVO2png" alt="">
 			<h1 style="text-align: center;">TFLSIS KENETH ALEXIS BRAVO PAZ <br></h1><br>
 			<ul>
-				<li><strong>Cargo Actual: </strong>JEFE SECCIÓN DISEÑO CENTRO DE DESARROLLO TECNÓLOGICO NAVAL</li><br>
-				<li><strong>Arma/Cuerpo: </strong>EJECUTIVO</li><br>
-				<li><strong>Especialidad o Habilidad: </strong>LOGISTICO DE SISTEMAS</li><br>
-				<li><strong>Área de Conocimiento: </strong>INGENIERO DE SISTEMAS</li><br>
-				<li><strong>Programa de desempeño actual: </strong>SISTEMA DE ARMAS</li><br>
+				<li><strong>Cargo Actual: </strong>JEFE SECCIÓN DISEÑO CENTRO DE DESARROLLO TECNÓLOGICO NAVAL</li>
+				<li><strong>Área de Conocimiento: </strong>INGENIERÍA DE SISTEMAS</li>
+				<li><strong>Programa de desempeño actual: </strong>SISTEMA DE ARMAS</li>
 				<li><strong>Proyecto desempeño actual:</strong><br> > Programador Backend: Sistema de Control de Fuego
-					(FCS) BARRACUDA V2.0</li><br>
-				<li><strong>Habilidades complementarias: </strong> <br> > Vigilancia Tecnológica <br>> Propiedad
-					Intelectual
-					<br>> Inteligencia Artificial <br>> Base de Datos SQL<br> > Metodologías Ágiles
-					<br>> Lenguaje de programción C++ - FRAME QT <br>> Lenguaje de programción PHYTON <br>> Lenguaje de
+					(FCS) BARRACUDA V2.0</li>
+				<li><strong>Habilidades complementarias: </strong> <br>> Ingenieria de Sistemas<strong><br>> Diplomados:</strong> <br>
+				Vigilancia Tecnológica <br> Propiedad Intelectual
+					<br> Inteligencia Artificial <br> Base de Datos SQL<br> Metodologías Ágiles
+					<br> Lenguaje de programción C++ - FRAME QT <br> Lenguaje de programción PHYTON <br> Lenguaje de
 					Java<br>
 				</li>
 			</ul>
-		</div>
-		<div class="products-item" category="cednav" style="padding-right: 3%; width: 30%;">
-			<img src="img\datosPersonal\fotoSJSOSSA.png" alt="">
-		</div>
-		<div class="products-item" category="cednav" style="text-align: justify;">
+
+    </div>
+        <!-- ------------------------------------------------- -->
+
+
+        <!-- ------------------------------------------------- -->
+
+
+    <div class="profile">
+    <img src="img\datosPersonal\fotoSJSOSSA.png" alt="">
 			<h1 style="text-align: center;">SJMEL MERVIN JESÚS SOSA BORRERO <br></h1><br>
 			<ul>
-				<li><strong>Cargo Actual: </strong>JEFE PROGRAMA MANDO Y CONTROL - CENTRO DE DESARROLLO TECNÓLOGICO NAVAL</li><br>
-				<li><strong>Arma/Cuerpo: </strong>SUPERFICIE-MAR</li><br>
-				<li><strong>Especialidad o Habilidad: </strong>SUPERFICIE </li><br>
-				<li><strong>Área de Conocimiento: </strong>INGENIERO DE SISTEMAS</li><br>
-				<li><strong>Programa de desempeño actual: </strong>SISTEMA DE MANDO Y CONTROL</li><br>
+				<li><strong>Cargo Actual: </strong>JEFE PROGRAMA MANDO Y CONTROL - CENTRO DE DESARROLLO TECNÓLOGICO NAVAL</li>
+				<li><strong>Área de Conocimiento: </strong>INGENIERO DE SISTEMAS</li>
+				<li><strong>Programa de desempeño actual: </strong>SISTEMA DE MANDO Y CONTROL</li>
 				<li><strong>Proyecto desempeño actual:</strong><br> > Investigador: Diseño e Implementación de un
-					Adaptador DDS para Datos de Navegación en Tiempo Real en Plataformas Navales</li><br>
-				<li><strong>Habilidades complementarias: </strong> <br>> Maestría/Magister-INGENIERIA <br>> Ingeniero de
-					Sistemas <br> > Vigilancia Tecnológica <br>> Propiedad Intelectual <br> > Metodologías Ágiles
-					<br>> Inteligencia Artificial <br>> Lenguaje de programción C++<br>
+					Adaptador DDS para Datos de Navegación en Tiempo Real en Plataformas Navales</li>
+				<li><strong>Habilidades complementarias: </strong> <br>> Maestría/Magister-Ingeniería <br>> Ingeniería de Sistemas<br>
+				<strong>> Diplomados:</strong> <br>  Vigilancia Tecnológica <br> Propiedad Intelectual <br> Metodologías Ágiles
+					<br> Inteligencia Artificial <br> Lenguaje de programción C++<br>
 				</li>
 			</ul>
-		</div>
-		<div class="products-item" category="cednav" style="padding-right: 3%; width: 30%;">
-			<img src="img\datosPersonal\FOTOS1BEVANS2_.png" alt="">
-		</div>
-		<div class="products-item" category="cednav" style="text-align: justify;">
+
+    </div>
+        <!-- ------------------------------------------------- -->
+
+
+
+                <!-- ------------------------------------------------- -->
+
+
+    <div class="profile">
+   <img src="img\datosPersonal\FOTOS1BEVANS2_.png" alt="">
 			<h1 style="text-align: center;">S1MAC FERNANDO ELIAS BEVANS CATAÑO <br></h1><br>
 			<ul>
-				<li><strong>Cargo Actual: </strong>INVESTIGADOR CENTRO DE DESARROLLO TECNÓLOGICO NAVAL</li><br>
-				<li><strong>Arma/Cuerpo: </strong>SUPERFICIE-MAR</li><br>
-				<li><strong>Especialidad o Habilidad: </strong>ELECTRÓNICA</li><br>
-				<li><strong>Área de Conocimiento: </strong>INGENIERO DE SOFTWARE</li><br>
-				<li><strong>Programa de desempeño actual: </strong>SISTEMAS DE ARMAS</li><br>
+				<li><strong>Cargo Actual: </strong>INVESTIGADOR CENTRO DE DESARROLLO TECNÓLOGICO NAVAL</li>
+				<li><strong>Área de Conocimiento: </strong>INGENIERO DE SOFTWARE</li>
+				<li><strong>Programa de desempeño actual: </strong>SISTEMAS DE ARMAS</li>
 				<li><strong>Proyecto desempeño actual:</strong><br> > Programador Frontend: Sistema de Control de Fuego
-					(FCS) BARRACUDA V2.0</li><br>
-				<li><strong>Habilidades complementarias: </strong> <br>> INGENIERIA SOFTWARE<br>>
-					Especialista-GERENCIA Y PROYECTO <br>> Especialista-REDES INALÁMBRICAS<br>>
-					Técnico-ELECTRÓNICA<br>> Vigilancia Tecnológica <br>> Propiedad Intelectual <br> > Metodologías
+					(FCS) BARRACUDA V2.0</li>
+				<li><strong>Habilidades complementarias: </strong> <br>> Ingeniería de Software<br>>
+					Técnico-Electrónica<br>> Especialista-Gerencia y Proyecto <br>> Especialista-Redes inalámbricas<br>
+					<strong>> Diplomados:</strong><br> Vigilancia Tecnológica <br> Propiedad Intelectual <br> Metodologías
 					Ágiles
-					<br>> Inteligencia Artificial <br>> Cloud Computing<br>> Curador Datos<br>> Desarrollador APPs
+					<br> Inteligencia Artificial <br> Cloud Computing<br> Curador Datos<br> Desarrollador APPs
 					Moviles
-					<br>> Lenguaje de programción C++ - FRAME QT<br>> Lenguaje de programción C#<br>> Lenguaje de
+					<br> Lenguaje de programción C++ - FRAME QT<br> Lenguaje de programción C#<br> Lenguaje de
 					programción JAVA-APACHE
-					<br>> Lenguaje de programción JAVASCRIPT<br>> Lenguaje de programción PYTHON
-					<br>> Base datos SQL - SQLite - MONGO DB<br>> Lenguaje JSON<br>> Lenguaje de Etiquetado HTML -
-					CSS<br>> Diseño WEB
+					<br> Lenguaje de programción JAVASCRIPT<br> Lenguaje de programción PYTHON
+					<br> Base datos SQL - SQLite - MONGO DB<br> Lenguaje JSON<br> Lenguaje de Etiquetado HTML -
+					CSS<br> Diseño WEB
 				</li>
 			</ul>
-		</div>
-		<div class="products-item" category="cednav" style="padding-right: 3%; width: 30%;">
-			<img src="img\datosPersonal\fotoS2Guevara_.png" alt="">
-		</div>
-		<div class="products-item" category="cednav" style="text-align: justify;">
+
+    </div>
+        <!-- ------------------------------------------------- -->
+
+
+                <!-- ------------------------------------------------- -->
+
+
+    <div class="profile">
+   <img src="img\datosPersonal\SV ARANZAZU.png" alt="">
+			<h1 style="text-align: center;">SVIF CESAR AUGUSTO ARANZAZU<br></h1><br>
+			<ul>
+				<li><strong>Cargo Actual: </strong> GESTOR DE INVESTIGACIÓN CENTRO DE DESARROLLO TECNÓLOGICO NAVAL</li>
+				<li><strong>Área de Conocimiento: </strong>ANFIBIO IM</li>
+				<li><strong>Programa de desempeño actual: </strong>SISTEMA DE MANDO Y CONTROL</li>
+				<li><strong>Proyecto desempeño actual:</strong><br> > Investigador: Sistema de Gestión Tecnológica.</li>
+				<li><strong>Habilidades complementarias: </strong> <br>> Doctorando en Ingeniería <br>> Maestría/Magister-Gerencia del Desarrollo Humano
+				<br>> Especialista en Desarrollo Humano Organizacional <br> > Ingeniero Industrial <br>> Tecnólogo en Mantenimiento Electromecánico Industrial
+				<br> <strong>> Diplomados:</strong><br> Programación en Python	Metodologías Ágiles
+					<br> Inteligencia Artificial <br> Lenguaje de programción C++<br>
+				</li>
+			</ul>
+
+    </div>
+        <!-- ------------------------------------------------- -->
+
+
+<!-- ------------------------------------------------- -->
+
+
+    <div class="profile">
+  <img src="img\datosPersonal\fotoS2Guevara_.png" alt="">
 			<h1 style="text-align: center;">S2MEL DIEGO ALBERTO GUEVARA AMAYA <br></h1><br>
 			<ul>
-				<li><strong>Cargo Actual: </strong>INVESTIGADOR CENTRO DE DESARROLLO TECNÓLOGICO NAVAL</li><br>
-				<li><strong>Arma/Cuerpo: </strong>SUPERFICIE-MAR</li><br>
-				<li><strong>Especialidad o Habilidad: </strong>ARMAS NAVALES</li><br>
-				<li><strong>Área de Conocimiento: </strong>INGENIERO EN CONTROL</li><br>
-				<li><strong>Programa de desempeño actual: </strong>SISTEMA DE MANDO Y CONTROL</li><br>
+				<li><strong>Cargo Actual: </strong>INVESTIGADOR CENTRO DE DESARROLLO TECNÓLOGICO NAVAL</li>
+				<li><strong>Arma/Cuerpo: </strong>SUPERFICIE-MAR</li>
+				<li><strong>Especialidad o Habilidad: </strong>ARMAS NAVALES</li>
+				<li><strong>Área de Conocimiento: </strong>INGENIERO EN CONTROL</li>
+				<li><strong>Programa de desempeño actual: </strong>SISTEMA DE MANDO Y CONTROL</li>
 				<li><strong>Proyecto desempeño actual:</strong><br> > Investigador: Diseño y Desarrollo de Sistema
-					Optrónico Colombiano</li><br>
-				<li><strong>Habilidades complementarias: </strong> <br>> Maestría/Magister-INGENIERIA<br>>
-					Pregrado-INGENIERIA EN CONTROL<br>> Tecnólogo-ELECTRÓNICA<br>> Vigilancia Tecnológica <br>>
-					Propiedad Intelectual <br> > Metodologías Ágiles
-					<br>> Inteligencia Artificial <br>> Lenguaje de programción C++ - FRAME QT
+					Optrónico Colombiano</li>
+				<li><strong>Habilidades complementarias: </strong> <br>> Maestría/Magister-Ingeniería<br>>
+					Pregrado-Ingeniería en Control<br>> Tecnólogo-Electrónica<br><strong> Diplomados:</strong><br> Vigilancia Tecnológica <br>
+					Propiedad Intelectual <br> Metodologías Ágiles
+					<br> Inteligencia Artificial <br> Lenguaje de programción C++ - FRAME QT
 				</li>
 			</ul>
-		</div>
-		<div class="products-item" category="cednav" style="padding-right: 3%; width: 30%;">
-			<img src="img\datosPersonal\FOTOMA2CARABALI.png" alt="">
-		</div>
-		<div class="products-item" category="cednav" style="text-align: justify;">
+
+    </div>
+        <!-- ------------------------------------------------- -->
+
+        <!-- ------------------------------------------------- -->
+
+
+    <div class="profile">
+  <img src="img\datosPersonal\FOTOMA2CARABALI.png" alt="">
 			<h1 style="text-align: center;">MA2MPM JULIAN ANDRES CARABALI VASQUEZ <br></h1><br>
 			<ul>
-				<li><strong>Cargo Actual: </strong>GESTOR DE PROGRAMA CENTRO DE DESARROLLO TECNÓLOGICO NAVAL</li><br>
-				<li><strong>Arma/Cuerpo: </strong>EJECUTIVO</li><br>
-				<li><strong>Especialidad o Habilidad: </strong>INGENIERIA NAVAL</li><br>
-				<li><strong>Área de Conocimiento: </strong>PROPULSION MOTORES</li><br>
-				<li><strong>Programa de desempeño actual: </strong>SISTEMA DE MANDO Y CONTROL</li><br>
-				<li><strong>Proyecto desempeño actual:</strong><br> > Investigador: Diseño y Desarrollo de Sistema
-					Optrónico Colombiano</li><br>
-				<li><strong>Habilidades complementarias: </strong> <br>> Tecnólogo-PROPULSION MOTORES<br>> Vigilancia
-					Tecnológica <br>> Propiedad Intelectual <br> > Metodologías Ágiles
-					<br>> Inteligencia Artificial <br>> Lenguaje de programción C++ - FRAME QT
+				<li><strong>Cargo Actual: </strong>GESTOR DE PROGRAMA CENTRO DE DESARROLLO TECNÓLOGICO NAVAL</li>
+				<li><strong>Área de Conocimiento: </strong>PROPULSIÓN MOTORES</li>
+				<li><strong>Programa de desempeño actual: </strong>SISTEMAS DE PLATAFORMA</li>
+				<li><strong>Proyecto desempeño actual:</strong><br> > Investigador: Proyecto Sistema Integrado de
+					Supervisión y Control de Plataforma Colombiano – SISCP</li>
+				<li><strong>Habilidades complementarias: </strong> <br>> Tecnólogo-Propulsión Motores<br>> <strong> Diplomados:</strong><br>Vigilancia
+					Tecnológica <br>Propiedad Intelectual <br> Metodologías Ágiles
+					<br>Inteligencia Artificial <br>Lenguaje de programción C++ - FRAME QT
 				</li>
 			</ul>
-		</div>
-	</section>
+
+    </div>
+        <!-- ------------------------------------------------- -->
+
+
+
+ </section>
+
+
 
 	<div class="slider2">
 		<ul>
-			<li><img src="img\presentacion\SUPERFICIE_1.jpg" alt=""></li>
-			<li><img src="img\presentacion\VISTA_BUQUE_ARMAS_1.png" alt=""></li>
-			<li><img src="img\presentacion\perfilShip.jpg" alt=""></li>
 			<li><img src="img\presentacion\SUPERFICIE_2.jpg" alt=""></li>
+			<li><img src="img\presentacion\perfilShip.jpg" alt=""></li>
+			<li><img src="img\presentacion\VISTA_BUQUE_ARMAS_1.png" alt=""></li>
+			<li><img src="img\presentacion\SUPERFICIE_1.jpg" alt=""></li>
 		</ul>
 	</div>
+
+	<div class="copyright" style="width: 100%;">
 	<section class="products-list" style="width: 100%;">
-		<div class="copyright" style="width: 100%;">
+
 
 			<section class="contenedor-copyright" style="width: 100%;">
 				<ul>
 					<li><a href="cednav.html"><span class="icon-user-tie"></span> Nosotros</a></li>
-					<li><a
-							href="https://www.google.com/maps/dir/11.0161371,-74.8073699/Cl.+81+%23%2371-9,+Barranquilla,+Atl%C3%A1ntico/@11.0156408,-74.8081579,17.71z/data=!4m8!4m7!1m0!1m5!1m1!1s0x8ef42dbc2d8c4f8d:0xb5c64ace77bef902!2m2!1d-74.8071049!2d11.0161591"><span
+					<li><a href="https://maps.app.goo.gl/erdjMNppw3Mi2PMq6"><span
 								class="icon-location2"></span> Ubicación </a></li>
-					<li><a href="www.armada.mil.co"><span class="icon-images"></span> Galeria</a></li>
-					<li><a href="www.armada.mil.co"><span class="icon-file-text2"></span> Copyright</a></li>
+					<li><a href="https://www.armada.mil.co/"><span class="icon-images"></span> Galeria</a></li>
+					<li><a href="https://www.armada.mil.co/"><span class="icon-file-text2"></span> Copyright</a></li>
 				</ul>
 			</section>
 
 			<section class="contenedor-info" style="width: 100%;">
 				<ul>
-					<li><a href="www.armada.mil.co"><span class="icon-phone"></span> Contactos</a></li>
-					<li><a href="www.armada.mil.co"><span class="icon-briefcase"></span> Servicios</a></li>
-					<li><a href="www.armada.mil.co"><span class="icon-truck"></span> Web ARMADA NACIONAL DE COLOMBIA</a>
+					<li><a href="https://www.armada.mil.co/"><span class="icon-phone"></span> Contactos</a></li>
+					<li><a href="https://www.armada.mil.co/"><span class="icon-briefcase"></span> Servicios</a></li>
+					<li><a href="https://www.armada.mil.co/"><span class="icon-truck"></span> Web ARMADA NACIONAL DE COLOMBIA</a>
 					</li>
-					<li><a href="www.armada.mil.co"><span class="icon-bubbles4"></span>Saber más</a></li>
+					<li><a href="https://www.armada.mil.co/"><span class="icon-bubbles4"></span>Saber más</a></li>
 				</ul>
 			</section>
 
 			<section class="contenedor-redes" style="width: 100%;">
 				<ul>
-					<li><a href="www.armada.mil.co"><span class="icon-whatsapp"></span> Número: (+57) 323 200 0010 </a>
+					<li><a href="https://www.armada.mil.co/"><span class="icon-whatsapp"></span> Número: (+57) 323 200 0010 </a>
 					</li>
-					<li><a href="www.armada.mil.co"><span class="icon-facebook"></span></a></li>
-					<li><a href="www.armada.mil.co"><span class="icon-instagram"></span></a></li>
-					<li><a href=" https://www.youtube.com/channel/UCVbmHjwPonMtdQlR7aQqeWQ"><span
+					<li><a href="https://www.armada.mil.co/"><span class="icon-facebook"></span></a></li>
+					<li><a href="https://www.armada.mil.co/"><span class="icon-instagram"></span></a></li>
+					<li><a href=" https://www.youtube.com/@cednavarc"><span
 								class="icon-youtube2"></span> </a></li>
 				</ul>
 			</section>
