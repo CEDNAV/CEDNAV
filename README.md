@@ -20,7 +20,7 @@ Aquí encontrarás:
 
 1. Clona el repositorio:  
    ```bash
-   git clone https://github.com/Centro-de-Desarrollo-Tecnologico-Naval/landing-page.git
+   git clone https://github.com/CEDNAV/CEDNAV.git
 
 2. Abre index.html en tu navegador
 
