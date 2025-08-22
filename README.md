@@ -44,7 +44,7 @@ Para más información, escribe a nuestro correo de contacto (inserta aquí).
 2. En **Source**, elige rama `main` y carpeta `/ (root)`.  
 3. Pulsa **Save**.  
 4. Opcional: entra en **Theme chooser** para seleccionar un tema simple (e.g., “Architect”).  
-5. GitHub te mostrará la URL:  https://centro-de-desarrollo-tecnologico-naval.github.io/landing-page/
+5. GitHub te mostrará la URL:  [Pagina CEDNAV](https://cednav.github.io/CEDNAV/)
 
 
 ---
