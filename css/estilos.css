@@ -22,20 +22,25 @@ header {
 .header-top {
     width: 100%;
     max-width: 1800px;
-	position: absolute;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    pointer-events: none;
+    /* Let clicks pass through to nav if needed, but we'll align it better */
 }
 
-.header-top h1{
+.header-top h1 {
 
     font-size: 60px;
-    color:white;
+    color: white;
 }
 
 
 .index-top {
     width: 100%;
     max-width: 1800px;
-	position: absolute;
+    position: absolute;
 }
 
 header nav ul li span {
@@ -58,7 +63,7 @@ header nav ul li {
     float: right;
 }
 
-header nav ul img{
+header nav ul img {
     padding: 0;
     float: right;
     width: 50px;
@@ -82,7 +87,8 @@ header nav {
 .dropdown {
     position: relative;
     display: inline-block;
-    margin-left: 20%;
+    margin-left: 20px;
+    pointer-events: auto;
 }
 
 /* Estilo del botón */
@@ -102,7 +108,8 @@ header nav {
 }
 
 
-.menu_btn a, .menu_btn {
+.menu_btn a,
+.menu_btn {
     display: none;
 
 }
@@ -118,10 +125,10 @@ header nav {
 .navegacion {
     width: 90%;
     max-width: 1000px;
-    margin: auto;
+    margin: 10px auto;
     padding: 12px 0;
     margin-top: 4%;
-    
+    pointer-events: auto;
 }
 
 .index_navegacion {
@@ -133,12 +140,20 @@ header nav {
 }
 
 input[type="search"] {
-    display: flex;
-    position: relative;
-    padding: 10px 25px 10px 10px;
-    border: none;
+    display: inline-block;
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
     font-family: "Anonymous Pro";
-    background-color: rgba(255, 255, 255, 0.6);
+    background-color: rgba(255, 255, 255, 0.8);
+    width: 250px;
+    outline: none;
+    transition: width 0.3s ease;
+}
+
+input[type="search"]:focus {
+    width: 300px;
+    background-color: #fff;
 }
 
 .search {
@@ -175,7 +190,7 @@ tbody tr td a {
 }
 
 
- tr td a:hover {
+tr td a:hover {
     border: 1px solid #378FD9;
 }
 
@@ -200,20 +215,20 @@ tbody tr td a {
 }
 
 
-header{
-	position: relative;
+header {
+    position: relative;
 }
 
-.sdoParrafo h4{
-    text-align:justify;
+.sdoParrafo h4 {
+    text-align: justify;
     font-family: "Anonymous Pro";
-  }
-  
-  .sdoParrafo h4{
+}
+
+.sdoParrafo h4 {
     margin-top: 1%;
     text-align: justify;
     font-family: "Anonymous Pro";
-  }
+}
 
 @media screen and (max-width: 800px) {
     header nav {
@@ -224,15 +239,15 @@ header{
         position: fixed;
     }
 
-    header nav ul{
+    header nav ul {
         margin-top: 60%;
-        
+
     }
 
     header nav ul li {
         display: block;
         float: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.3); 
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     }
 
 
@@ -281,263 +296,421 @@ header{
 
     /*index-------------------*/
 
-.products-list_index {
- 
-    display: block;
-    width: 25%; 
-    height: auto;
-    margin-top: 26%;
-    margin-left : none;
-    justify-content: space-between; /* Espacio entre imágenes (puedes cambiarlo a `center` o `flex-start`) */
-    align-items: center; /* Alinea verticalmente si las imágenes tienen diferentes alturas */
-    gap: 0px; /* Espaciado entre imágenes */
-    opacity: 0.6; /* Transparencia: 0 es completamente transparente, 1 es completamente opaco */
-  }
-  
-  .products-list .products-item_index {
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.22);
+    .products-list_index {
+
+        display: block;
+        width: 25%;
+        height: auto;
+        margin-top: 26%;
+        margin-left: none;
+        justify-content: space-between;
+        /* Espacio entre imágenes (puedes cambiarlo a `center` o `flex-start`) */
+        align-items: center;
+        /* Alinea verticalmente si las imágenes tienen diferentes alturas */
+        gap: 0px;
+        /* Espaciado entre imágenes */
+        opacity: 0.6;
+        /* Transparencia: 0 es completamente transparente, 1 es completamente opaco */
+    }
+
+    .products-list .products-item_index {
+        box-shadow: 0 0 6px rgba(0, 0, 0, 0.22);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: "Anonymous Pro";
+        padding: 0%;
+    }
+
+    .products-item_index iframe {
+        max-width: 800px;
+        /* Limita el tamaño máximo del video */
+        aspect-ratio: 16 / 9;
+        /* Mantiene la relación de aspecto 16:9 */
+    }
+
+
+    /*------------------------*/
+
+
+    .products-list {
+
+        flex-direction: column;
+        display: flex;
+        width: auto;
+        height: auto;
+        font-family: "Anonymous Pro";
+        font-size: 5%;
+        align-items: center;
+        /* Alinea verticalmente si las imágenes tienen diferentes alturas */
+        gap: 1px;
+        /* Espaciado entre imágenes */
+        /*opacity: 0.7;  Transparencia: 0 es completamente transparente, 1 es completamente opaco */
+        position: static;
+    }
+
+    .products-list p {
+
+        font-family: "Anonymous Pro";
+        font-size: 15px;
+    }
+
+    .products-list h2 {
+
+        font-family: "Anonymous Pro";
+        font-size: 15px;
+    }
+
+    .products-list h1 {
+
+        font-family: "Anonymous Pro";
+        font-size: 15px;
+    }
+
+    .products-list li {
+
+        font-family: "Anonymous Pro";
+        font-size: 15px;
+    }
+
+
+    .products-list .products-item {
+        margin: 0%;
+        margin-left: 1%;
+        width: 77%;
+        margin-bottom: 2%;
+        display: flex;
+        flex-direction: column;
+        font-family: "Anonymous Pro";
+    }
+
+
+    .products-list .products-item img,
+    .products-item img {
+        width: 100%;
+        height: auto;
+        position: static;
+    }
+
+    .products-list .products-item a {
+        position: static;
+        display: block;
+        width: 100%;
+        padding: 20px 0;
+        color: grey;
+        text-align: center;
+        text-decoration: none;
+        font-size: 30px;
+    }
+
+
+
+    /* Estilo para el contenedor */
+    .dropdown {
+        position: relative;
+        display: inline-block;
+        margin: 2px;
+    }
+
+    /* Estilo del botón */
+    .dropdown-button {
+        background-color: #007BFF;
+        color: white;
+        padding: 20% 30%;
+        font-size: 10px;
+        border: none;
+        cursor: pointer;
+        border-radius: 2px;
+        transition: background-color 0.3s ease;
+    }
+
+    .dropdown-button:hover {
+        background-color: #0056b3;
+    }
+
+    /* Estilo del menú */
+    .dropdown-menu {
+        display: none;
+        /* Oculto por defecto */
+        position: absolute;
+        background-color: white;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    /* Estilo para los elementos de la lista */
+    .dropdown-menu li {
+        border-bottom: 1px solid #ddd;
+    }
+
+    .dropdown-menu li:last-child {
+        border-bottom: none;
+    }
+
+    .dropdown-menu li a {
+        color: black;
+        padding: 10px 15px;
+        text-decoration: none;
+        display: block;
+        transition: background-color 0.3s ease;
+    }
+
+    .dropdown-menu li a:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Mostrar el menú cuando se active */
+    .dropdown.active .dropdown-menu {
+        display: block;
+    }
+
+    .header-top h1 {
+        margin-top: 4%;
+        margin-right: 20%;
+        font-size: 20px;
+        color: white;
+    }
+
+    .category_list {
+        width: 100px;
+        font-size: 100%;
+    }
+
+    .logo_imge img {
+        width: 70px;
+        margin-left: 20px;
+    }
+
+    .wrap .index_navegacion {
+        position: absolute;
+        margin-top: -40%;
+    }
+
+    .index_navegacion h2 {
+        margin-top: 0%;
+        margin-left: 5%;
+        margin-right: 35%;
+        font-size: 25px;
+        color: white;
+        font-family: "Anonymous Pro";
+        text-align: left;
+    }
+
+    .dropdown {
+        margin-top: 0%;
+        margin-left: 5%;
+    }
+
+
+    .products-item .escudo img {
+        width: 55%;
+        margin-left: 20%;
+        height: auto;
+        position: static;
+    }
+
+    .products-list {
+        display: flex;
+        padding: 1%;
+        margin-left: auto;
+        margin-right: auto;
+        justify-content: center;
+        /* Centra horizontalmente */
+        align-items: center;
+        /* Centra verticalmente */
+        position: static;
+    }
+
+    .staticImg {
+        display: flex;
+        padding: 0;
+        width: 0%;
+        margin-top: 0%;
+        animation: cambio 80s infinite;
+    }
+
+
+    .centraImg img {
+        width: 100%;
+        margin-left: 0%;
+        margin-right: auto;
+    }
+
+    .sdoParrafo h4 {
+        text-align: justify;
+        font-family: "Anonymous Pro";
+    }
+
+    .sdoParrafo h4 {
+        margin-top: 1%;
+        text-align: justify;
+        font-family: "Anonymous Pro";
+    }
+
+    .sdoParrafo p {
+        margin-top: 1%;
+        text-align: justify;
+        font-family: "Anonymous Pro";
+        margin-left: 2%;
+        margin-left: 2%;
+    }
+
+    .search-table {
+        margin-top: 60%;
+        width: 100%;
+    }
+}
+
+
+/* Investigators Section Grid */
+.profiles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 20px;
+    width: 95%;
+    margin: 40px auto;
+    align-items: stretch;
+}
+
+.profile {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    padding: 30px 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-family: "Anonymous Pro";
-    padding: 0%;
-  }
-  
-  .products-item_index iframe {
-    max-width: 800px;    /* Limita el tamaño máximo del video */
-    aspect-ratio: 16 / 9; /* Mantiene la relación de aspecto 16:9 */
-  }
-  
-  
-  /*------------------------*/
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+    border-top: 6px solid #274958;
+    height: 100%;
+}
 
+.profile:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
 
-  .products-list{
- 
-    flex-direction: column;
-    display: flex;
-    width: auto;
-    height: auto;
-    font-family: "Anonymous Pro";
-    font-size: 5%;
-    align-items: center; /* Alinea verticalmente si las imágenes tienen diferentes alturas */
-    gap: 1px; /* Espaciado entre imágenes */
-    /*opacity: 0.7;  Transparencia: 0 es completamente transparente, 1 es completamente opaco */
-    position:static;
-  }
+.profile img {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 25px;
+    border: 4px solid #f0f0f0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
 
-  .products-list p{
- 
-    font-family: "Anonymous Pro";
-    font-size: 15px;
-  }
-
-  .products-list h2{
- 
-    font-family: "Anonymous Pro";
-    font-size: 15px;
-  }
-
-  .products-list h1{
- 
-    font-family: "Anonymous Pro";
-    font-size: 15px;
-  }
-
-  .products-list li{
- 
-    font-family: "Anonymous Pro";
-    font-size: 15px;
-  }
-
-
-  .products-list .products-item {
-    margin: 0%;
-    margin-left: 1%;
-    width: 77%;
-    margin-bottom: 2%;
+.profile-content {
     display: flex;
     flex-direction: column;
-    font-family: "Anonymous Pro";
-  }
-  
-  
-  .products-list .products-item img,
-  .products-item img {
     width: 100%;
-    height: auto;
-    position: static;
-  }
-  
-  .products-list .products-item a {
-    position: static;
-    display: block;
-    width: 100%;
-    padding: 20px 0;
-    color: grey;
+    flex-grow: 1;
+}
+
+.profile h1 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #274958;
     text-align: center;
-    text-decoration: none;
-    font-size: 30px;
-  }
-
-
-  
-/* Estilo para el contenedor */
-.dropdown {
-    position: relative;
-    display: inline-block;
-    margin: 2px;
+    margin-bottom: 25px;
+    font-family: 'Fira Sans Condensed', sans-serif;
+    min-height: 2.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-/* Estilo del botón */
-.dropdown-button {
-    background-color: #007BFF;
-    color: white;
-    padding: 20% 30%;
-    font-size: 10px;
-    border: none;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: background-color 0.3s ease;
-}
-
-.dropdown-button:hover {
-    background-color: #0056b3;
-}
-
-/* Estilo del menú */
-.dropdown-menu {
-    display: none; /* Oculto por defecto */
-    position: absolute;
-    background-color: white;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    padding: 0;
-    margin: 0;
+.profile-details {
     list-style: none;
-    border-radius: 5px;
-    overflow: hidden;
+    padding: 0;
+    width: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-/* Estilo para los elementos de la lista */
-.dropdown-menu li {
-    border-bottom: 1px solid #ddd;
+.profile-details li {
+    font-size: 0.82rem;
+    color: #555;
+    line-height: 1.5;
+    font-family: 'Parkinsans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #f5f5f5;
+    padding-bottom: 10px;
 }
 
-.dropdown-menu li:last-child {
+.profile-details li:last-child {
     border-bottom: none;
 }
 
-.dropdown-menu li a {
-    color: black;
-    padding: 10px 15px;
-    text-decoration: none;
+.profile-details li strong {
+    color: #274958;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    letter-spacing: 0.8px;
+    font-weight: 800;
+}
+
+.profile-details li span {
     display: block;
-    transition: background-color 0.3s ease;
+    min-height: 1.2em;
 }
 
-.dropdown-menu li a:hover {
-    background-color: #f1f1f1;
+/* Container for text blocks */
+.content-container {
+    width: 85%;
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 30px;
+    background: #fdfdfd;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
 }
 
-/* Mostrar el menú cuando se active */
-.dropdown.active .dropdown-menu {
-    display: block;
+.content-container p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #333;
 }
 
-.header-top h1{
-    margin-top: 4%;
-    margin-right: 20%;
-    font-size: 20px;
-    color:white;
+/* Responsive Overrides (Cleaning up) */
+@media screen and (max-width: 800px) {
+    .profiles-grid {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+        width: 98%;
+    }
+
+    .profile {
+        padding: 20px 15px;
+    }
+
+    .profile img {
+        width: 140px;
+        height: 140px;
+    }
+
+    .content-container {
+        width: 95%;
+        padding: 20px;
+    }
 }
 
-.category_list {
-    width: 100px;
-    font-size: 100%;
-  }
-
-  .logo_imge img{
-    width: 70px;
-    margin-left: 20px;
-  }
-
-  .wrap .index_navegacion{
-    position: absolute;
-    margin-top: -40%;
-  }
-  
-  .index_navegacion h2{
-    margin-top: 0%;
-    margin-left: 5%;
-    margin-right: 35%;
-    font-size: 25px;
-    color:white;
-    font-family: "Anonymous Pro";
-    text-align:left;
-  }
-
-  .dropdown{
-    margin-top: 0%;
-    margin-left: 5%;
-  }
-
-
-  .products-item .escudo img {
-    width:55%;
-    margin-left: 20%;
-    height: auto;
-    position: static;
-  }
-
-  .products-list{
-    display: flex;
-    padding: 1%;
-    margin-left: auto;
-    margin-right: auto;
-    justify-content: center; /* Centra horizontalmente */
-    align-items: center; /* Centra verticalmente */
-    position: static;
-  }
-
-  .staticImg{
-    display: flex;
-    padding: 0;
-    width: 0%;
-    margin-top: 0%;
-    animation: cambio 80s infinite;
-  } 
-
-
-  .centraImg img{
-    width: 100%;
-    margin-left: 0%;
-    margin-right: auto;
-  }
-
-  .sdoParrafo h4{
-    text-align:justify;
-    font-family: "Anonymous Pro";
-  }
-  
-  .sdoParrafo h4{
-    margin-top: 1%;
-    text-align: justify;
-    font-family: "Anonymous Pro";
-  }
-
-  .sdoParrafo p{
-    margin-top: 1%;
-    text-align: justify;
-    font-family: "Anonymous Pro";
-    margin-left: 2%;
-    margin-left: 2%;
-  }
-
-  .search-table {
-    margin-top: 60%;
-    width: 100%;
+@media screen and (max-width: 480px) {
+    .profiles-grid {
+        grid-template-columns: 1fr;
+    }
 }
-}
-
