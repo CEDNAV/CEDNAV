@@ -375,7 +375,10 @@
 				aquí!
 				<br><br>
 				</strong><br> <br>
-			</p> <a href="sistema_armas.html"><span class="icon-briefcase"></span> <strong>Más...</strong></a>
+			</p> <a href="PRESENTACION_MVP_BARRACUDA/index.html" onclick="verificarAcceso()">
+    <span class="icon-briefcase"></span> 
+    <strong>Avances desarrollo...</strong>
+</a>
 		</div>
 
 		<div class="products-item" category="Sistemas Armas">
@@ -539,6 +542,18 @@
 		</div>
 
 	</section>
+
+	<script>
+function verificarAcceso() {
+    var codigo = prompt("Ingrese el código de seguridad:");
+
+    if (codigo === "corei5") {
+        window.location.href = "PRESENTACION_MVP_BARRACUDA/index.html";
+    } else {
+        alert("Código incorrecto. Acceso denegado.");
+    }
+}
+</script>
 
 
 </body>
