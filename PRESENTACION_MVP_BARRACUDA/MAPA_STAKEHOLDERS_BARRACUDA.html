@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matriz de Stakeholders — SW CONSOLA BARRACUDA V2.0 | CEDNAV</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #e8f0f8;
+            --primary: #0d3b66;
+            --primary-light: #1a5fa0;
+            --accent: #2980b9;
+            --text: #1e293b;
+            --text-secondary: #475569;
+            --text-muted: #64748b;
+            --border: #bfcfe0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 40px;
+        }
+
+        /* ============ HEADER ============ */
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .header-institution {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+
+        .header h1 span {
+            font-weight: 400;
+        }
+
+        .header h2 {
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--text-secondary);
+            margin-bottom: 2px;
+        }
+
+        .header .sub {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* ============ MATRIX LAYOUT ============ */
+        .matrix-outer {
+            display: flex;
+            align-items: stretch;
+            max-width: 1000px;
+            margin: 0 auto 20px;
+        }
+
+        /* Y-axis */
+        .y-axis-col {
+            width: 48px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding-bottom: 38px;
+        }
+
+        .y-axis-title {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--primary);
+        }
+
+        .y-label {
+            position: absolute;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .y-label.top {
+            top: 2px;
+        }
+
+        .y-label.bottom {
+            bottom: 42px;
+        }
+
+        /* Grid column */
+        .grid-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* The 2x2 grid */
+        .grid-2x2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+            border-left: 3px solid var(--primary);
+            border-bottom: 3px solid var(--primary);
+            position: relative;
+        }
+
+        /* Arrow tips */
+        .grid-2x2::before {
+            content: '▲';
+            position: absolute;
+            top: -16px;
+            left: -8px;
+            font-size: 13px;
+            color: var(--primary);
+        }
+
+        .grid-2x2::after {
+            content: '▶';
+            position: absolute;
+            bottom: -8px;
+            right: -14px;
+            font-size: 13px;
+            color: var(--primary);
+        }
+
+        /* Center dividers */
+        .divider-h {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            border-top: 2px dashed var(--border);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .divider-v {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            border-left: 2px dashed var(--border);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* X-axis row */
+        .x-axis-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 38px;
+            position: relative;
+            margin-left: 48px;
+            max-width: calc(1000px - 48px);
+        }
+
+        .x-axis-title {
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--primary);
+        }
+
+        .x-label {
+            position: absolute;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .x-label.left {
+            left: 10px;
+        }
+
+        .x-label.right {
+            right: 10px;
+        }
+
+        /* ============ QUADRANTS ============ */
+        .quadrant {
+            padding: 18px 16px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 290px;
+        }
+
+        .q-tl {
+            background: rgba(245, 158, 11, 0.07);
+        }
+
+        .q-tr {
+            background: rgba(220, 38, 38, 0.06);
+        }
+
+        .q-bl {
+            background: rgba(148, 163, 184, 0.07);
+        }
+
+        .q-br {
+            background: rgba(34, 197, 94, 0.07);
+        }
+
+        .q-label {
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            line-height: 1.3;
+            margin-bottom: 14px;
+            flex-shrink: 0;
+        }
+
+        .q-tl .q-label {
+            color: #92400e;
+        }
+
+        .q-tr .q-label {
+            color: #b91c1c;
+        }
+
+        .q-bl .q-label {
+            color: #64748b;
+        }
+
+        .q-br .q-label {
+            color: #15803d;
+        }
+
+        /* ============ STAKEHOLDER CARDS ============ */
+        .node-list {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            width: 100%;
+        }
+
+        .s-node {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            background: white;
+            border-radius: 8px;
+            padding: 9px 12px;
+            border: 1px solid rgba(0, 0, 0, 0.07);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .s-dot {
+            width: 26px;
+            height: 26px;
+            min-width: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 800;
+            color: white;
+            margin-top: 1px;
+            flex-shrink: 0;
+        }
+
+        .q-tl .s-dot {
+            background: #d97706;
+        }
+
+        .q-tr .s-dot {
+            background: #dc2626;
+        }
+
+        .q-bl .s-dot {
+            background: #94a3b8;
+        }
+
+        .q-br .s-dot {
+            background: #16a34a;
+        }
+
+        .s-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .s-name {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.3;
+        }
+
+        .s-role {
+            font-size: 10px;
+            color: var(--text-muted);
+            line-height: 1.35;
+            margin-top: 2px;
+        }
+
+        /* Influence/Interest bars */
+        .s-bars {
+            display: flex;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .s-bar-group {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .s-bar-label {
+            font-size: 8px;
+            font-weight: 700;
+            color: var(--text-muted);
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            min-width: 20px;
+        }
+
+        .s-bar-dots {
+            display: flex;
+            gap: 2px;
+        }
+
+        .bar-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #e2e8f0;
+        }
+
+        .bar-dot.f-red {
+            background: #dc2626;
+        }
+
+        .bar-dot.f-amber {
+            background: #d97706;
+        }
+
+        .bar-dot.f-green {
+            background: #16a34a;
+        }
+
+        .bar-dot.f-gray {
+            background: #94a3b8;
+        }
+
+        /* ============ LEGEND ============ */
+        .legend {
+            display: flex;
+            gap: 22px;
+            justify-content: center;
+            margin: 18px 0 30px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .legend-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+        }
+
+        /* ============ SUMMARY TABLE ============ */
+        .summary-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 12px;
+            padding-left: 12px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .summary-table thead th {
+            background: var(--primary);
+            color: white;
+            padding: 10px 12px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .summary-table tbody td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #eef2f7;
+            color: var(--text-secondary);
+            vertical-align: top;
+            font-size: 11.5px;
+        }
+
+        .summary-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .summary-table tbody tr:hover {
+            background: #f8fafc;
+        }
+
+        .name-cell {
+            font-weight: 700;
+            color: var(--text);
+            white-space: nowrap;
+        }
+
+        .type-cell {
+            font-style: italic;
+            font-size: 11px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .badge-red {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+
+        .badge-amber {
+            background: #fffbeb;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
+        .badge-green {
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .badge-gray {
+            background: #f8fafc;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* ============ FOOTER ============ */
+        .footer {
+            text-align: center;
+            margin-top: 28px;
+            padding-top: 16px;
+            border-top: 2px solid var(--border);
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .footer strong {
+            color: var(--primary);
+        }
+
+        /* Print */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .s-node {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+
+            .grid-2x2 {
+                border-color: #333;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-institution">Centro de Desarrollo Tecnológico Naval — CEDNAV</div>
+            <h1>Matriz de <span>Stakeholders</span></h1>
+            <h2>Proyecto BARRACUDA V2.0 <br> Diseño, Desarrollo e Implementación de un Ecosistema de Software
+                Concurrente
+                para la Integración Multi-Protocolo, Procesamiento Lógico en Tiempo Real y Visualización Táctica de
+                Datos en Sistemas Navales de Control de Armas</h2>
+            <div class="sub">Modelo de Mendelow (Influencia vs. Interés) · Trabajo de Grado en Ingeniería de Software
+            </div>
+        </div>
+
+        <!-- ======== MATRIX ======== -->
+        <div class="matrix-outer">
+
+            <!-- Y AXIS -->
+            <div class="y-axis-col">
+                <span class="y-label top">Alto</span>
+                <span class="y-axis-title">Influencia</span>
+                <span class="y-label bottom">Bajo</span>
+            </div>
+
+            <!-- GRID -->
+            <div class="grid-col">
+                <div class="grid-2x2">
+                    <div class="divider-h"></div>
+                    <div class="divider-v"></div>
+
+                    <!-- ===== Q1: TENER SATISFECHOS (Alta Influencia / Bajo Interés) ===== -->
+                    <div class="quadrant q-tl">
+                        <div class="q-label">Tener<br>Satisfechos</div>
+                        <div class="node-list">
+                            <div class="s-node">
+                                <div class="s-dot">1</div>
+                                <div class="s-info">
+                                    <div class="s-name">Alto Mando Naval</div>
+                                    <div class="s-role">Supervisa alineación con Plan Estratégico Naval 2042 y metas de
+                                        soberanía tecnológica.</div>
+                                    <div class="s-bars">
+                                        <div class="s-bar-group"><span class="s-bar-label">Inf.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-amber"></div>
+                                                <div class="bar-dot f-amber"></div>
+                                                <div class="bar-dot f-amber"></div>
+                                                <div class="bar-dot f-amber"></div>
+                                                <div class="bar-dot f-amber"></div>
+                                            </div>
+                                        </div>
+                                        <div class="s-bar-group"><span class="s-bar-label">Int.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-amber"></div>
+                                                <div class="bar-dot f-amber"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="s-node">
+                                <div class="s-dot">2</div>
+                                <div class="s-info">
+                                    <div class="s-name">Jefatura de Material Naval</div>
+                                    <div class="s-role">Aprueba los recursos institucionales y presupuesto asignado al
+                                        proyecto de desarrollo tecnológico.</div>
+                                    <div class="s-bars">
+                                        <div class="s-bar-group"><span class="s-bar-label">Inf.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-amber"></div>
+                                                <div class="bar-dot f-amber"></div>
+                                                <div class="bar-dot f-amber"></div>
+                                                <div class="bar-dot f-amber"></div>
+                                                <div class="bar-dot"></div>
+                                            </div>
+                                        </div>
+                                        <div class="s-bar-group"><span class="s-bar-label">Int.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-amber"></div>
+                                                <div class="bar-dot f-amber"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="s-node">
+                                <div class="s-dot">3</div>
+                                <div class="s-info">
+                                    <div class="s-name">Comando de Flota Naval</div>
+                                    <div class="s-role">Evalúa aptitud del sistema para despliegue operativo en unidades
+                                        de superficie.</div>
+                                    <div class="s-bars">
+                                        <div class="s-bar-group"><span class="s-bar-label">Inf.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-amber"></div>
+                                                <div class="bar-dot f-amber"></div>
+                                                <div class="bar-dot f-amber"></div>
+                                                <div class="bar-dot f-amber"></div>
+                                                <div class="bar-dot"></div>
+                                            </div>
+                                        </div>
+                                        <div class="s-bar-group"><span class="s-bar-label">Int.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-amber"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== Q2: GESTIONAR MINUCIOSAMENTE (Alta Influencia / Alto Interés) ===== -->
+                    <div class="quadrant q-tr">
+                        <div class="q-label">Gestionar<br>Minuciosamente</div>
+                        <div class="node-list">
+                            <div class="s-node">
+                                <div class="s-dot">4</div>
+                                <div class="s-info">
+                                    <div class="s-name">Director del CEDNAV</div>
+                                    <div class="s-role">Sponsor y tutor directo del proyecto. Define requerimientos
+                                        operativos, valida ICD y aprueba entregas de Sprint.</div>
+                                    <div class="s-bars">
+                                        <div class="s-bar-group"><span class="s-bar-label">Inf.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                            </div>
+                                        </div>
+                                        <div class="s-bar-group"><span class="s-bar-label">Int.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="s-node">
+                                <div class="s-dot">5</div>
+                                <div class="s-info">
+                                    <div class="s-name">Desarrollador del Proyecto (Tesista)</div>
+                                    <div class="s-role">Responsable integral: backend concurrente, lógica de negocio
+                                        naval, procesamiento binario e HMI.</div>
+                                    <div class="s-bars">
+                                        <div class="s-bar-group"><span class="s-bar-label">Inf.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot"></div>
+                                            </div>
+                                        </div>
+                                        <div class="s-bar-group"><span class="s-bar-label">Int.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="s-node">
+                                <div class="s-dot">6</div>
+                                <div class="s-info">
+                                    <div class="s-name">Jefe del Programa de Sistemas de Armas</div>
+                                    <div class="s-role">Define protocolos de integración con IC, valida procesamiento
+                                        binario y compatibilidad con hardware naval.</div>
+                                    <div class="s-bars">
+                                        <div class="s-bar-group"><span class="s-bar-label">Inf.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot"></div>
+                                            </div>
+                                        </div>
+                                        <div class="s-bar-group"><span class="s-bar-label">Int.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                                <div class="bar-dot f-red"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== Q3: MONITORIZAR (Baja Influencia / Bajo Interés) ===== -->
+                    <div class="quadrant q-bl">
+                        <div class="q-label">Monitorizar</div>
+                        <div class="node-list">
+                            <div class="s-node">
+                                <div class="s-dot">10</div>
+                                <div class="s-info">
+                                    <div class="s-name">Proveedores de Hardware Industrial</div>
+                                    <div class="s-role">Suministradores de PC industriales y periféricos. Interés
+                                        limitado a compatibilidad.</div>
+                                    <div class="s-bars">
+                                        <div class="s-bar-group"><span class="s-bar-label">Inf.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-gray"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                            </div>
+                                        </div>
+                                        <div class="s-bar-group"><span class="s-bar-label">Int.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-gray"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="s-node">
+                                <div class="s-dot">11</div>
+                                <div class="s-info">
+                                    <div class="s-name">Equipo de Firmware del IC</div>
+                                    <div class="s-role">Equipo independiente del software embebido del Gabinete de
+                                        Interfaz. Integración vía ICD.</div>
+                                    <div class="s-bars">
+                                        <div class="s-bar-group"><span class="s-bar-label">Inf.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-gray"></div>
+                                                <div class="bar-dot f-gray"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                            </div>
+                                        </div>
+                                        <div class="s-bar-group"><span class="s-bar-label">Int.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-gray"></div>
+                                                <div class="bar-dot f-gray"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="s-node">
+                                <div class="s-dot">12</div>
+                                <div class="s-info">
+                                    <div class="s-name">Universidad (Tutor Académico)</div>
+                                    <div class="s-role">Evalúa pertinencia metodológica y académica del trabajo de
+                                        grado.</div>
+                                    <div class="s-bars">
+                                        <div class="s-bar-group"><span class="s-bar-label">Inf.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-gray"></div>
+                                                <div class="bar-dot f-gray"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                            </div>
+                                        </div>
+                                        <div class="s-bar-group"><span class="s-bar-label">Int.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-gray"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== Q4: MANTENER INFORMADOS (Baja Influencia / Alto Interés) ===== -->
+                    <div class="quadrant q-br">
+                        <div class="q-label">Mantener<br>Informados</div>
+                        <div class="node-list">
+                            <div class="s-node">
+                                <div class="s-dot">7</div>
+                                <div class="s-info">
+                                    <div class="s-name">Operadores Navales Tácticos</div>
+                                    <div class="s-role">Usuarios finales. Retroalimentación sobre usabilidad y claridad
+                                        de información táctica.</div>
+                                    <div class="s-bars">
+                                        <div class="s-bar-group"><span class="s-bar-label">Inf.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-green"></div>
+                                                <div class="bar-dot f-green"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                            </div>
+                                        </div>
+                                        <div class="s-bar-group"><span class="s-bar-label">Int.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-green"></div>
+                                                <div class="bar-dot f-green"></div>
+                                                <div class="bar-dot f-green"></div>
+                                                <div class="bar-dot f-green"></div>
+                                                <div class="bar-dot f-green"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="s-node">
+                                <div class="s-dot">8</div>
+                                <div class="s-info">
+                                    <div class="s-name">Técnicos de Mantenimiento Naval</div>
+                                    <div class="s-role">Responsables de instalación, configuración y mantenimiento del
+                                        paquete .deb en consolas.</div>
+                                    <div class="s-bars">
+                                        <div class="s-bar-group"><span class="s-bar-label">Inf.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-green"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                            </div>
+                                        </div>
+                                        <div class="s-bar-group"><span class="s-bar-label">Int.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-green"></div>
+                                                <div class="bar-dot f-green"></div>
+                                                <div class="bar-dot f-green"></div>
+                                                <div class="bar-dot f-green"></div>
+                                                <div class="bar-dot"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="s-node">
+                                <div class="s-dot">9</div>
+                                <div class="s-info">
+                                    <div class="s-name">Equipo CMS (Gestión de Combate)</div>
+                                    <div class="s-role">Sistema externo que alimenta pistas tácticas. Interés en
+                                        correcta integración de datos.</div>
+                                    <div class="s-bars">
+                                        <div class="s-bar-group"><span class="s-bar-label">Inf.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-green"></div>
+                                                <div class="bar-dot f-green"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                                <div class="bar-dot"></div>
+                                            </div>
+                                        </div>
+                                        <div class="s-bar-group"><span class="s-bar-label">Int.</span>
+                                            <div class="s-bar-dots">
+                                                <div class="bar-dot f-green"></div>
+                                                <div class="bar-dot f-green"></div>
+                                                <div class="bar-dot f-green"></div>
+                                                <div class="bar-dot f-green"></div>
+                                                <div class="bar-dot"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /grid-2x2 -->
+            </div><!-- /grid-col -->
+        </div><!-- /matrix-outer -->
+
+        <!-- X AXIS -->
+        <div class="x-axis-row">
+            <span class="x-label left">Bajo</span>
+            <span class="x-axis-title">Interés</span>
+            <span class="x-label right">Alto</span>
+        </div>
+
+        <!-- LEGEND -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-dot" style="background:#dc2626"></div>Gestionar Minuciosamente
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background:#d97706"></div>Tener Satisfechos
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background:#16a34a"></div>Mantener Informados
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot" style="background:#94a3b8"></div>Monitorizar
+            </div>
+        </div>
+
+        <!-- ======== SUMMARY TABLE ======== -->
+        <div style="margin-top: 10px;">
+            <div class="summary-title">Registro de Interesados — Detalle Consolidado</div>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Stakeholder</th>
+                        <th>Tipo</th>
+                        <th>Clasificación</th>
+                        <th>Influencia</th>
+                        <th>Interés</th>
+                        <th>Estrategia de Gestión</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>4</td>
+                        <td class="name-cell">Director del CEDNAV</td>
+                        <td class="type-cell">Interno / Primario</td>
+                        <td><span class="badge badge-red">Gestionar Minuciosamente</span></td>
+                        <td>■■■■■</td>
+                        <td>■■■■■</td>
+                        <td>Sprint Reviews semanales, demos funcionales, reportes técnicos detallados, aprobación de
+                            entregas.</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td class="name-cell">Desarrollador (Tesista)</td>
+                        <td class="type-cell">Interno / Primario</td>
+                        <td><span class="badge badge-red">Gestionar Minuciosamente</span></td>
+                        <td>■■■■○</td>
+                        <td>■■■■■</td>
+                        <td>Auto‑gestión diaria, Daily Scrum, Product Backlog y Git.</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td class="name-cell">Jefe Prog. Sistemas de Armas</td>
+                        <td class="type-cell">Interno / Primario</td>
+                        <td><span class="badge badge-red">Gestionar Minuciosamente</span></td>
+                        <td>■■■■○</td>
+                        <td>■■■■■</td>
+                        <td>Mesas de trabajo técnicas, validación de protocolo IC, pruebas de integración HW.</td>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td class="name-cell">Alto Mando Naval</td>
+                        <td class="type-cell">Interno / Secundario</td>
+                        <td><span class="badge badge-amber">Tener Satisfechos</span></td>
+                        <td>■■■■■</td>
+                        <td>■■○○○</td>
+                        <td>Informes ejecutivos trimestrales, alineación Plan Estratégico Naval 2042.</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td class="name-cell">Jefatura de Material Naval</td>
+                        <td class="type-cell">Interno / Secundario</td>
+                        <td><span class="badge badge-amber">Tener Satisfechos</span></td>
+                        <td>■■■■○</td>
+                        <td>■■○○○</td>
+                        <td>Solicitudes y aprobación de recursos, informes de avance presupuestal.</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td class="name-cell">Comando de Flota Naval</td>
+                        <td class="type-cell">Interno / Secundario</td>
+                        <td><span class="badge badge-amber">Tener Satisfechos</span></td>
+                        <td>■■■■○</td>
+                        <td>■○○○○</td>
+                        <td>Informes de aptitud para despliegue, coordinación de pruebas en buques.</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td class="name-cell">Operadores Navales Tácticos</td>
+                        <td class="type-cell">Interno / Primario</td>
+                        <td><span class="badge badge-green">Mantener Informados</span></td>
+                        <td>■■○○○</td>
+                        <td>■■■■■</td>
+                        <td>Sesiones de validación UX, pruebas de usabilidad, feedback post‑demo.</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td class="name-cell">Técnicos de Mantenimiento</td>
+                        <td class="type-cell">Conectado</td>
+                        <td><span class="badge badge-green">Mantener Informados</span></td>
+                        <td>■○○○○</td>
+                        <td>■■■■○</td>
+                        <td>Documentación técnica, manuales, capacitación en despliegue .deb.</td>
+                    </tr>
+                    <tr>
+                        <td>9</td>
+                        <td class="name-cell">Equipo CMS</td>
+                        <td class="type-cell">Conectado</td>
+                        <td><span class="badge badge-green">Mantener Informados</span></td>
+                        <td>■■○○○</td>
+                        <td>■■■■○</td>
+                        <td>Coordinación de interfaces, validación de integración de pistas tácticas.</td>
+                    </tr>
+                    <tr>
+                        <td>10</td>
+                        <td class="name-cell">Proveedores HW Industrial</td>
+                        <td class="type-cell">Externo</td>
+                        <td><span class="badge badge-gray">Monitorizar</span></td>
+                        <td>■○○○○</td>
+                        <td>■○○○○</td>
+                        <td>Comunicación bajo demanda, especificaciones de compatibilidad.</td>
+                    </tr>
+                    <tr>
+                        <td>11</td>
+                        <td class="name-cell">Equipo Firmware IC</td>
+                        <td class="type-cell">Conectado</td>
+                        <td><span class="badge badge-gray">Monitorizar</span></td>
+                        <td>■■○○○</td>
+                        <td>■■○○○</td>
+                        <td>Intercambio puntual de actualizaciones ICD, pruebas de compatibilidad TCP.</td>
+                    </tr>
+                    <tr>
+                        <td>12</td>
+                        <td class="name-cell">Universidad (Tutor Académico)</td>
+                        <td class="type-cell">Externo</td>
+                        <td><span class="badge badge-gray">Monitorizar</span></td>
+                        <td>■■○○○</td>
+                        <td>■○○○○</td>
+                        <td>Entregas académicas formales, sustentación del trabajo de grado.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <strong>PROYECTO SW CONSOLA BARRACUDA V2.0</strong> — Matriz de Stakeholders (Modelo de Mendelow: Influencia vs.
+            Interés)<br>
+            Centro de Desarrollo Tecnológico Naval — CEDNAV · Armada Nacional de Colombia · 2026
+        </div>
+
+    </div>
+</body>
+
+</html>

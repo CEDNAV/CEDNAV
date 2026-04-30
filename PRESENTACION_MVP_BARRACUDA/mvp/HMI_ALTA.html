@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barracuda 7.0</title>
+
+    <!-- Importa las fuentes Inter e Inconsolata desde Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Define las variables de diseño basadas en tus guías */
+        :root {
+            /* Colores primarios */
+            --sainsel-blue-primary: #0045B2;
+            --sainsel-dark-primary: #000B19; /* COLOR CORREGIDO */
+            --sainsel-blue-accent: #0062FF;
+
+            /* Colores secundarios */
+            --sainsel-teal: #00B291;
+            --sainsel-blue-gray: #4D6280;
+            --sainsel-gray-dark: #333C4D;
+
+            /* Colores de estado */
+            --success-green: #00CC66;
+            --warning-orange: #FFB200;
+            --error-red: #FF0033;
+            --status-ok: #00CC66;
+            --status-warn: #FFB200;
+            --status-error: #FF0033;
+            
+            /* Espaciado (múltiplos de 4px) */
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+        }
+
+        /* Estilos generales y de tipografía */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            color: #FFFFFF;
+            background-color: var(--sainsel-dark-primary); /* COLOR CORREGIDO */
+            overflow-x: hidden; /* Previene la barra de desplazamiento horizontal */
+            font-size: 0.8vh; /* Tamaño de fuente base que escala con la altura de la pantalla */
+        }
+
+        /* Contenedor principal para la interfaz */
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 100vw;
+            height: 100vh;
+            padding: var(--spacing-xl);
+        }
+
+        /* Estilos del encabezado */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--sainsel-dark-primary); /* COLOR CORREGIDO */
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border-bottom: 1px solid var(--sainsel-gray-dark);
+        }
+
+        .app-logo, .app-title, .app-time {
+            font-family: 'Inconsolata', monospace;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .app-title {
+            font-size: 2.2vh;
+        }
+
+        /* Estilos del contenido principal (paneles) */
+        main {
+            display: flex;
+            flex: 1;
+            gap: var(--spacing-lg);
+            padding-top: var(--spacing-lg);
+        }
+
+        .left-panel, .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+            width: 20%;
+        }
+
+        .central-section {
+            flex: 1;
+            position: relative;
+            background-color: rgba(51, 60, 77, 0.2); /* Fondo semi-transparente para el radar */
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Estilos de los paneles individuales */
+        .panel {
+            background-color: rgba(51, 60, 77, 0.4); /* sainsel-gray-dark semi-transparente */
+            border: 1px solid var(--sainsel-blue-gray);
+            padding: var(--spacing-lg);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+
+        .panel-title {
+            font-size: 1.8vh;
+            font-weight: 600; /* Inter Semibold */
+            color: #FFFFFF;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        /* Controles de botón */
+        .button-group {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+
+        .btn {
+            min-height: 4.8vh;
+            padding: 0 var(--spacing-lg);
+            border: none;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+            text-transform: uppercase;
+            font-size: 1.5vh;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background-color: var(--sainsel-blue-primary);
+            color: #FFFFFF;
+        }
+
+        .btn-primary.active, .btn-primary:hover {
+            background-color: var(--sainsel-blue-accent);
+        }
+
+        .btn-action-red {
+            background-color: var(--error-red);
+            color: #FFFFFF;
+        }
+        
+        .btn-action-red:hover {
+            background-color: #ff3366;
+        }
+
+        /* Estilos de inputs y etiquetas */
+        .input-group, .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs);
+        }
+
+        .label, .checkbox-label, .condition-label {
+            font-size: 1.3vh;
+            color: var(--sainsel-blue-gray);
+        }
+
+        .input-control {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .input {
+            width: 100%;
+            height: 4vh;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--sainsel-blue-gray);
+            color: #FFFFFF;
+            padding: 0 var(--spacing-sm);
+            font-family: 'Inconsolata', monospace;
+            border-radius: 4px;
+            font-size: 1.5vh;
+        }
+
+        /* Estilos para el área del log */
+        .log-area {
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--sainsel-blue-gray);
+            padding: var(--spacing-md);
+            overflow-y: auto;
+            height: 15vh;
+            font-family: 'Inconsolata', monospace;
+            font-size: 1.3vh;
+            color: var(--success-green);
+        }
+        
+        .log-area p {
+            line-height: 1.2;
+        }
+
+        /* Estilos para el área central (radar) */
+        .radar-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background-color: var(--sainsel-dark-primary); /* COLOR CORREGIDO */
+            background-image:
+                linear-gradient(rgba(77, 98, 128, 0.2) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(77, 98, 128, 0.2) 1px, transparent 1px);
+            background-size: 2.5vh 2.5vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .compass-ring {
+            width: 80vh;
+            height: 80vh;
+            border: 1px solid var(--sainsel-blue-gray);
+            border-radius: 50%;
+            position: relative;
+        }
+        
+        .ship-icon {
+            width: 1.5vw;
+            height: 4vh;
+            background-color: #fff;
+            clip-path: polygon(50% 0%, 0% 100%, 50% 75%, 100% 100%);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        /* Estilos de las pestañas */
+        .panel-tabs {
+            display: flex;
+            background-color: rgba(51, 60, 77, 0.4);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--sainsel-blue-gray);
+        }
+
+        .panel-tabs .tab {
+            flex: 1;
+            padding: var(--spacing-sm);
+            background-color: transparent;
+            border: none;
+            color: var(--sainsel-blue-gray);
+            font-size: 1.5vh;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.2s, background-color 0.2s;
+            text-align: center;
+        }
+
+        .panel-tabs .tab.active {
+            background-color: var(--sainsel-blue-primary);
+            color: #FFFFFF;
+        }
+
+        /* Estilos para las tarjetas de info en el panel derecho */
+        .info-card {
+            background-color: rgba(51, 60, 77, 0.4);
+            border: 1px solid var(--sainsel-blue-gray);
+            padding: var(--spacing-md);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-sm);
+        }
+
+        .data-item, .indicator-item {
+            display: flex;
+            justify-content: space-between;
+            gap: var(--spacing-xs);
+        }
+        
+        .data-label, .indicator-label {
+            font-family: 'Inconsolata', monospace;
+            font-size: 1.3vh;
+            color: var(--sainsel-blue-gray);
+        }
+        
+        .data-value, .indicator-value {
+            font-family: 'Inconsolata', monospace;
+            font-size: 1.3vh;
+            color: #FFFFFF;
+        }
+
+        .status-ok { color: var(--status-ok); }
+        .status-warn { color: var(--status-warn); }
+        .status-error { color: var(--status-error); }
+        
+        /* MEDIA QUERIES para hacer el diseño responsive en pantallas más pequeñas */
+        @media (max-width: 1920px) {
+            html, body {
+                font-size: 0.9vh;
+            }
+        }
+        
+        @media (max-width: 1440px) {
+            html, body {
+                font-size: 1.0vh;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            html, body {
+                font-size: 1.2vh;
+            }
+            .container {
+                padding: var(--spacing-lg);
+            }
+            main {
+                flex-direction: column;
+                gap: var(--spacing-lg);
+                overflow-y: auto;
+            }
+            .left-panel, .right-panel {
+                width: 100%;
+            }
+            .central-section {
+                height: 80vh;
+            }
+        }
+
+        @media (max-width: 768px) {
+            html, body {
+                font-size: 1.4vh;
+            }
+            .panel {
+                padding: var(--spacing-md);
+            }
+            .compass-ring {
+                width: 60vh;
+                height: 60vh;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            html, body {
+                font-size: 1.6vh;
+            }
+            .container {
+                padding: var(--spacing-md);
+            }
+            header {
+                flex-direction: column;
+                gap: var(--spacing-sm);
+                text-align: center;
+            }
+            .button-group {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+            }
+            .compass-ring {
+                width: 40vh;
+                height: 40vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- ENCABEZADO -->
+        <header>
+            <div class="app-logo">System Control Fire</div>
+            <div class="app-title">Barracuda 7.0</div>
+            <div class="app-time">14:16:36</div>
+        </header>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main>
+            <!-- PANEL IZQUIERDO -->
+            <aside class="left-panel">
+                <!-- Sección de control de sistema -->
+                <div class="panel">
+                    <h3 class="panel-title">System Control</h3>
+                    <div class="button-group">
+                        <button class="btn btn-primary active" id="on-station-btn">ON STATION</button>
+                        <button class="btn btn-primary" id="off-station-btn">OFF STATION</button>
+                    </div>
+                </div>
+
+                <!-- Sección de asignación de componentes -->
+                <div class="panel">
+                    <h3 class="panel-title">Assignment Components</h3>
+                    <div class="input-group">
+                        <label for="select-mode" class="label">Select mode: Up</label>
+                        <input type="text" id="select-mode" class="input" value="On:Ctrl">
+                    </div>
+                    <div class="input-group">
+                        <label for="select-apnis" class="label">Select Apnis</label>
+                        <input type="text" id="select-apnis" class="input" value="1.0">
+                    </div>
+                    
+                    <!-- Las opciones de PMS y LINK PMS ahora son checkboxes como en el diseño -->
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="select-pms" checked>
+                        <label for="select-pms" class="checkbox-label">Select PMS</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="link-pms">
+                        <label for="link-pms" class="checkbox-label">LINK PMS</label>
+                    </div>
+                </div>
+
+                <!-- Sección de condiciones de fuego -->
+                <div class="panel">
+                    <h3 class="panel-title">Fire Conditions</h3>
+                    <div class="condition-item">
+                        <span class="condition-label">Assigned System</span>
+                        <span class="condition-value">Situation on Watch</span>
+                    </div>
+                    <div class="condition-item">
+                        <span class="condition-label">Sub Weapon</span>
+                        <span class="condition-value">Priotity List</span>
+                    </div>
+                    <button class="btn btn-action-red" id="acquisition-btn">ACQUISITION FIRE</button>
+                </div>
+                
+                <!-- Sección de información de operación -->
+                <div class="panel">
+                    <h3 class="panel-title">Operation Information</h3>
+                    <div class="log-area" id="log-area">
+                        <p>14:16:36: System Initialized</p>
+                        <p>14:16:37: Connected to Sensor Suite</p>
+                        <p>14:16:38: On Station Status: OFF</p>
+                        <p>14:16:39: Ready for command</p>
+                    </div>
+                </div>
+                
+                <!-- Sección de meteorología -->
+                <div class="panel">
+                    <h3 class="panel-title">Meteorology</h3>
+                    <div class="input-group">
+                        <label for="wind-dir" class="label">Wind Dir.</label>
+                        <input type="text" id="wind-dir" class="input" value="120">
+                    </div>
+                    <div class="input-group">
+                        <label for="temp" class="label">Temp</label>
+                        <input type="text" id="temp" class="input" value="25">
+                    </div>
+                </div>
+            </aside>
+
+            <!-- SECCIÓN CENTRAL (Radar y Brújula) -->
+            <section class="central-section">
+                <div class="radar-container">
+                    <!-- Anillo exterior con grados -->
+                    <div class="compass-ring"></div>
+                    <!-- Icono de la embarcación -->
+                    <div class="ship-icon"></div>
+                </div>
+            </section>
+
+            <!-- PANEL DERECHO -->
+            <aside class="right-panel">
+                <!-- Pestañas -->
+                <div class="panel-tabs">
+                    <button class="tab active" data-tab="tactic">Tactic</button>
+                    <button class="tab" data-tab="event-log">Event Log</button>
+                    <button class="tab" data-tab="sensors">Sensors</button>
+                </div>
+
+                <!-- Contenido de las pestañas -->
+                <div class="tab-content active" id="tactic-content">
+                    <div class="info-card">
+                        <div class="data-grid">
+                            <div class="data-item"><span class="data-label">Heading</span><span class="data-value">0.0</span></div>
+                            <div class="data-item"><span class="data-label">Bearing</span><span class="data-value">0.0</span></div>
+                            <div class="data-item"><span class="data-label">Range</span><span class="data-value">0.0</span></div>
+                            <div class="data-item"><span class="data-label">Elevation</span><span class="data-value">0.0</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-content" id="event-log-content" style="display: none;">
+                    <!-- Contenido del log de eventos aquí -->
+                    <div class="info-card"><p>Event log content...</p></div>
+                </div>
+                <div class="tab-content" id="sensors-content" style="display: none;">
+                    <!-- Contenido de sensores aquí -->
+                    <div class="info-card"><p>Sensors content...</p></div>
+                </div>
+
+                <!-- Sección de información del objetivo -->
+                <div class="panel">
+                    <h3 class="panel-title">Target Information</h3>
+                    <div class="info-card">
+                        <div class="data-grid">
+                            <div class="data-item"><span class="data-label">Heading</span><span class="data-value">0.0</span></div>
+                            <div class="data-item"><span class="data-label">Range</span><span class="data-value">0.0</span></div>
+                            <div class="data-item"><span class="data-label">Targ. Rate</span><span class="data-value">0.0</span></div>
+                            <div class="data-item"><span class="data-label">Targ. Alt</span><span class="data-value">0.0</span></div>
+                            <div class="data-item"><span class="data-label">Velocity</span><span class="data-value">0.0</span></div>
+                            <div class="data-item"><span class="data-label">Strap</span><span class="data-value">0.0</span></div>
+                            <div class="data-item"><span class="data-label">GyroComp</span><span class="data-value">0.0</span></div>
+                            <div class="data-item"><span class="data-label">Ship Comp</span><span class="data-value">0.0</span></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sección de indicadores -->
+                <div class="panel">
+                    <h3 class="panel-title">Indicators</h3>
+                    <div class="info-card">
+                        <div class="data-grid">
+                            <div class="data-item"><span class="data-label">Status FC</span><span class="data-value status-ok">OK</span></div>
+                            <div class="data-item"><span class="data-label">Com. Data IC</span><span class="data-value status-warn">WARN</span></div>
+                            <div class="data-item"><span class="data-label">CMS Data</span><span class="data-value status-error">ERROR</span></div>
+                            <div class="data-item"><span class="data-label">Report Com.</span><span class="data-value status-ok">OK</span></div>
+                            <div class="data-item"><span class="data-label">AVG</span><span class="data-value status-ok">OK</span></div>
+                            <div class="data-item"><span class="data-label">Video CEV</span><span class="data-value status-ok">OK</span></div>
+                            <div class="data-item"><span class="data-label">Video In</span><span class="data-value status-ok">OK</span></div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <!-- Funcionalidad JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Maneja la funcionalidad de los botones ON/OFF STATION
+            const stationButtons = document.querySelectorAll('.button-group .btn');
+            stationButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    stationButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    console.log(`Estado cambiado a: ${button.textContent}`);
+                });
+            });
+
+            // Maneja el botón de ACQUISITION FIRE
+            const fireButton = document.getElementById('acquisition-btn');
+            fireButton.addEventListener('click', () => {
+                const logArea = document.getElementById('log-area');
+                const logEntry = document.createElement('p');
+                const time = new Date().toLocaleTimeString('es-ES', {hour12: false});
+                logEntry.textContent = `${time}: ACQUISITION FIRE INITIATED!`;
+                logArea.prepend(logEntry); // Añade el nuevo log al inicio
+                console.log('ACQUISITION FIRE activado.');
+            });
+            
+            // Maneja la funcionalidad de los checkboxes
+            const checkboxes = document.querySelectorAll('.checkbox-group input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', (event) => {
+                    const label = document.querySelector(`label[for="${event.target.id}"]`).textContent;
+                    console.log(`Estado de "${label}" cambiado a: ${event.target.checked}`);
+                });
+            });
+
+            // Maneja la funcionalidad de las pestañas
+            const tabButtons = document.querySelectorAll('.panel-tabs .tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabButtons.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const targetTab = tab.dataset.tab;
+
+                    // Desactiva todas las pestañas y oculta su contenido
+                    tabButtons.forEach(t => t.classList.remove('active'));
+                    tabContents.forEach(content => content.style.display = 'none');
+
+                    // Activa la pestaña clickeada y muestra su contenido
+                    tab.classList.add('active');
+                    document.getElementById(`${targetTab}-content`).style.display = 'block';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
+

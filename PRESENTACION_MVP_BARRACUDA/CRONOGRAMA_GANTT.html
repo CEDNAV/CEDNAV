@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronograma Gantt — BARRACUDA </title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --bg: #f7f8fa;
+            --white: #ffffff;
+            --navy: #0d2645;
+            --navy2: #153760;
+            --navy3: #1e4f8a;
+            --gold: #b8860b;
+            --gold-lt: #d4a32a;
+            --text: #1a2535;
+            --text-dim: #4a5568;
+            --border: #c9d4e0;
+            --border2: #dbe4ed;
+            --sp1: #1a4fa0;
+            --sp2: #9b1b1b;
+            --sp3: #7a5200;
+            --sp4: #1a6e45;
+            --sp1-lt: #e8eef8;
+            --sp2-lt: #f8eaea;
+            --sp3-lt: #fdf5e0;
+            --sp4-lt: #e6f4ed;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .page {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 32px 24px 48px;
+        }
+
+        /* ─── INSTITUTIONAL HEADER ─── */
+        .inst-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 28px;
+            background: var(--navy);
+            border-radius: 6px 6px 0 0;
+            border-bottom: 4px solid var(--gold);
+        }
+
+        .inst-logo {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: 2px solid rgba(184, 134, 11, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .inst-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 50%;
+        }
+
+        .inst-text {
+            flex: 1;
+        }
+
+        .inst-country {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .inst-name {
+            font-family: 'EB Garamond', serif;
+            font-size: 15px;
+            color: #ffffff;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .inst-dept {
+            font-size: 11px;
+            color: var(--gold-lt);
+            margin-top: 2px;
+        }
+
+        .inst-badge {
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .inst-badge-text {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.45);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            display: block;
+        }
+
+        .inst-badge-year {
+            font-family: 'EB Garamond', serif;
+            font-size: 28px;
+            color: var(--gold-lt);
+            font-weight: 700;
+            display: block;
+            line-height: 1;
+        }
+
+        /* ─── THESIS BLOCK ─── */
+        .thesis-block {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-top: none;
+            padding: 28px 32px 22px;
+            position: relative;
+        }
+
+        .thesis-block::before {
+            content: 'TRABAJO DE GRADO';
+            position: absolute;
+            top: 20px;
+            right: 28px;
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            border: 1px solid var(--border);
+            padding: 3px 8px;
+            border-radius: 2px;
+        }
+
+        .thesis-label {
+            font-size: 10px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .thesis-title {
+            font-family: 'EB Garamond', serif;
+            font-size: 19px;
+            color: var(--navy);
+            font-weight: 700;
+            line-height: 1.4;
+            max-width: 880px;
+            margin-bottom: 18px;
+            border-left: 3px solid var(--gold);
+            padding-left: 14px;
+        }
+
+        .thesis-meta {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border2);
+        }
+
+        .meta-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .meta-key {
+            font-size: 9px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 3px;
+        }
+
+        .meta-val {
+            font-size: 12px;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .system-name {
+            font-weight: 700;
+            color: var(--navy3);
+            font-size: 13px;
+        }
+
+        /* ─── DOCUMENT TITLE ─── */
+        .doc-section {
+            background: var(--navy2);
+            padding: 12px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+        }
+
+        .doc-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .doc-sub {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.55);
+        }
+
+        /* ─── SPRINT SUMMARY ─── */
+        .sprint-summary {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-top: none;
+            padding: 20px 24px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background-color: var(--border2);
+        }
+
+        .scard {
+            background: var(--white);
+            padding: 14px 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scard::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+        }
+
+        .sc1::before {
+            background: var(--sp1);
+        }
+
+        .sc2::before {
+            background: var(--sp2);
+        }
+
+        .sc3::before {
+            background: var(--sp3);
+        }
+
+        .sc4::before {
+            background: var(--sp4);
+        }
+
+        .scard-num {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-dim);
+            margin-bottom: 4px;
+        }
+
+        .scard-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .scard-dates {
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            font-style: italic;
+        }
+
+        .scard-footer {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .scard-sp {
+            font-size: 20px;
+            font-weight: 700;
+            font-family: 'EB Garamond', serif;
+        }
+
+        .c1 {
+            color: var(--sp1);
+        }
+
+        .c2 {
+            color: var(--sp2);
+        }
+
+        .c3 {
+            color: var(--sp3);
+        }
+
+        .c4 {
+            color: var(--sp4);
+        }
+
+        .scard-detail {
+            font-size: 10px;
+            color: var(--text-dim);
+        }
+
+        /* ─── GANTT ─── */
+        .gantt-container {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-top: none;
+            overflow-x: auto;
+            border-radius: 0 0 6px 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1100px;
+        }
+
+        /* WEEK HEADER */
+        .th-label-top {
+            background: var(--navy);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 10px 18px;
+            text-align: left;
+            border-right: 2px solid rgba(255, 255, 255, 0.1);
+            width: 320px;
+            min-width: 320px;
+        }
+
+        .th-sprint-zone {
+            padding: 8px 0 4px;
+            text-align: center;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border-right: 2px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .sz1 {
+            background: var(--sp1);
+        }
+
+        .sz2 {
+            background: var(--sp2);
+        }
+
+        .sz3 {
+            background: var(--sp3);
+        }
+
+        .sz4 {
+            background: var(--sp4);
+        }
+
+        .sz-dates {
+            font-size: 9px;
+            font-weight: 400;
+            opacity: 0.8;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .th-label {
+            background: #f0f4f8;
+            border-bottom: 1px solid var(--border);
+            border-right: 2px solid var(--border);
+            padding: 8px 18px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            width: 320px;
+            min-width: 320px;
+        }
+
+        .th-week {
+            background: #f0f4f8;
+            border-bottom: 1px solid var(--border);
+            border-right: 1px solid var(--border2);
+            padding: 6px 2px;
+            font-size: 9px;
+            color: var(--text-dim);
+            text-align: center;
+            white-space: nowrap;
+            min-width: 55px;
+        }
+
+        .th-week span {
+            display: block;
+            font-size: 8px;
+            color: #9aabbf;
+            margin-top: 1px;
+        }
+
+        .th-week.zone-end {
+            border-right: 2px solid var(--border) !important;
+        }
+
+        /* SECTION HEADER */
+        .tr-section td {
+            background: #e8eef5;
+            border-bottom: 1px solid var(--border);
+            border-top: 2px solid var(--navy2);
+            height: 28px;
+        }
+
+        .section-label {
+            padding: 0 18px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--navy2);
+            display: flex;
+            align-items: center;
+            height: 100%;
+            border-right: 2px solid var(--border);
+        }
+
+        .section-bar {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.85;
+            color: white;
+        }
+
+        .sbar1 {
+            background: var(--sp1);
+        }
+
+        .sbar2 {
+            background: var(--sp2);
+        }
+
+        .sbar3 {
+            background: var(--sp3);
+            color: #3a2000;
+        }
+
+        .sbar4 {
+            background: var(--sp4);
+        }
+
+        /* HU ROWS */
+        .tr-hu td {
+            border-bottom: 1px solid var(--border2);
+            border-right: 1px solid var(--border2);
+            height: 38px;
+            padding: 0;
+        }
+
+        .tr-hu:hover td {
+            background: #f5f8ff !important;
+        }
+
+        .td-zone-end {
+            border-right: 2px solid var(--border) !important;
+        }
+
+        .hu-label {
+            padding: 0 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            height: 100%;
+            border-right: 2px solid var(--border);
+            background: var(--white) !important;
+            width: 320px;
+            min-width: 320px;
+            overflow: hidden;
+        }
+
+        .hu-id {
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 2px;
+            font-weight: 700;
+            flex-shrink: 0;
+            border: 1px solid;
+            font-family: 'Inter', monospace;
+        }
+
+        .id1 {
+            color: var(--sp1);
+            border-color: var(--sp1);
+            background: var(--sp1-lt);
+        }
+
+        .id2 {
+            color: var(--sp2);
+            border-color: var(--sp2);
+            background: var(--sp2-lt);
+        }
+
+        .id3 {
+            color: var(--sp3);
+            border-color: var(--sp3);
+            background: var(--sp3-lt);
+        }
+
+        .id4 {
+            color: var(--sp4);
+            border-color: var(--sp4);
+            background: var(--sp4-lt);
+        }
+
+        .hu-name {
+            font-size: 10.5px;
+            color: var(--text);
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
+        }
+
+        .hu-sp {
+            font-size: 10px;
+            color: var(--text-dim);
+            flex-shrink: 0;
+        }
+
+        .pbadge {
+            font-size: 8px;
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            flex-shrink: 0;
+        }
+
+        .pc {
+            background: #fde8e8;
+            color: #7b1a1a;
+            border: 1px solid #e8a0a0;
+        }
+
+        .pa {
+            background: #fef3cd;
+            color: #664d00;
+            border: 1px solid #e8c97a;
+        }
+
+        .pm {
+            background: #e2e8f0;
+            color: #4a5568;
+            border: 1px solid #b0bec5;
+        }
+
+        .bar-cell {
+            padding: 4px 3px;
+            vertical-align: middle;
+        }
+
+        .bar {
+            height: 24px;
+            border-radius: 2px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 7px;
+            font-size: 9px;
+            font-weight: 600;
+            overflow: hidden;
+            white-space: nowrap;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+        }
+
+        .b1 {
+            background: linear-gradient(135deg, #2359aa 0%, #3b7dd8 100%);
+            color: #e8f0ff;
+        }
+
+        .b2 {
+            background: linear-gradient(135deg, #9b1b1b 0%, #c0392b 100%);
+            color: #ffe8e8;
+        }
+
+        .b3 {
+            background: linear-gradient(135deg, #8a5e00 0%, #c4890a 100%);
+            color: #fff3d4;
+        }
+
+        .b4 {
+            background: linear-gradient(135deg, #1a5e38 0%, #27ae60 100%);
+            color: #d4f5e4;
+        }
+
+        /* ZONE BACKGROUNDS */
+        .z1 {
+            background: #f5f8ff;
+        }
+
+        .z2 {
+            background: #fff5f5;
+        }
+
+        .z3 {
+            background: #fefbf0;
+        }
+
+        .z4 {
+            background: #f0faf5;
+        }
+
+        /* LEGEND + FOOTER */
+        .legend-row {
+            display: flex;
+            gap: 24px;
+            padding: 14px 20px;
+            border-top: 1px solid var(--border);
+            align-items: center;
+            flex-wrap: wrap;
+            background: #f8f9fc;
+        }
+
+        .legend-title-lbl {
+            font-size: 9px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 10px;
+            color: var(--text);
+        }
+
+        .ld {
+            width: 14px;
+            height: 10px;
+            border-radius: 1px;
+            flex-shrink: 0;
+        }
+
+        .ld1 {
+            background: var(--sp1);
+        }
+
+        .ld2 {
+            background: var(--sp2);
+        }
+
+        .ld3 {
+            background: var(--sp3);
+        }
+
+        .ld4 {
+            background: var(--sp4);
+        }
+
+        .doc-footer {
+            margin-top: 20px;
+            padding: 14px 0;
+            border-top: 2px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
+            color: var(--text-dim);
+        }
+
+        .doc-footer-project {
+            font-weight: 600;
+            color: var(--navy2);
+        }
+
+        @media print {
+            .page {
+                padding: 12px;
+            }
+
+            .inst-header {
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page">
+
+        <!-- ── INSTITUTIONAL HEADER ── -->
+        <div class="inst-header">
+            <div class="inst-logo"><img src="CEDNAV.jpeg" alt="CEDNAV" /></div>
+            <div class="inst-text">
+                <div class="inst-country">República de Colombia — Armada Nacional</div>
+                <div class="inst-name">Centro de Desarrollo Tecnológico Naval — CEDNAV</div>
+                <div class="inst-dept">Programa de Sistemas de Armas <br> S1 FERNANDO ELIAS BEVANS CATAÑO -
+                    DESARROLLLADOR SW CONSOLAS</div>
+            </div>
+            <div class="inst-badge">
+                <span class="inst-badge-text">Año</span>
+                <span class="inst-badge-year">2026</span>
+            </div>
+        </div>
+
+        <!-- ── THESIS INFO ── -->
+        <div class="thesis-block">
+            <div class="thesis-label">Título del Trabajo de Grado</div>
+            <div class="thesis-title">
+                Diseño, Desarrollo e Implementación de un Ecosistema de Software Concurrente para la Integración
+                Multi-Protocolo, Procesamiento Lógico en Tiempo Real y Visualización Táctica de Datos en Sistemas
+                Navales de Control de Armas
+            </div>
+            <div class="thesis-meta">
+                <div class="meta-group">
+                    <span class="meta-key">Sistema Desarrollado</span>
+                    <span class="meta-val system-name">BARRACUDA v2.0</span>
+                </div>
+                <div class="meta-group">
+                    <span class="meta-key">Área de Conocimiento</span>
+                    <span class="meta-val">Ingeniería de Software de Misión Crítica</span>
+                </div>
+                <div class="meta-group">
+                    <span class="meta-key">Metodología</span>
+                    <span class="meta-val">Scrum · Desarrollo Ágil Académico</span>
+                </div>
+                <div class="meta-group">
+                    <span class="meta-key">Período de Desarrollo</span>
+                    <span class="meta-val">02 marzo — 12 junio 2026 (15 semanas)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── DOCUMENT TITLE BAR ── -->
+        <div class="doc-section">
+            <div>
+                <div class="doc-title">Cronograma de Desarrollo — Diagrama de Gantt</div>
+                <div class="doc-sub">Product Backlog · 18 Historias de Usuario · 134 Story Points · 4 Sprints · 65
+                    Tareas Técnicas</div>
+            </div>
+            <div style="text-align:right;">
+                <div class="doc-sub">Fecha emisión: 13/03/2026</div>
+                <div class="doc-sub">Versión: 1.0</div>
+            </div>
+        </div>
+
+        <!-- ── SPRINT SUMMARY ── -->
+        <div class="sprint-summary">
+            <div class="scard sc1">
+                <div class="scard-num">Sprint 1</div>
+                <div class="scard-name">Análisis, Requisitos y Arquitectura</div>
+                <div class="scard-dates">02/03/2026 — 20/03/2026</div>
+                <div class="scard-footer">
+                    <span class="scard-sp c1">21 SP</span>
+                    <span class="scard-detail">3 semanas · 3 HUs · 15 tareas · Fases 1–2</span>
+                </div>
+            </div>
+            <div class="scard sc2">
+                <div class="scard-num">Sprint 2 — Carga Máxima</div>
+                <div class="scard-name">Desarrollo Backend y HMI Core</div>
+                <div class="scard-dates">23/03/2026 — 24/04/2026</div>
+                <div class="scard-footer">
+                    <span class="scard-sp c2">60 SP</span>
+                    <span class="scard-detail">5 semanas · 6 HUs · 23 tareas · Fases 3–4a</span>
+                </div>
+            </div>
+            <div class="scard sc3">
+                <div class="scard-num">Sprint 3</div>
+                <div class="scard-name">Integración y Funcionalidades Completas</div>
+                <div class="scard-dates">27/04/2026 — 22/05/2026</div>
+                <div class="scard-footer">
+                    <span class="scard-sp c3">42 SP</span>
+                    <span class="scard-detail">4 semanas · 6 HUs · 12 tareas · Fases 4b–5</span>
+                </div>
+            </div>
+            <div class="scard sc4">
+                <div class="scard-num">Sprint 4</div>
+                <div class="scard-name">Testing, Despliegue y Documentación</div>
+                <div class="scard-dates">25/05/2026 — 12/06/2026</div>
+                <div class="scard-footer">
+                    <span class="scard-sp c4">24 SP</span>
+                    <span class="scard-detail">3 semanas · 3 HUs · 15 tareas · Fases 6–7</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── GANTT TABLE ── -->
+        <div class="gantt-container">
+            <table>
+                <colgroup>
+                    <col style="width:320px; min-width:320px;">
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                    <col>
+                </colgroup>
+                <thead>
+                    <!-- Sprint zone header -->
+                    <tr>
+                        <td class="th-label-top">Historia de Usuario</td>
+                        <td class="th-sprint-zone sz1" colspan="3">
+                            SPRINT 1
+                            <span class="sz-dates">02/03 — 20/03/2026 · 3 semanas</span>
+                        </td>
+                        <td class="th-sprint-zone sz2" colspan="5">
+                            SPRINT 2 — CARGA MÁXIMA (45% del esfuerzo total)
+                            <span class="sz-dates">23/03 — 24/04/2026 · 5 semanas</span>
+                        </td>
+                        <td class="th-sprint-zone sz3" colspan="4">
+                            SPRINT 3
+                            <span class="sz-dates">27/04 — 22/05/2026 · 4 semanas</span>
+                        </td>
+                        <td class="th-sprint-zone sz4" colspan="3">
+                            SPRINT 4
+                            <span class="sz-dates">25/05 — 12/06/2026 · 3 semanas</span>
+                        </td>
+                    </tr>
+                    <!-- Week numbers -->
+                    <tr>
+                        <th class="th-label">HU — Descripción / Tareas</th>
+                        <th class="th-week">S1<span>02/03</span></th>
+                        <th class="th-week">S2<span>09/03</span></th>
+                        <th class="th-week zone-end">S3<span>16/03</span></th>
+                        <th class="th-week">S4<span>23/03</span></th>
+                        <th class="th-week">S5<span>30/03</span></th>
+                        <th class="th-week">S6<span>06/04</span></th>
+                        <th class="th-week">S7<span>13/04</span></th>
+                        <th class="th-week zone-end">S8<span>20/04</span></th>
+                        <th class="th-week">S9<span>27/04</span></th>
+                        <th class="th-week">S10<span>04/05</span></th>
+                        <th class="th-week">S11<span>11/05</span></th>
+                        <th class="th-week zone-end">S12<span>18/05</span></th>
+                        <th class="th-week">S13<span>25/05</span></th>
+                        <th class="th-week">S14<span>01/06</span></th>
+                        <th class="th-week zone-end">S15<span>08/06</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <!-- ── SPRINT 1 SECTION ── -->
+                    <tr class="tr-section">
+                        <td>
+                            <div class="section-label">Épicas 1–2 · Investigación y Arquitectura</div>
+                        </td>
+                        <td colspan="3">
+                            <div class="section-bar sbar1">Sprint 1 · 3 semanas · 21 SP · HU-01 a HU-03</div>
+                        </td>
+                        <td colspan="5" style="background:#fff5f5;"></td>
+                        <td colspan="4" style="background:#fefbf0;"></td>
+                        <td colspan="3" style="background:#f0faf5;"></td>
+                    </tr>
+
+                    <tr class="tr-hu">
+                        <td class="hu-label">
+                            <span class="hu-id id1">HU-01</span>
+                            <span class="hu-name">Protocolo de Comunicación Binario IC (TX 29B / RX 33B)</span>
+                            <span class="hu-sp">8 SP</span><span class="pbadge pc">Crítica</span>
+                        </td>
+                        <td class="bar-cell z1" colspan="2">
+                            <div class="bar b1">T-01→T-05 · Análisis ICD / DFD</div>
+                        </td>
+                        <td class="z1 td-zone-end"></td>
+                        <td class="z2" colspan="5"></td>
+                        <td class="z3" colspan="4"></td>
+                        <td class="z4" colspan="3"></td>
+                    </tr>
+
+                    <tr class="tr-hu">
+                        <td class="hu-label">
+                            <span class="hu-id id1">HU-02</span>
+                            <span class="hu-name">Estándares HMI Naval (MIL-STD-2525) y Requisitos de Rendimiento</span>
+                            <span class="hu-sp">5 SP</span><span class="pbadge pa">Alta</span>
+                        </td>
+                        <td class="z1"></td>
+                        <td class="bar-cell z1" colspan="2">
+                            <div class="bar b1">T-06→T-08 · Estándares / Latencia &lt;33ms</div>
+                        </td>
+                        <td class="z2 td-zone-end" colspan="5"></td>
+                        <td class="z3" colspan="4"></td>
+                        <td class="z4" colspan="3"></td>
+                    </tr>
+
+                    <tr class="tr-hu">
+                        <td class="hu-label">
+                            <span class="hu-id id1">HU-03</span>
+                            <span class="hu-name">Ecosistema Full-Stack Svelte + Vite + Node.js (Entorno modular)</span>
+                            <span class="hu-sp">8 SP</span><span class="pbadge pc">Crítica</span>
+                        </td>
+                        <td class="z1"></td>
+                        <td class="bar-cell z1" colspan="2">
+                            <div class="bar b1">T-09→T-15 · Setup / instalar-red.sh / config</div>
+                        </td>
+                        <td class="z2 td-zone-end" colspan="5"></td>
+                        <td class="z3" colspan="4"></td>
+                        <td class="z4" colspan="3"></td>
+                    </tr>
+
+                    <!-- ── SPRINT 2 SECTION ── -->
+                    <tr class="tr-section">
+                        <td>
+                            <div class="section-label">Épicas 2–4 · Backend Core + HMI Principal</div>
+                        </td>
+                        <td colspan="3" style="background:#f5f8ff;"></td>
+                        <td colspan="5">
+                            <div class="section-bar sbar2">Sprint 2 · 5 semanas · 60 SP (44.8%) · HU-04 a HU-10</div>
+                        </td>
+                        <td colspan="4" style="background:#fefbf0;"></td>
+                        <td colspan="3" style="background:#f0faf5;"></td>
+                    </tr>
+
+                    <tr class="tr-hu">
+                        <td class="hu-label">
+                            <span class="hu-id id2">HU-04</span>
+                            <span class="hu-name">BinaryProtocolService — Serialización y Verificación XOR</span>
+                            <span class="hu-sp">13 SP</span><span class="pbadge pc">Crítica</span>
+                        </td>
+                        <td class="z1 td-zone-end" colspan="3"></td>
+                        <td class="bar-cell z2" colspan="2">
+                            <div class="bar b2">T-16, T-17, T-28, T-29 · Protocolo / XOR</div>
+                        </td>
+                        <td class="z2" colspan="3"></td>
+                        <td class="z3" colspan="4"></td>
+                        <td class="z4" colspan="3"></td>
+                    </tr>
+
+                    <tr class="tr-hu">
+                        <td class="hu-label">
+                            <span class="hu-id id2">HU-05</span>
+                            <span class="hu-name">Comunicación de Red Multi-Protocolo TCP / UDP / NMEA</span>
+                            <span class="hu-sp">13 SP</span><span class="pbadge pc">Crítica</span>
+                        </td>
+                        <td class="z1 td-zone-end" colspan="3"></td>
+                        <td class="bar-cell z2" colspan="3">
+                            <div class="bar b2">T-18→T-21, T-26 · TCP/UDP/Heartbeat/NMEA</div>
+                        </td>
+                        <td class="z2" colspan="2"></td>
+                        <td class="z3" colspan="4"></td>
+                        <td class="z4" colspan="3"></td>
+                    </tr>
+
+                    <tr class="tr-hu">
+                        <td class="hu-label">
+                            <span class="hu-id id2">HU-06</span>
+                            <span class="hu-name">Gestión de Estados de Hardware — StationManager y FSM</span>
+                            <span class="hu-sp">8 SP</span><span class="pbadge pa">Alta</span>
+                        </td>
+                        <td class="z1 td-zone-end" colspan="3"></td>
+                        <td class="z2"></td>
+                        <td class="bar-cell z2" colspan="3">
+                            <div class="bar b2">T-22→T-24, T-27 · StationMgr / FSM / Filtros</div>
+                        </td>
+                        <td class="z2"></td>
+                        <td class="z3" colspan="4"></td>
+                        <td class="z4" colspan="3"></td>
+                    </tr>
+
+                    <tr class="tr-hu">
+                        <td class="hu-label">
+                            <span class="hu-id id2">HU-08</span>
+                            <span class="hu-name">Sistema de Diseño Visual "Deep Sea" — CSS / Stores Svelte</span>
+                            <span class="hu-sp">5 SP</span><span class="pbadge pa">Alta</span>
+                        </td>
+                        <td class="z1 td-zone-end" colspan="3"></td>
+                        <td class="bar-cell z2" colspan="2">
+                            <div class="bar b2">T-30, T-31, T-42 · app.css / Stores</div>
+                        </td>
+                        <td class="z2 td-zone-end" colspan="3"></td>
+                        <td class="z3" colspan="4"></td>
+                        <td class="z4" colspan="3"></td>
+                    </tr>
+
+                    <tr class="tr-hu">
+                        <td class="hu-label">
+                            <span class="hu-id id2">HU-09</span>
+                            <span class="hu-name">Monitor de Radar PPI — SVG Dinámico y Vectores Tácticos</span>
+                            <span class="hu-sp">13 SP</span><span class="pbadge pc">Crítica</span>
+                        </td>
+                        <td class="z1 td-zone-end" colspan="3"></td>
+                        <td class="z2"></td>
+                        <td class="bar-cell z2" colspan="4">
+                            <div class="bar b2">T-32, T-33, T-37, T-50 · Radar.svelte / Offset CMS</div>
+                        </td>
+                        <td class="z3" colspan="4"></td>
+                        <td class="z4" colspan="3"></td>
+                    </tr>
+
+                    <tr class="tr-hu">
+                        <td class="hu-label">
+                            <span class="hu-id id2">HU-10</span>
+                            <span class="hu-name">Dashboard de Telemetría IC — Gauges / Pointer Needles</span>
+                            <span class="hu-sp">8 SP</span><span class="pbadge pa">Alta</span>
+                        </td>
+                        <td class="z1 td-zone-end" colspan="3"></td>
+                        <td class="z2" colspan="2"></td>
+                        <td class="bar-cell z2" colspan="3">
+                            <div class="bar b2">T-34, T-36, T-38 · Dashboard / Gauges</div>
+                        </td>
+                        <td class="z3" colspan="4"></td>
+                        <td class="z4" colspan="3"></td>
+                    </tr>
+
+                    <!-- ── SPRINT 3 SECTION ── -->
+                    <tr class="tr-section">
+                        <td>
+                            <div class="section-label">Épicas 3–5 · Video, Integración y Lógica de Negocio</div>
+                        </td>
+                        <td colspan="3" style="background:#f5f8ff;"></td>
+                        <td colspan="5" style="background:#fff5f5;"></td>
+                        <td colspan="4">
+                            <div class="section-bar sbar3">Sprint 3 · 4 semanas · 42 SP · HU-07, HU-11 a HU-15</div>
+                        </td>
+                        <td colspan="3" style="background:#f0faf5;"></td>
+                    </tr>
+
+                    <tr class="tr-hu">
+                        <td class="hu-label">
+                            <span class="hu-id id3">HU-07</span>
+                            <span class="hu-name">Servicio de Video H.264 sobre UDP — Puertos por Estación</span>
+                            <span class="hu-sp">8 SP</span><span class="pbadge pm">Media</span>
+                        </td>
+                        <td class="z1 td-zone-end" colspan="3"></td>
+                        <td class="z2 td-zone-end" colspan="5"></td>
+                        <td class="bar-cell z3" colspan="2">
+                            <div class="bar b3">T-25 · video.service.js / ffmpeg</div>
+                        </td>
+                        <td class="z3" colspan="2"></td>
+                        <td class="z4" colspan="3"></td>
+                    </tr>
+
+                    <tr class="tr-hu">
+                        <td class="hu-label">
+                            <span class="hu-id id3">HU-11</span>
+                            <span class="hu-name">Panel de Configuración Protegido + Monitor Hexadecimal</span>
+                            <span class="hu-sp">8 SP</span><span class="pbadge pa">Alta</span>
+                        </td>
+                        <td class="z1 td-zone-end" colspan="3"></td>
+                        <td class="z2 td-zone-end" colspan="5"></td>
+                        <td class="bar-cell z3" colspan="3">
+                            <div class="bar b3">T-35, T-40, T-41 · Auth / Config / Hacking View</div>
+                        </td>
+                        <td class="z3"></td>
+                        <td class="z4" colspan="3"></td>
+                    </tr>
+
+                    <tr class="tr-hu">
+                        <td class="hu-label">
+                            <span class="hu-id id3">HU-12</span>
+                            <span class="hu-name">Integración de Video en Vivo en el HMI — CameraTelemetry</span>
+                            <span class="hu-sp">5 SP</span><span class="pbadge pm">Media</span>
+                        </td>
+                        <td class="z1 td-zone-end" colspan="3"></td>
+                        <td class="z2 td-zone-end" colspan="5"></td>
+                        <td class="z3"></td>
+                        <td class="bar-cell z3" colspan="2">
+                            <div class="bar b3">T-39 · CameraTelemetry.svelte</div>
+                        </td>
+                        <td class="z3"></td>
+                        <td class="z4" colspan="3"></td>
+                    </tr>
+
+                    <tr class="tr-hu">
+                        <td class="hu-label">
+                            <span class="hu-id id3">HU-13</span>
+                            <span class="hu-name">Control de Energización EOT / RWS — Feedback Loop TX/RX</span>
+                            <span class="hu-sp">8 SP</span><span class="pbadge pc">Crítica</span>
+                        </td>
+                        <td class="z1 td-zone-end" colspan="3"></td>
+                        <td class="z2 td-zone-end" colspan="5"></td>
+                        <td class="z3"></td>
+                        <td class="bar-cell z3" colspan="3">
+                            <div class="bar b3">T-43, T-44 · Energizar / Feedback Loop</div>
+                        </td>
+                        <td class="z4" colspan="3"></td>
+                    </tr>
+
+                    <tr class="tr-hu">
+                        <td class="hu-label">
+                            <span class="hu-id id3">HU-14</span>
+                            <span class="hu-name">Control de Joystick con Zona Muerta ±5 y Seguridad de Disparo</span>
+                            <span class="hu-sp">8 SP</span><span class="pbadge pa">Alta</span>
+                        </td>
+                        <td class="z1 td-zone-end" colspan="3"></td>
+                        <td class="z2 td-zone-end" colspan="5"></td>
+                        <td class="z3" colspan="2"></td>
+                        <td class="bar-cell z3" colspan="2">
+                            <div class="bar b3">T-45, T-47, T-49 · Joystick / Roles / Alertas</div>
+                        </td>
+                        <td class="z4" colspan="3"></td>
+                    </tr>
+
+                    <tr class="tr-hu">
+                        <td class="hu-label">
+                            <span class="hu-id id3">HU-15</span>
+                            <span class="hu-name">Datos de Navegación Pitch / Roll / Gyro — Horizonte Táctico</span>
+                            <span class="hu-sp">5 SP</span><span class="pbadge pm">Media</span>
+                        </td>
+                        <td class="z1 td-zone-end" colspan="3"></td>
+                        <td class="z2 td-zone-end" colspan="5"></td>
+                        <td class="bar-cell z3" colspan="2">
+                            <div class="bar b3">T-46, T-48 · Pitch/Roll / Autodiscovery</div>
+                        </td>
+                        <td class="z3 td-zone-end" colspan="2"></td>
+                        <td class="z4" colspan="3"></td>
+                    </tr>
+
+                    <!-- ── SPRINT 4 SECTION ── -->
+                    <tr class="tr-section">
+                        <td>
+                            <div class="section-label">Épicas 6–7 · Testing, Despliegue y Cierre Académico</div>
+                        </td>
+                        <td colspan="3" style="background:#f5f8ff;"></td>
+                        <td colspan="5" style="background:#fff5f5;"></td>
+                        <td colspan="4" style="background:#fefbf0;"></td>
+                        <td colspan="3">
+                            <div class="section-bar sbar4">Sprint 4 · 3 semanas · 24 SP · HU-16 a HU-18</div>
+                        </td>
+                    </tr>
+
+                    <tr class="tr-hu">
+                        <td class="hu-label">
+                            <span class="hu-id id4">HU-16</span>
+                            <span class="hu-name">Suite de Pruebas de Integración y Simulación de Tráfico IC</span>
+                            <span class="hu-sp">8 SP</span><span class="pbadge pa">Alta</span>
+                        </td>
+                        <td class="z1 td-zone-end" colspan="3"></td>
+                        <td class="z2 td-zone-end" colspan="5"></td>
+                        <td class="z3 td-zone-end" colspan="4"></td>
+                        <td class="bar-cell z4" colspan="2">
+                            <div class="bar b4">T-51→T-55 · Simulación / Estrés / XOR Inject</div>
+                        </td>
+                        <td class="z4"></td>
+                    </tr>
+
+                    <tr class="tr-hu">
+                        <td class="hu-label">
+                            <span class="hu-id id4">HU-17</span>
+                            <span class="hu-name">Despliegue en PC Industrial — Systemd + Empaquetado Electron</span>
+                            <span class="hu-sp">8 SP</span><span class="pbadge pc">Crítica</span>
+                        </td>
+                        <td class="z1 td-zone-end" colspan="3"></td>
+                        <td class="z2 td-zone-end" colspan="5"></td>
+                        <td class="z3 td-zone-end" colspan="4"></td>
+                        <td class="bar-cell z4" colspan="2">
+                            <div class="bar b4">T-56→T-60 · Systemd / Deploy / ffmpeg bundle</div>
+                        </td>
+                        <td class="z4"></td>
+                    </tr>
+
+                    <tr class="tr-hu">
+                        <td class="hu-label">
+                            <span class="hu-id id4">HU-18</span>
+                            <span class="hu-name">Documentación Técnica y Académica — Manual / UML / Tesis</span>
+                            <span class="hu-sp">8 SP</span><span class="pbadge pa">Alta</span>
+                        </td>
+                        <td class="z1 td-zone-end" colspan="3"></td>
+                        <td class="z2 td-zone-end" colspan="5"></td>
+                        <td class="z3 td-zone-end" colspan="4"></td>
+                        <td class="z4"></td>
+                        <td class="bar-cell z4" colspan="2">
+                            <div class="bar b4">T-61→T-65 · Manual / UML / Riesgos / Bitácora</div>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <!-- LEGEND -->
+            <div class="legend-row">
+                <span class="legend-title-lbl">Referencia de colores:</span>
+                <div class="legend-item">
+                    <div class="ld ld1"></div>Sprint 1 — Análisis (02/03→20/03)
+                </div>
+                <div class="legend-item">
+                    <div class="ld ld2"></div>Sprint 2 — Backend Core (23/03→24/04)
+                </div>
+                <div class="legend-item">
+                    <div class="ld ld3"></div>Sprint 3 — Integración (27/04→22/05)
+                </div>
+                <div class="legend-item">
+                    <div class="ld ld4"></div>Sprint 4 — Cierre (25/05→12/06)
+                </div>
+                <span class="pbadge pc" style="margin-left:16px;">Crítica</span>
+                <span class="pbadge pa">Alta</span>
+                <span class="pbadge pm">Media</span>
+                <div style="margin-left:auto; font-size:10px; color:var(--text-dim);">SP = Story Points</div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="doc-footer">
+            <span class="doc-footer-project">BARRACUDA v2.0 · Gateway de Integración IC Naval</span>
+            <span>CEDNAV — Armada Nacional de Colombia · Ingeniería de Software · 2026</span>
+            <span>Total: 134 SP · 18 HUs · 65 Tareas · 4 Sprints · 15 Semanas</span>
+        </div>
+
+    </div><!-- /page -->
+</body>
+
+</html>

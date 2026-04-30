@@ -1,0 +1,2009 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BARRACUDA 2.0 – Réplica</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap');
+
+        :root{
+            --bg:#000B19;            /* fondo principal */
+            --panel:#12202b;         /* paneles */
+            --panel-2:#0e1a24;       /* panel oscuro */
+            --border:#1dd3d8;        /* cian brillante para bordes principales */
+            --text:#c7f5ff;          /* texto principal */
+            --muted:#6db9c1;         /* texto tenue */
+            --accent:#13a5af;        /* acento */
+            --green:#33ff7a;         /* estados ok */
+            --yellow:#ffd34d;        /* advertencia */
+            --red:#ff5e6e;           /* error */
+            --orange: #FFA500;       /* Naranja para "DESCONOCIDO" */
+            --gray: #A0AEC0;         /* Gris para "NEUTRAL" */
+            --panel-dark-contrast: #141F2E;
+            --subtle-border: #566e9e;
+
+            /* Variables para los colores del botón */
+            --btn-normal-bg: #2B6CB0;
+            --btn-normal-border: #2C5282;
+            --btn-normal-text: #FFFFFF;
+
+            --btn-hover-bg: #3182CE;
+            --btn-hover-border: #3182CE;
+
+            --btn-active-bg: #2B6CB0;
+            --btn-active-border: #1B4B8A;
+
+            --btn-focus-border: #A7C7ED;
+            --btn-focus-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+
+            --btn-disabled-bg: #4A5568;
+            --btn-disabled-border: #4A5568;
+            --btn-disabled-text: #A0AEC0;
+
+            /* Variables para los checkboxes */
+            --checkbox-unchecked-border: #FFFFFF;
+            --checkbox-checked-bg: #FFFFFF; /* Fondo del checkmark blanco */
+            --checkbox-checked-dot: #000000; /* Punto interior negro */
+            --checkbox-disabled-bg: #4A5568;
+            --checkbox-disabled-border: #4A5568;
+            --checkbox-disabled-text: #A0AEC0;
+            --checkbox-text-color: #FFFFFF;
+
+            /* Colores de los iconos de validación */
+            --icon-valid: #33ff7a;
+            --icon-error: #ff5e6e; /* Usaremos este para unchecked y disabled */
+
+            /* Colores para los nuevos indicadores */
+            --gauge-fill-bg: rgba(29, 211, 216, 0.1); /* Fondo cian muy tenue */
+            --gauge-border: var(--border);
+            --gauge-text: var(--text);
+            --gauge-value-bg: #2B6CB0; /* Fondo del valor central (azul de botón) */
+            --gauge-value-text: #FFFFFF;
+            --gauge-limit-color: var(--red);
+            --gauge-pointer-color: #FFFFFF; /* Blanco para el puntero central */
+            --gauge-pointer-tip: var(--border); /* Cian para la punta de la flecha del puntero */
+            --elevation-shape-fill: rgba(29, 211, 216, 0.6); /* Cian semitransparente para la forma de elevación */
+
+            /* COLORES PARA EL MODO DE TRABAJO ACTIVO (verde azulado con borde) */
+            --operational-active-bg-div: #00A389; /* Verde azulado del ejemplo para el DIV */
+            --operational-active-border-div: #1dd3d8; /* Borde cian brillante para el DIV */
+            --operational-active-dot-status: #33ff7a; /* Punto verde brillante para el estado */
+            --operational-inactive-dot-status: var(--red); /* Punto rojo para el estado inactivo */
+        }
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0; background:var(--bg); color:var(--text);
+            font-family: 'Inter', ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+            letter-spacing:.3px;
+        }
+        .topbar{
+            position:sticky; top:0; z-index:10;
+            display:flex; align-items:center; gap:24px;
+            padding:14px 18px; border-bottom:1px solid #0c1319;
+            background:linear-gradient(180deg, #10202b 0%, #0f1a23 100%);
+        }
+        .brand{display:flex; align-items:center; gap:10px; font-weight:800}
+        .brand .logo{width:26px; height:26px; border:2px solid var(--border); border-radius:50%; display:grid; place-items:center}
+        .brand .logo::after{content:""; width:10px; height:10px; border:2px solid var(--border); border-radius:50%}
+        .brand .name{font-size:20px}
+        .brand .ver{opacity:.8; margin-left:6px}
+        .title{opacity:.75}
+        .spacer{flex:1}
+        .clock{margin-right:6px; font-weight:700}
+        .tabs{display:flex; gap:8px}
+        .pill{padding:6px 12px; border:1px solid var(--border); color:var(--text); border-radius:6px; background:transparent; cursor:pointer}
+        .pill.active{background:#0c2b35}
+
+        /* AJUSTE CLAVE: Se cambió el orden de las columnas */
+        .wrap{
+            display:grid;
+            grid-template-columns: 270px 380px 1fr;
+            gap:20px;
+            padding:18px;
+        }
+
+        /* Panel base */
+        .card{background:var(--panel-dark-contrast); border:1px solid var(--subtle-border); border-radius:8px; padding:14px}
+        .card h4{margin:0 0 12px; color:var(--muted); font-size:14px; letter-spacing:.8px}
+
+        .left .group{margin-bottom:16px}
+        .left label, .left .row{display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:13px}
+        .left select{width:100%; background:var(--panel-2); border:1px solid #183948; color:var(--text); padding:8px; border-radius:6px}
+
+        /* Estilos del botón */
+        .btn{
+            background: var(--btn-normal-bg);
+            color: var(--btn-normal-text);
+            border: 1px solid var(--btn-normal-border);
+            padding: 8px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+        .btn:hover{
+            background: var(--btn-hover-bg);
+            border-color: var(--btn-hover-border);
+        }
+        .btn:active{
+            background: var(--btn-active-bg);
+            border-color: var(--btn-active-border);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn:focus-visible{
+            outline: none;
+            border-color: var(--btn-focus-border);
+            box-shadow: var(--btn-focus-shadow);
+        }
+        .btn:disabled, .btn.disabled {
+            background: var(--btn-disabled-bg);
+            border-color: var(--btn-disabled-border);
+            color: var(--btn-disabled-text);
+            cursor: not-allowed;
+            opacity: 0.8;
+            box-shadow: none;
+        }
+
+        .btn.secondary{border-color:#2a6a79}
+        .btn.red{border-color:var(--red); color:var(--red); font-weight:900}
+        .switch{display:inline-grid; grid-template-columns:1fr auto; align-items:center; gap:10px}
+
+        /* Estilo para el indicador operacional (el div principal que contiene todo el item de modo de trabajo) */
+        .operational-indicator {
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            transition: background-color 0.3s, border-color 0.3s;
+            position: relative; /* Para posicionar el status-dot */
+        }
+        .operational-indicator:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .operational-indicator.active {
+            background: var(--operational-active-bg-div); /* Color verde azulado para el fondo del div */
+            border: 1px solid var(--operational-active-border-div); /* Borde cian brillante para el div */
+        }
+
+        .operational-indicator.inactive {
+            background: var(--panel-2);
+            border: 1px solid var(--subtle-border);
+            color: var(--text);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px; /* Espacio a la derecha del dot */
+            flex-shrink: 0;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* PUNTO VERDE PARA EL ESTADO ACTIVO */
+        .operational-indicator.active .status-dot {
+            background-color: var(--operational-active-dot-status);
+            box-shadow: 0 0 5px var(--operational-active-dot-status);
+        }
+        /* PUNTO ROJO PARA EL ESTADO INACTIVO */
+        .operational-indicator.inactive .status-dot {
+            background-color: var(--operational-inactive-dot-status); /* Rojo para inactivo */
+            box-shadow: 0 0 5px var(--operational-inactive-dot-status); /* Sombra roja para inactivo */
+        }
+
+        .status-text-item {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-left: auto; /* Empuja el texto de estado a la derecha */
+        }
+
+        /* Estilos para la sección CONDICIONES DE TIRO y ESTADO DEL SISTEMA */
+        .status-item {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+        }
+        .fire-condition-item {
+            margin-bottom: 8px;
+        }
+        .fire-condition-item:last-child {
+            margin-bottom: 0;
+        }
+        .status-item .icon {
+            margin-right: 8px;
+            width: 12px;
+            height: 12px;
+            flex-shrink: 0;
+            filter: drop-shadow(0 0 2px currentColor); /* Efecto de brillo */
+        }
+        .status-item .status-text {
+            flex-grow: 1;
+            text-align: left;
+        }
+        .fire-condition-item .value {
+            margin-left: auto;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* Colores de los iconos (SVGs) */
+        .icon.ok svg { stroke: var(--green); fill: none; }
+        .icon.warn svg { stroke: var(--yellow); fill: none; }
+        .icon.bad svg { stroke: var(--red); fill: none; }
+        .icon.ok svg, .icon.warn svg, .icon.bad svg { filter: drop-shadow(0 0 2px currentColor); }
+
+
+        /* Colores de los valores */
+        .value.ok { color: var(--green); }
+        .value.warn { color: var(--yellow); }
+        .value.bad { color: var(--red); }
+
+        /* ESTILOS DEL RADAR CENTRAL */
+        .radar-card {
+            position: relative;
+            background: var(--panel-dark-contrast);
+            border: 1px solid var(--subtle-border);
+            border-radius: 8px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+
+            background-image:
+                linear-gradient(0deg, transparent 9%, #122738 10%, #122738 11%, transparent 12%),
+                linear-gradient(90deg, transparent 9%, #122738 10%, #122738 11%, transparent 12%);
+            background-size: 100px 100px;
+        }
+
+        .radar-circle {
+            position: relative;
+            aspect-ratio: 1/1;
+            width: 90%;
+            max-width: 1000px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: rgba(20, 31, 46, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+
+        /* Anillos concéntricos dentro del círculo */
+        .radar-circle::before,
+        .radar-circle::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            border: 1px dashed rgba(29, 211, 216, 0.3);
+        }
+        .radar-circle::before { width: 50%; height: 50%; }
+        .radar-circle::after { width: 75%; height: 75%; }
+
+        /* Marcas y números de grados */
+        .degree-text {
+            position: absolute;
+            color: var(--border);
+            font-size: 12px;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+        }
+
+        .degree-text.d0 { top: 0%; left: 50%; transform: translateX(-50%); }
+        .degree-text.d30 { top: 8%; right: 22%; }
+        .degree-text.d60 { top: 26%; right: 4.5%; }
+        .degree-text.d90 { top: 50%; right: 0%; transform: translateY(-50%); }
+        .degree-text.d120 { bottom: 25%; right: 4%; }
+        .degree-text.d150 { bottom: 7%; right: 21%; }
+        .degree-text.d180 { bottom: 0%; left: 50%; transform: translateX(-50%); }
+        .degree-text.d210 { bottom: 7.5%; left: 24%; }
+        .degree-text.d240 { bottom: 25%; left: 8%; }
+        .degree-text.d270 { top: 50%; left: 0%; transform: translateY(-50%); }
+        .degree-text.d300 { top: 25%; left: 9%; }
+        .degree-text.d330 { top: 8%; left: 25%; }
+
+        /* Estilo de la punta de flecha */
+        .center-arrow {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 20px solid var(--border);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 4;
+        }
+
+        .status-line{margin-top:8px; text-align:center; color:#7ae9f2; font-size:12px; letter-spacing:1.5px}
+
+        /* Indicadores de rotación e inclinación */
+        .indicators-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .indicator-card {
+            background: var(--panel-dark-contrast);
+            border: 1px solid var(--subtle-border);
+            border-radius: 8px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .indicator-card h4 {
+            margin: 0 0 10px;
+            color: var(--muted);
+            font-size: 14px;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+        }
+
+        /* --- NUEVOS ESTILOS PARA LOS GAUGES --- */
+        .gauge-container {
+            position: relative;
+            width: 100%;
+            max-width: 200px; /* Ajusta esto si los indicadores son muy grandes */
+            aspect-ratio: 1 / 1; /* Mantiene la proporción cuadrada para el SVG */
+            margin: 0 auto;
+            display: flex; /* Para centrar el SVG */
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gauge-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .gauge-arc-main {
+            stroke: var(--gauge-border);
+            fill: var(--gauge-fill-bg);
+            stroke-width: 1;
+        }
+        .gauge-arc-limit {
+            stroke: var(--gauge-limit-color);
+            fill: none;
+            stroke-width: 2;
+        }
+        .gauge-mark-main {
+            stroke: var(--gauge-border);
+            stroke-width: 1.5;
+        }
+        .gauge-mark-sub {
+            stroke: var(--muted);
+            stroke-width: 0.8;
+        }
+        .gauge-text {
+            fill: var(--gauge-text);
+            font-size: 11px;
+            font-weight: bold;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+        .gauge-value-box {
+            fill: var(--gauge-value-bg);
+        }
+        .gauge-value-text {
+            fill: var(--gauge-value-text);
+            font-size: 14px;
+            font-weight: bold;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+        .gauge-pointer-line {
+            stroke: var(--gauge-pointer-color);
+            stroke-width: 2;
+            fill: var(--gauge-pointer-color);
+            transform-origin: center center;
+            transition: transform 0.1s ease-out; /* Suaviza el movimiento del puntero */
+        }
+        .gauge-pointer-tip {
+            fill: var(--gauge-pointer-tip);
+            stroke: var(--gauge-pointer-tip);
+            stroke-width: 1;
+        }
+
+        /* Estilos específicos para el Elevation gauge */
+        .elevation-pointer-shape {
+            fill: rgba(29, 211, 216, 0.6);
+            stroke: var(--border);
+            stroke-width: 1;
+        }
+        .elevation-center-line {
+            stroke: var(--border);
+            stroke-width: 1.5;
+        }
+        .elevation-value-box {
+            fill: var(--gauge-value-bg);
+        }
+        .elevation-value-text {
+            fill: var(--gauge-value-text);
+            font-size: 14px;
+            font-weight: bold;
+            text-anchor: middle;
+            dominant-baseline: central;
+        }
+
+
+        /* Estilos generales para las líneas de meteorología y posición */
+        .info-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-item .icon {
+            width: 12px;
+            height: 12px;
+            flex-shrink: 0;
+            stroke: var(--text);
+            fill: currentColor;
+            margin-right: 8px;
+        }
+
+        .info-item .label-text {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            color: var(--text);
+        }
+
+        /* Estilos del "Label de Solo Lectura" para los valores de info */
+        .info-item .value-container {
+            width: 96px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(68, 68, 68, 0.7);
+            backdrop-filter: blur(2px);
+            border: 1px solid #5a594b;
+            border-radius: 5px;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .info-item .value-container .unit {
+            color: var(--muted);
+            margin-left: 4px;
+        }
+
+        /* Ajustes para el tamaño de fuente y espacio en valores de lat/lon si son largos */
+        .info-item .value-container.compact {
+            font-size: 12px;
+            padding: 0 4px;
+        }
+
+
+        .list-grid{
+            display:grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 10px;
+        }
+        .list-grid .item{
+            display:flex; align-items:center; gap:8px; padding:6px 8px;
+            border:1px solid #1a3a49; border-radius:6px; background:#0e1f28;
+            font-size: 13px;
+        }
+        .list-grid .item .icon {
+            margin-right: 0px;
+            width: 12px;
+            height: 12px;
+            flex-shrink: 0;
+        }
+
+        .footer-note{margin-top:10px; text-align:center; color:#66c9d3; font-size:12px; opacity:.9}
+
+        /* Botón de emergencia ancho */
+        .emergency{display:block; width:100%; background:#2e0e12; border:1px solid var(--red); color:var(--red); padding:10px 12px; border-radius:6px; font-weight:900; letter-spacing:1px}
+
+        /* Estilos para los Checkboxes personalizados */
+        .custom-checkbox {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--checkbox-text-color);
+            flex-grow: 1; /* Para que ocupe el espacio y se alinee bien con el status-text-item */
+            margin-right: 8px; /* Espacio entre el checkbox y el texto de estado */
+        }
+
+        .custom-checkbox input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .custom-checkbox .checkmark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid var(--checkbox-unchecked-border);
+            margin-right: 10px;
+            flex-shrink: 0;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        /* CUANDO ESTÁ MARCADO: Fondo blanco y punto negro */
+        .custom-checkbox input[type="checkbox"]:checked + .checkmark {
+            background-color: var(--checkbox-checked-bg);
+            border-color: var(--checkbox-checked-bg); /* Borde también blanco */
+        }
+
+        .custom-checkbox input[type="checkbox"]:checked + .checkmark::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--checkbox-checked-dot); /* Punto negro */
+            display: block;
+        }
+
+        /* Estilo para el estado "disabled" del checkmark */
+        .custom-checkbox input[type="checkbox"]:disabled + .checkmark {
+            background-color: var(--checkbox-disabled-bg);
+            border-color: var(--checkbox-disabled-border);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .custom-checkbox input[type="checkbox"]:disabled + .checkmark::after {
+            background-color: var(--checkbox-disabled-text);
+        }
+
+        /* Asegurarse de que el texto del disabled también cambie */
+        .custom-checkbox input[type="checkbox"]:disabled ~ span:not(.checkmark) {
+            color: var(--checkbox-disabled-text);
+            cursor: not-allowed;
+        }
+
+        /* Contenedor de botones para "EN ESTACIÓN" */
+        .button-group-control {
+            display: flex;
+            gap: 8px; /* Espacio entre los botones */
+            margin-top: 8px;
+        }
+
+        /* Asegurar que el botón "EN ESTACIÓN" ocupe el 100% de su espacio si es el único activo */
+        .button-group-control .btn:not(.disabled) {
+            flex-grow: 1; /* Permite que el botón crezca para llenar el espacio */
+            width: auto; /* Ancho automático para flex-grow */
+        }
+
+        /* --- NUEVOS ESTILOS PARA EL PANEL DE EMBARCACIÓN --- */
+        .info-panel-embarcacion {
+            background: var(--panel-dark-contrast);
+            border: 1px solid var(--subtle-border);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 16px;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+        }
+
+        .info-panel-embarcacion .panel-title {
+            color: #d1d1d1;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .info-panel-embarcacion .panel-title::before,
+        .info-panel-embarcacion .panel-title::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background-color: #555;
+        }
+
+        .info-panel-embarcacion .panel-title::before {
+            left: 0;
+        }
+
+        .info-panel-embarcacion .panel-title::after {
+            right: 0;
+        }
+
+        .own-ship-container {
+            border: 1px solid #777;
+            border-radius: 6px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 20px;
+            background: var(--panel-2);
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        .data-group {
+            display: contents;
+        }
+
+        .data-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            white-space: nowrap;
+        }
+
+        .data-item-row .label {
+            color: var(--muted);
+            font-weight: normal;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+
+        .data-item-row .value {
+            font-weight: bold;
+            color: #ffffff;
+            text-align: right;
+            flex-grow: 1;
+            letter-spacing: 0.5px;
+        }
+
+        .data-item-row .unit {
+            color: var(--muted);
+            margin-left: 4px;
+            font-weight: normal;
+        }
+
+        .divider {
+            grid-column: 1 / -1;
+            height: 1px;
+            background-color: #555;
+            margin: 10px 0;
+        }
+
+        /* Estilos para el nuevo panel de datos de arma */
+        .weapon-data-panel {
+            background: var(--panel-dark-contrast);
+            border: 1px solid var(--subtle-border);
+            border-radius: 8px;
+            padding: 14px;
+            margin-top: 10px; /* Espacio encima del panel */
+            font-size: 13px;
+        }
+
+        .weapon-data-panel h4 {
+            margin: 0 0 12px;
+            color: var(--muted);
+            font-size: 14px;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+        }
+
+        .weapon-data-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Dos columnas para los pares de datos */
+            gap: 8px 20px; /* Espacio vertical y horizontal entre los elementos */
+        }
+
+        .weapon-data-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .weapon-data-row .label {
+            color: var(--text); /* Color de texto principal para las etiquetas */
+            flex-shrink: 0;
+        }
+
+        .weapon-data-row .value {
+            font-weight: bold;
+            color: var(--border); /* Cian brillante para los valores */
+            text-align: right;
+            flex-grow: 1;
+            letter-spacing: 0.5px;
+        }
+
+        /* Estilo para el nuevo botón de ID Hostil */
+        .id-hostil-button {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Centrar el contenido dentro del botón */
+            padding: 8px 10px;
+            border-radius: 6px;
+            margin-top: 10px; /* Espacio encima del botón */
+            transition: background-color 0.3s, border-color 0.3s;
+            position: relative;
+            cursor: pointer;
+            font-size: 14px; /* Ajustar el tamaño de fuente para el contenido */
+            font-weight: bold;
+            text-transform: uppercase;
+            color: var(--text); /* Color de texto por defecto */
+        }
+        .id-hostil-button:not(.active) {
+            cursor: not-allowed; /* Cambiar cursor cuando está inactivo */
+        }
+
+        .id-hostil-button .hostil-text {
+            color: var(--text); /* Color por defecto, se cambiará a rojo cuando esté activo */
+            margin-left: 5px; /* Pequeño espacio entre el ID y HOSTIL */
+            transition: color 0.3s ease;
+        }
+
+        .id-hostil-button.active {
+            background: var(--operational-active-bg-div);
+            border: 1px solid var(--operational-active-border-div);
+        }
+
+        .id-hostil-button.inactive {
+            background: var(--panel-2);
+            border: 1px solid var(--subtle-border);
+        }
+
+        .id-hostil-button.active .hostil-text {
+            color: var(--red); /* HOSTIL en rojo cuando el botón está activo */
+        }
+
+        .id-hostil-button .status-dot {
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+
+        /* Estilos para el contenedor de CONTACTOS ASIGNADOS */
+        .assigned-contacts {
+            margin-top: 16px; /* Espacio para separar de la sección anterior */
+        }
+
+        .assigned-contacts .contact-button {
+            display: flex;
+            align-items: center;
+            width: 100%; /* Ocupa todo el ancho */
+            padding: 8px 10px;
+            margin-bottom: 8px; /* Espacio entre botones */
+            background: var(--panel-2);
+            border: 1px solid var(--subtle-border);
+            border-radius: 6px;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .assigned-contacts .contact-button:hover:not(.active) {
+            background-color: #1a2a38; /* Un poco más oscuro al pasar el ratón */
+            border-color: var(--border); /* Borde cian al pasar el ratón */
+        }
+
+        /* Estilos para el botón cuando está ACTIVO (checkbox Pista-CMS marcado) */
+        .assigned-contacts .contact-button.active {
+            background: var(--operational-active-bg-div); /* Fondo verde del indicador operacional */
+            border: 1px solid var(--operational-active-border-div); /* Borde cian del indicador operacional */
+        }
+        /* Hover para el botón ACTIVO */
+        .assigned-contacts .contact-button.active:hover {
+            background-color: #008f77; /* Un tono más oscuro de verde al pasar el ratón sobre un activo */
+            border-color: var(--operational-active-border-div);
+        }
+
+        .assigned-contacts .contact-button .status-dot {
+            margin-right: 8px;
+            background-color: var(--operational-inactive-dot-status); /* Rojo por defecto */
+            box-shadow: 0 0 5px var(--operational-inactive-dot-status);
+        }
+        .assigned-contacts .contact-button.active .status-dot {
+            background-color: var(--operational-active-dot-status); /* Verde para activo */
+            box-shadow: 0 0 5px var(--operational-active-dot-status);
+        }
+
+        /* Estilos para los colores de las palabras en los botones de contacto */
+        .contact-button .label-hostil { color: var(--red); }
+        .contact-button .label-neutral { color: var(--gray); }
+        .contact-button .label-amigo { color: var(--green); }
+        .contact-button .label-desconocido { color: var(--orange); }
+
+
+        /* Estilos para la miniventana (modal) */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--panel-dark-contrast);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            width: 90%;
+            max-width: 900px; /* Aumentado para las nuevas columnas */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            backdrop-filter: blur(2px); /* Efecto glassmorphism */
+            animation: fadeInScale 0.3s ease forwards;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-content .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 24px;
+            cursor: pointer;
+        }
+        .modal-content .close-button:hover {
+            color: var(--text);
+        }
+
+
+        /* Estilos de la tabla dentro del modal */
+        .modal-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 13px;
+            font-family: 'Inter', sans-serif; /* Asegurar Inter para la tabla */
+            font-weight: 600; /* Semi Bold */
+        }
+
+        .modal-table th, .modal-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #1a3a49; /* Borde sutil */
+        }
+
+        .modal-table th {
+            background: #1a2a38; /* Fondo para encabezados */
+            color: var(--muted);
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Filas alternantes */
+        .modal-table tbody tr:nth-child(even) {
+            background-color: rgba(30, 48, 61, 0.4); /* Gris/transparente */
+        }
+        .modal-table tbody tr:nth-child(odd) {
+            background-color: transparent; /* Blanco/transparente */
+        }
+
+
+        .modal-table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+
+        .modal-table tbody tr:hover {
+            background-color: #1e303d; /* Un poco más claro al pasar el ratón */
+        }
+
+        .modal-table tbody tr.selected-row {
+            background-color: #334d6b; /* Fila seleccionada */
+            border-left: 3px solid var(--border);
+        }
+        
+        /* Estilos para el símbolo del objetivo en el radar */
+        .target-symbol {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            width: 40px; /* Ancho base del símbolo */
+            height: 40px; /* Alto base del símbolo */
+            font-family: 'Inter', sans-serif;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            pointer-events: none; /* Para no interferir con clics en el radar */
+            z-index: 10;
+        }
+
+        .target-symbol .symbol-frame {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+            border: 1px solid var(--red); /* Borde rojo por defecto para HOSTIL */
+            clip-path: polygon(50% 0%, 100% 25%, 100% 100%, 0% 100%, 0% 25%); /* Forma de casa */
+        }
+
+        .target-symbol .symbol-fill {
+            position: absolute;
+            width: calc(100% - 2px); /* Un poco más pequeño que el borde */
+            height: calc(100% - 2px);
+            background-color: var(--red); /* Relleno rojo por defecto para HOSTIL */
+            clip-path: polygon(50% 0%, 100% 25%, 100% 100%, 0% 100%, 0% 25%); /* Misma forma de casa */
+            opacity: 0.8; /* Ligeramente transparente para ver a través */
+        }
+
+        .target-symbol .symbol-icon {
+            position: relative; /* Para que esté por encima del relleno */
+            color: black; /* Color del icono */
+            font-size: 18px; /* Tamaño de la letra 'F' */
+            z-index: 2;
+        }
+
+        .target-symbol .text-fields {
+            position: absolute;
+            bottom: -30px; /* Posicionar debajo del símbolo */
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap; /* Evitar que el texto se rompa */
+            text-align: center;
+            font-size: 10px;
+            line-height: 1.2;
+            color: var(--text); /* Color del texto */
+            z-index: 3;
+        }
+        .target-symbol .text-modifier:first-child {
+             color: var(--muted); /* Color más tenue para la primera línea */
+             font-size: 9px;
+             display: block; /* Asegurar que cada línea de texto esté en su propia línea */
+        }
+        .target-symbol .text-modifier:last-child {
+             font-size: 10px; /* Tamaño de fuente para la segunda línea */
+             display: block;
+        }
+/*
+        .target-symbol .direction-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 10px; /* Longitud del indicador *//*
+            background-color: blue; /* Color del indicador *//*
+            transform-origin: center top; /* Punto de pivote para rotación *//*
+            transform: translate(-50%, -100%) rotate(0deg); /* Ajustar posición y rotación inicial *//*
+            z-index: 4;
+        }
+
+         Modificadores para tipos de objetivo (si los hubiera, por ejemplo, AMIGO, NEUTRAL) */
+         .target-symbol.amigo .symbol-frame, .target-symbol.amigo .symbol-fill {
+            border-color: var(--green);
+            background-color: var(--green);
+        } */
+        /* .target-symbol.neutral .symbol-frame, .target-symbol.neutral .symbol-fill {
+            border-color: var(--gray);
+            background-color: var(--gray);
+        } */
+        
+        /* Estilos para la vista táctica */
+        
+        /*PANORAMA TACTICO Y VIDEO*//* Estilos iniciales para la vista táctica (oculta por defecto) *//* --- ESTILOS PARA LA VISTA TÁCTICA (SOBREPOSICIÓN COMPLETA) --- */
+
+#tactical-view {
+    position: absolute !important; 
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    
+    background-color: rgba(0, 0, 0, 0.95) !important; /* Un fondo casi negro para asegurar que nada se vea por debajo */
+    z-index: 2147483647 !important; /* ¡Este es el valor MÁS ALTO posible en la mayoría de los navegadores! */
+
+    opacity: 0 !important; 
+    visibility: hidden !important;
+    pointer-events: none !important;
+    transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out !important;
+
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    overflow: hidden !important; 
+}
+
+/* El resto de tus estilos para .active, img, y iframe dentro de #tactical-view están bien. */
+
+/* Estado ACTIVO: Cuando el botón ha sido clicado y la vista debe mostrarse */
+#tactical-view.active {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+/* Estilos para el contenido interno (la imagen o el iframe) */
+#tactical-view img,
+#tactical-view iframe {
+    width: 2070px !important;  /* Ancho FIJO */
+    height: 1200px !important; /* Alto FIJO */
+    /* object-fit: cover !important;  <- Descomenta esto si quieres que la imagen llene los 1500x2000px y recorte */
+    /* Si la imagen o iframe tiene un fondo, asegúrate de que no sea transparente */
+    background-color: black !important;
+    display: block !important; /* Asegura que la imagen se comporte como un bloque para centrarla bien */
+}
+
+.tactical-view-hidden {
+	    opacity: 0;
+	    pointer-events: none; /* Desactiva el clic en la imagen cuando está oculta */
+	}
+	.tactical-map-image {
+	    width: 100%;
+	    height: 100%;
+	    object-fit: cover; /* Asegura que la imagen cubra todo el contenedor */
+	    object-position: center;
+	}
+	
+	/* ESTILOS PARA EL NUEVO RECUADRO ADICIONAL */
+.additional-box {
+    background-color: #0c1a2e; /* Color similar a tu interfaz */
+    border: 1px solid #1a3a5a; /* Borde sutil */
+    border-radius: 5px;
+    margin-top: 10px; /* Espacio con el recuadro superior */
+    padding: 15px;
+    padding-top: 170%;
+    flex-grow: 1; /* ¡CLAVE! Esto hará que ocupe todo el espacio vertical disponible */
+    display: flex; /* Para centrar contenido si lo agregas */
+    justify-content: center;
+    align-items: center;
+    color: #8899aa; /* Color de texto si lo tuviera */
+    font-size: 0.9em;
+    /* max-height: calc(100% - altura_condiciones_disparo - altura_otros_elementos); */
+    /* Si tienes una altura fija para la columna, esto podría ayudar a calcular el espacio */
+}
+
+/* ESTILOS BASE PARA LAS VENTANAS DE OVERLAY */
+.overlay-window {
+    position: absolute; /* Se posicionará con JS */
+    background-color: rgba(12, 26, 46, 0.9); /* Fondo semitransparente oscuro */
+    border: 1px solid #1a3a5a;
+    border-radius: 5px;
+    color: #c0d0e0;
+    padding: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    z-index: 1000; /* Por encima de la interfaz normal, pero debajo de la vista táctica */
+    
+    opacity: 0;         /* Oculto por defecto */
+    visibility: hidden; /* Invisible por defecto */
+    pointer-events: none; /* No interactuable cuando oculto */
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+.overlay-window.active {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+.overlay-window h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #66ccff; /* Color de título claro */
+    text-align: center;
+    font-size: 1.1em;
+}
+
+/* ESTILOS PARA LA ANIMACIÓN DEL SÍMBOLO DEL TARGET */
+/* Asumo que el símbolo del target tiene una clase .target-symbol */
+.target-symbol {
+    /* Asegúrate de que tenga una opacidad base o 1 */
+    opacity: 1; 
+    animation: pulseTarget 5s infinite ease-in-out; /* 5 segundos, infinito, suave */
+}
+
+@keyframes pulseTarget {
+    0% { opacity: 0.2; } /* Casi transparente */
+    50% { opacity: 1; }   /* Totalmente visible */
+    100% { opacity: 0.2; } /* Vuelve a casi transparente */
+}
+
+
+        @media (max-width:1200px){
+            .wrap{grid-template-columns:1fr;}
+            .radar-circle{max-width:100%}
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="logo"></div>
+            <div class="name">BARRACUDA <span class="ver">2.0</span></div>
+        </div>
+        <div class="title">SISTEMA DE CONTROL DE TIRO</div>
+        <div class="spacer"></div>
+        <div class="clock">14:17:51</div>
+        <div class="muted">HORA LOCAL</div>
+        <nav class="tabs">
+        	<button class="pill">RUMBO VERDADERO</button>
+            <button class="pill active button-tactic">CÁMARA</button>
+            <button class="pill">LISTA DE EVENTOS</button>
+            <button class="pill">SENSORES</button>
+        </nav>
+    </header>
+
+    <main class="wrap">
+        <section class="left">
+           
+
+             <div class="card group">
+                <h4>CONTROL DE ESTACIÓN</h4>
+                <label>
+                    <select>
+                        <option>MIOLNYR 12MM (Estribor)-E1</option>
+                        <option>MIOLNYR 12MM (Babor)-E2</option>
+                        <option>MIOLNYR 25MM (Popa)-E3</option>
+                    </select>
+                </label>
+                <div class="button-group-control">
+                    <button class="btn" id="enEstacionBtn">CONECTAR ESTACIÓN</button>
+
+                </div>
+                <br>
+                <div id="operationalInfo" class="operational-indicator inactive">
+                    <span class="status-dot"></span>
+                    <span id="operationalText">E1 |DESCONECTADA|</span>
+                </div>
+            </div>
+
+            <div class="card group">
+                <h4>ASIGNAR MODO DE TRABAJO</h4>
+                <div id="statusOptro" class="operational-indicator inactive">
+                    <span class="status-dot"></span>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="selectOptro">
+                        <span class="checkmark"></span>
+                        <span>EOT Cámara</span>
+                    </label>
+                    <span id="textOptro" class="status-text-item">DESCONECTADO</span>
+                </div>
+                <div id="statusRWS" class="operational-indicator inactive">
+                    <span class="status-dot"></span>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="selectRWS">
+                        <span class="checkmark"></span>
+                        <span>Weapon System</span>
+                    </label>
+                    <span id="textRWS" class="status-text-item">DESCONECTADO</span>
+                </div>
+                <div id="statusPistaCMS" class="operational-indicator inactive">
+                    <span class="status-dot"></span>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="selectPistaCMS">
+                        <span class="checkmark"></span>
+                        <span>|CMS |Pista</span>
+                    </label>
+                    <span id="textPistaCMS" class="status-text-item">DESCONECTADO</span>
+                </div>
+                <div id="statusPistaRWS" class="operational-indicator inactive">
+                    <span class="status-dot"></span>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" id="selectPistaRWS" disabled>
+                        <span class="checkmark"></span>
+                        <span>|LINK |Pista </span>
+                    </label>
+                    <span id="textPistaRWS" class="status-text-item">DESHABILITADO</span>
+                </div>
+            </div>
+
+            <div class="card group assigned-contacts">
+                <h4>ASIGNAR A CONTACTO CMS</h4>
+                <button class="contact-button" id="contactBtn1" data-id="789012345678901">
+                    <span class="status-dot"></span>
+                    ID: 789012345678901 -<span class="label-hostil">Hostil</span>
+                </button>
+                    <!--
+
+
+                <button class="contact-button" id="contactBtn2" data-id="789012345678902">
+                    <span class="status-dot"></span>
+                    ID: 789012345678902 -<span class="label-neutral">Neutral</span>
+                </button>
+                <button class="contact-button" id="contactBtn3" data-id="789012345678903">
+                    <span class="status-dot"></span>
+                    ID: 789012345678903 -<span class="label-amigo">Amigo</span>
+                </button>
+                <button class="contact-button" id="contactBtn4" data-id="789012345678904">
+                    <span class="status-dot"></span>
+                    ID: 789012345678904 -<span class="label-desconocido">Desco.</span>
+                </button>
+                    -->
+            </div>
+
+
+            <div class="card group">
+                <h4>CONDICIONES PARA DISPARO</h4>
+                <div class="status-item fire-condition-item">
+                    <span class="icon ok">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </span>
+                    <span class="status-text">Sistema Asignado</span>
+                    <span class="value ok">ACTIVO</span>
+                </div>
+                <div class="status-item fire-condition-item">
+                    <span class="icon warn">
+                        <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                    </span>
+                    <span class="status-text">Arma en Fase</span>
+                    <span class="value warn">ESPERA</span>
+                </div>
+                <div class="status-item fire-condition-item">
+                    <span class="icon ok">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </span>
+                    <span class="status-text">Arma Desasegurada</span>
+                    <span class="value ok">ACTIVO</span>
+                </div>
+                <div class="status-item fire-condition-item">
+                    <span class="icon ok">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </span>
+                    <span class="status-text">Límite Libre</span>
+                    <span class="value ok">ACTIVO</span>
+                </div>
+                <div class="status-item fire-condition-item">
+                    <span class="icon bad">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                    </span>
+                    <span class="status-text">No Tiro RWS</span>
+                    <span class="value bad">INACTIVO</span>
+                </div>
+ 
+            </div>
+            
+            <div class="additional-box">
+    </div>
+        </section>
+
+        <aside class="right">
+            <div class="indicators-container">
+                <div class="indicator-card">
+                    <h4>AZIMUTH</h4>
+                    <div class="gauge-container">
+                        <svg class="gauge-svg" viewBox="0 0 200 200">
+                            <path class="gauge-arc-main" d="M 100 10 A 90 90 0 1 0 100 190 A 90 90 0 1 0 100 10 Z" />
+                            <line x1="100" y1="10" x2="100" y2="20" class="gauge-mark-main" />
+                            <line x1="100" y1="180" x2="100" y2="190" class="gauge-mark-main" />
+                            <line x1="10" y1="100" x2="20" y2="100" class="gauge-mark-main" />
+                            <line x1="180" y1="100" x2="190" y2="100" class="gauge-mark-main" />
+                            <line x1="100" y1="10" x2="100" y2="20" class="gauge-mark-sub" transform="rotate(45 100 100)" />
+                            <line x1="100" y1="10" x2="100" y2="20" class="gauge-mark-sub" transform="rotate(135 100 100)" />
+                            <line x1="100" y1="10" x2="100" y2="20" class="gauge-mark-sub" transform="rotate(225 100 100)" />
+                            <line x1="100" y1="10" x2="100" y2="20" class="gauge-mark-sub" transform="rotate(315 100 100)" />
+                            <text x="102" y="30" class="gauge-text">0°</text>
+                            <text x="152" y="51" class="gauge-text">045°</text>
+                            <text x="170" y="100" class="gauge-text">090°</text>
+                            <text x="151" y="150" class="gauge-text">135°</text>
+                            <text x="102" y="170" class="gauge-text">180°</text>
+                            <text x="50" y="149" class="gauge-text">225°</text>
+                            <text x="35" y="100" class="gauge-text">270°</text>
+                            <text x="55" y="51" class="gauge-text">315°</text>
+                            <g class="rotation-pointer" transform="rotate(0 100 100)">
+                                <line x1="100" y1="90" x2="100" y2="10" class="gauge-pointer-line" />
+                                <polygon points="100,5 95,15 105,15" class="gauge-pointer-tip" />
+                            </g>
+                            <rect x="75" y="125" width="50" height="24" rx="4" ry="4" class="gauge-value-box" />
+                            <text x="100" y="137" class="gauge-value-text" id="rotationValue">000.0°</text>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="indicator-card">
+                    <h4>ELEVACIÓN</h4>
+                    <div class="gauge-container">
+                        <svg class="gauge-svg" viewBox="0 0 200 200">
+                            <path class="gauge-arc-main" d="M 100 10 A 90 90 0 0 1 100 190 A 90 90 0 0 1 100 10 Z" />
+                            <line x1="100" y1="10" x2="100" y2="20" class="gauge-mark-main" />
+                            <line x1="100" y1="180" x2="100" y2="190" class="gauge-mark-main" />
+                            <line x1="180" y1="100" x2="190" y2="100" class="gauge-mark-main" />
+                            <line x1="20" y1="100" x2="10" y2="100" class="gauge-mark-main" />
+                            <line x1="100" y1="10" x2="100" y2="20" class="gauge-mark-sub" transform="rotate(-135 100 100)" />
+                            <line x1="100" y1="10" x2="100" y2="20" class="gauge-mark-sub" transform="rotate(-45 100 100)" />
+                            <text x="102" y="30" class="gauge-text">90°</text>
+                            <text x="50" y="51" class="gauge-text">45°</text>
+                            <text x="30" y="100" class="gauge-text">0°</text>
+                            <text x="48" y="149" class="gauge-text">-45°</text>
+                            <text x="102" y="175" class="gauge-text">90°</text>
+                             <g class="rotation-pointer" transform="rotate(270 100 100)">
+                                <line x1="100" y1="100" x2="100" y2="10" class="gauge-pointer-line" />
+                                <polygon points="100,5 95,15 105,15" class="gauge-pointer-tip" />
+                            </g>
+                            <rect x="75" y="125" width="50" height="24" rx="4" ry="4" class="elevation-value-box" />
+                            <text x="100" y="137" class="elevation-value-text" id="elevationValue">00.0°</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4>ESTADO DEL SISTEMA</h4>
+                <div class="list-grid">
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Estado IC</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Com. DDU</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Com. datos IC</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Disp. Entrada/Salida</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Datos CMS</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon warn">
+                            <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                        </span>
+                        <span>Límite de ángulo</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon bad">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="15" y1="9" x2="9" y2="15"></line>
+                                <line x1="9" y1="9" x2="15" y2="15"></line>
+                            </svg>
+                        </span>
+                        <span>Com. Nport.</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Tiro On/Off</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>RWS</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Cámaras</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Video CCV</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Video B-Hot</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Video IR</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Video W-Hot</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="weapon-data-panel group">
+                <h4>DATOS DE ARMA</h4>
+                <div class="weapon-data-grid">
+                    <div class="weapon-data-row">
+                        <span class="label">Weapon state</span>
+                        <span class="value">OPERANDO</span>
+                    </div>
+                    <div class="weapon-data-row">
+                        <span class="label">Fase System</span>
+                        <span class="value">OUT FASE</span>
+                    </div>
+                    <div class="weapon-data-row">
+                        <span class="label">Optro. state</span>
+                        <span class="value">RATE</span>
+                    </div>
+                    <div class="weapon-data-row">
+                        <span class="label">Error fire X</span>
+                        <span class="value">0</span>
+                    </div>
+                    <div class="weapon-data-row">
+                        <span class="label">Trigger Rate</span>
+                        <span class="value">SINGLE</span>
+                    </div>
+                    <div class="weapon-data-row">
+                        <span class="label">Error fire Y</span>
+                        <span class="value">3</span>
+                    </div>
+                    <div class="weapon-data-row">
+                        <span class="label">Range LRF</span>
+                        <span class="value">0000</span>
+                    </div>
+                    <div class="weapon-data-row">
+                        <span class="label">D. Offset X</span>
+                        <span class="value">0</span>
+                    </div>
+                    <div class="weapon-data-row">
+                        <span class="label">Ship speed</span>
+                        <span class="value">-</span>
+                    </div>
+                    <div class="weapon-data-row">
+                        <span class="label">D. Offset Y</span>
+                        <span class="value">0</span>
+                    </div>
+                    <div class="weapon-data-row">
+                        <span class="label">Ship course</span>
+                        <span class="value">-</span>
+                    </div>
+                    <div class="weapon-data-row">
+                        <span class="label">Speed Ctrl.</span>
+                        <span class="value">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-panel-embarcacion">
+                <div class="panel-title">Nave Propia</div>
+                <div class="own-ship-container">
+                    <div class="data-group">
+                        <div class="data-item-row">
+                            <span class="label">Lat:</span>
+                            <span class="value">37°05.664N</span>
+                        </div>
+                        <div class="data-item-row">
+                            <span class="label">Lon:</span>
+                            <span class="value">08°44.142W</span>
+                        </div>
+                    </div>
+                    <div class="data-group">
+                        <div class="data-item-row">
+                            <span class="label">COG:</span>
+                            <span class="value">000.0°</span>
+                        </div>
+                        <div class="data-item-row">
+                            <span class="label">SOG:</span>
+                            <span class="value">000.0</span>
+                            <span class="unit">kn</span>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="data-group">
+                        <div class="data-item-row">
+                            <span class="label">Fuente Pos:</span>
+                            <span class="value">SISTEMA</span>
+                        </div>
+                        <div class="data-item-row">
+                            <span class="label">Rumbo:</span>
+                            <span class="value">000.0°</span>
+                        </div>
+                        <div class="data-item-row">
+                            <span class="label">Vel. Log (kn):</span>
+                            <span class="value">000.0</span>
+                        </div>
+                    </div>
+                    <div class="data-group">
+                        <div class="data-item-row">
+                            <span class="label">Dir. Viento:</span>
+                            <span class="value">0.1°</span>
+                        </div>
+                        <div class="data-item-row">
+                            <span class="label">Vel. Viento (kn):</span>
+                            <span class="value">0.6</span>
+                        </div>
+                        <div class="data-item-row">
+                            <span class="label">Profundidad (m):</span>
+                            <span class="value missing">---</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+<section class="card radar-card">
+    <div class="radar-circle">
+        <span class="degree-text d0">000.0°</span>
+        <span class="degree-text d30">030.0°</span>
+        <span class="degree-text d60">060.0°</span>
+        <span class="degree-text d90">090.0°</span>
+        <span class="degree-text d120">120.0°</span>
+        <span class="degree-text d150">150.0°</span>
+        <span class="degree-text d180">180.0°</span>
+        <span class="degree-text d210">210.0°</span>
+        <span class="degree-text d240">240.0°</span>
+        <span class="degree-text d270">270.0°</span>
+        <span class="degree-text d300">300.0°</span>
+        <span class="degree-text d330">330.0°</span>
+
+        <div class="center-arrow"></div>
+        
+        <div id="tactical-view" class="tactical-view-hidden">
+    		<iframe src="ejemplo_video.png" frameborder="0" allowfullscreen></iframe>
+	</div>
+	
+	    <div id="events-window" class="overlay-window">
+        <h3>LISTA DE EVENTOS</h3>
+        <p>Contenido de eventos aquí...</p>
+    </div>
+
+    <div id="sensors-window" class="overlay-window">
+        <h3>SENSORES</h3>
+        <p>Contenido de sensores aquí...</p>
+    </div>
+
+        <div class="target-symbol hostil" style="transform: translate(-1%, -100%) rotate(0deg) translate(100px, -100px);">
+            <div class="symbol-frame"></div>
+            <div class="symbol-fill"></div>
+            <div class="symbol-icon">F</div>
+            <div class="text-fields">
+            <span class="text-modifier">789012345678901</span>
+                <span class="text-modifier">MIG-29</span>
+                <span class="text-modifier">AJ2455</span>
+                
+            </div>
+            <div class="direction-indicator"></div>
+        </div>
+        </div>
+    <div class="status-line">ESTACIÓN OPERANDO</div>
+</section>
+    </main>
+
+    <div id="contactModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-button" id="closeModalBtn">&times;</button>
+            <table class="modal-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>COORDENADAS</th>
+                        <th>NOMBRE</th>
+                        <th>RUMBO</th>
+                        <th>DISTANCIA</th>
+                        <th>ELEVACIÓN</th>
+                        <th>MARCACIÓN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="contact-row" data-id="789012345678901">
+                        <td>789012345678901</td>
+                        <td>12345678</td>
+                        <td>MIG-29 AJ2455</td>
+                        <td>210.3°</td>
+                        <td>012NM</td>
+                        <td>18.7°</td>
+                        <td>025.4°</td>
+                    </tr>
+                    <tr class="contact-row" data-id="789012345678902">
+                        <td>789012345678902</td>
+                        <td>12345679</td>
+                        <td>SUBMARINO</td>
+                        <td>090.0°</td>
+                        <td>045NM</td>
+                        <td>-2.1°</td>
+                        <td>085.0°</td>
+                    </tr>
+                    <tr class="contact-row" data-id="789012345678903">
+                        <td>789012345678903</td>
+                        <td>12345680</td>
+                        <td>BUQUE LUPO</td>
+                        <td>180.0°</td>
+                        <td>078NM</td>
+                        <td>1.0°</td>
+                        <td>200.7°</td>
+                    </tr>
+                    <tr class="contact-row" data-id="789012345678904">
+                        <td>789012345678904</td>
+                        <td>12345681</td>
+                        <td>CRUCERO GUERRA</td>
+                        <td>270.0°</td>
+                        <td>156NM</td>
+                        <td>5.6°</td>
+                        <td>280.1°</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="events-window" class="overlay-window">
+        <h3>LISTA DE EVENTOS</h3>
+        <p>Aquí se mostrarán los eventos del sistema.</p>
+        <p>Fecha: 2023-10-27 10:30:00 - Evento crítico #1</p>
+        <p>Fecha: 2023-10-27 10:25:15 - Alerta de sensor #5</p>
+        <p>Fecha: 2023-10-27 10:20:05 - Comunicación establecida</p>
+    </div>
+
+    <div id="sensors-window" class="overlay-window">
+        <h3>SENSORES</h3>
+        <p>Información detallada de los sensores activos.</p>
+        <p>Sensor Óptico: Activo - Estado: Óptimo</p>
+        <p>Radar Primario: Activo - Estado: Normal</p>
+        <p>Telémetro Láser: Inactivo - Estado: Standby</p>
+    </div>
+    
+    
+
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // ----------------------------------------------------------------------
+    // LÓGICA DEL BOTÓN TÁCTICA / CÁMARA
+    // ----------------------------------------------------------------------
+    const tacticaBtn = document.querySelector('.button-tactic'); // Asegúrate de que este selector sea correcto
+    const tacticalView = document.getElementById('tactical-view');
+    const radarItems = document.querySelectorAll('.radar-circle > *:not(#tactical-view)');
+
+    if (tacticaBtn && tacticalView) {
+        tacticaBtn.textContent = 'CÁMARA'; // Texto inicial del botón
+
+        tacticaBtn.addEventListener('click', () => {
+            tacticalView.classList.toggle('active');
+            
+            // Cambiar el texto del botón
+            if (tacticalView.classList.contains('active')) {
+                tacticaBtn.textContent = 'TÁCTICA';
+            } else {
+                tacticaBtn.textContent = 'CÁMARA';
+            }
+
+            // Ocultar/mostrar elementos del radar que no son la vista táctica
+            const isTacticalViewActive = tacticalView.classList.contains('active');
+            radarItems.forEach(item => {
+                item.style.opacity = isTacticalViewActive ? 0 : 1;
+            });
+        });
+    } else {
+        console.error("Error (TÁCTICA): No se encontró el botón con clase '.button-tactic' o el elemento con ID 'tactical-view'.");
+        console.log("tacticaBtn:", tacticaBtn);
+        console.log("tacticalView:", tacticalView);
+    }
+
+    // ----------------------------------------------------------------------
+    // LÓGICA PARA LAS VENTANAS DE "LISTA DE EVENTOS" Y "SENSORES"
+    // ----------------------------------------------------------------------
+    // === ¡IMPORTANTE: AJUSTA ESTOS SELECTORES A LOS REALES DE TUS BOTONES! ===
+    const eventsBtn = document.querySelector('.header-buttons .button-events'); // Ejemplo: Si están en un div.header-buttons
+    const sensorsBtn = document.querySelector('.header-buttons .button-sensors'); // Ejemplo: Si están en un div.header-buttons
+    // O si tienen IDs:
+    // const eventsBtn = document.getElementById('idDelBotonEventos');
+    // const sensorsBtn = document.getElementById('idDelBotonSensores');
+    // =======================================================================
+
+    const eventsWindow = document.getElementById('events-window');
+    const sensorsWindow = document.getElementById('sensors-window');
+    // === ¡IMPORTANTE: AJUSTA ESTE SELECTOR AL RECUADRO "ESTADO DEL SISTEMA"! ===
+    const estadoSistemaBox = document.querySelector('.estado-sistema-box'); // Clase o ID real del recuadro
+    // =======================================================================
+
+    // Función para posicionar y alternar la visibilidad de una ventana
+    function toggleWindow(button, windowElement) {
+        windowElement.classList.toggle('active');
+
+        if (windowElement.classList.contains('active')) {
+            // Asegurarse de que estadoSistemaBox exista antes de usar getBoundingClientRect
+            if (!estadoSistemaBox) {
+                console.error("Error: 'estadoSistemaBox' no se encontró para posicionar la ventana.");
+                return; // Salir si no se encuentra la referencia
+            }
+
+            const buttonRect = button.getBoundingClientRect(); // Posición del botón que se hizo clic
+            const estadoRect = estadoSistemaBox.getBoundingClientRect(); // Posición del recuadro "ESTADO DEL SISTEMA"
+
+            windowElement.style.width = estadoRect.width + 'px'; // Ancho del recuadro "ESTADO DEL SISTEMA"
+            windowElement.style.top = (buttonRect.bottom + 5) + 'px'; // Justo debajo del botón + un pequeño margen
+            windowElement.style.left = estadoRect.left + 'px'; // Alineado con la izquierda del recuadro "ESTADO DEL SISTEMA"
+            
+            // Calcular el alto disponible desde la parte inferior del botón hasta el final del viewport
+            const availableHeight = window.innerHeight - (buttonRect.bottom + 5);
+            windowElement.style.maxHeight = availableHeight + 'px';
+            windowElement.style.height = availableHeight + 'px'; // Intentar ocupar todo el alto disponible
+            windowElement.style.overflowY = 'auto'; // Añadir scroll si el contenido es demasiado largo
+        }
+    }
+
+    if (eventsBtn && sensorsBtn && eventsWindow && sensorsWindow && estadoSistemaBox) {
+        eventsBtn.addEventListener('click', () => {
+            sensorsWindow.classList.remove('active'); // Cierra la ventana de Sensores si está abierta
+            toggleWindow(eventsBtn, eventsWindow);
+        });
+
+        sensorsBtn.addEventListener('click', () => {
+            eventsWindow.classList.remove('active'); // Cierra la ventana de Eventos si está abierta
+            toggleWindow(sensorsBtn, sensorsWindow);
+        });
+    } else {
+        console.error("Error (VENTANAS): No se pudieron encontrar todos los elementos para las ventanas de Eventos/Sensores. Verifique los selectores HTML y las IDs.");
+        console.log("eventsBtn:", eventsBtn);
+        console.log("sensorsBtn:", sensorsBtn);
+        console.log("eventsWindow:", eventsWindow);
+        console.log("sensorsWindow:", sensorsWindow);
+        console.log("estadoSistemaBox:", estadoSistemaBox);
+    }
+
+    // ----------------------------------------------------------------------
+    // LÓGICA DEL BOTÓN 'EN ESTACIÓN'
+    // ----------------------------------------------------------------------
+    const enEstacionBtn = document.getElementById('enEstacionBtn');
+    const operationalInfo = document.getElementById('operationalInfo');
+    const operationalText = document.getElementById('operationalText');
+    let isOperational = false; // Estado inicial
+
+    if (enEstacionBtn && operationalInfo && operationalText) {
+        enEstacionBtn.addEventListener('click', function() {
+            isOperational = !isOperational; // Alternar estado
+            if (isOperational) {
+                operationalInfo.classList.remove('inactive');
+                operationalInfo.classList.add('active');
+                operationalText.textContent = 'E1 | CONECTADA |';
+            } else {
+                operationalInfo.classList.remove('active');
+                operationalInfo.classList.add('inactive');
+                operationalText.textContent = 'E1 |DESCONECTADA|';
+            }
+        });
+    } else {
+        console.error("Error ('EN ESTACIÓN'): No se pudieron encontrar los elementos para el botón 'En Estación'.");
+        console.log("enEstacionBtn:", enEstacionBtn);
+        console.log("operationalInfo:", operationalInfo);
+        console.log("operationalText:", operationalText);
+    }
+
+    // ----------------------------------------------------------------------
+    // LÓGICA PARA LOS CHECKBOXES DE MODO DE TRABAJO
+    // ----------------------------------------------------------------------
+    const checkboxConfig = [
+        { checkboxId: 'selectOptro', statusId: 'statusOptro', textId: 'textOptro' },
+        { checkboxId: 'selectRWS', statusId: 'statusRWS', textId: 'textRWS' },
+        { checkboxId: 'selectPistaCMS', statusId: 'statusPistaCMS', textId: 'textPistaCMS' },
+        { checkboxId: 'selectPistaRWS', statusId: 'statusPistaRWS', textId: 'textPistaRWS' }
+    ];
+
+    const selectPistaCMSCheckbox = document.getElementById('selectPistaCMS');
+    const contactButtons = document.querySelectorAll('.assigned-contacts .contact-button');
+
+    checkboxConfig.forEach(config => {
+        const checkbox = document.getElementById(config.checkboxId);
+        const statusDiv = document.getElementById(config.statusId);
+        const statusText = document.getElementById(config.textId);
+
+        if (checkbox && statusDiv && statusText) {
+            const updateStatus = () => {
+                if (checkbox.checked) {
+                    statusDiv.classList.remove('inactive');
+                    statusDiv.classList.add('active');
+                    statusText.textContent = 'ASIGNADO';
+                } else {
+                    statusDiv.classList.remove('active');
+                    statusDiv.classList.add('inactive');
+                    statusText.textContent = 'INACTIVO';
+                }
+                // Actualizar estado de los botones de contacto si es el checkbox Pista-CMS
+                if (config.checkboxId === 'selectPistaCMS') {
+                    if (selectPistaCMSCheckbox) { // Asegurarse de que exista
+                        contactButtons.forEach(button => {
+                            if (checkbox.checked) {
+                                button.classList.add('active');
+                            } else {
+                                button.classList.remove('active');
+                            }
+                        });
+                    } else {
+                        console.warn("Advertencia: El checkbox 'selectPistaCMS' no se encontró para actualizar los botones de contacto.");
+                    }
+                }
+            };
+
+            checkbox.addEventListener('change', updateStatus);
+            updateStatus(); // Aplica el estado inicial al cargar la página
+        } else {
+            console.error(`Error (CHECKBOXES): No se encontraron todos los elementos para la configuración del checkbox con ID '${config.checkboxId}'.`);
+            console.log("Checkbox:", checkbox);
+            console.log("Status Div:", statusDiv);
+            console.log("Status Text:", statusText);
+        }
+    });
+
+    // ----------------------------------------------------------------------
+    // LÓGICA PARA LA MINIVENTANA (MODAL) DE CONTACTOS
+    // ----------------------------------------------------------------------
+    const contactModal = document.getElementById('contactModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    // Asegúrate de que 'modalTableRows' exista dentro del modal
+    const modalTableRows = contactModal ? contactModal.querySelectorAll('.contact-row') : null; 
+
+    if (contactModal && closeModalBtn && selectPistaCMSCheckbox) { // selectPistaCMSCheckbox es necesario aquí
+        // Abrir modal al hacer clic en un botón de contacto
+        contactButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Solo si el checkbox "Seleccionar Pista-CMS" está marcado
+                if (selectPistaCMSCheckbox.checked) {
+                    contactModal.classList.add('show');
+                    if (modalTableRows) {
+                        modalTableRows.forEach(row => row.classList.remove('selected-row'));
+                    }
+                    const contactId = this.dataset.id;
+                    const targetRow = contactModal.querySelector(`.contact-row[data-id="${contactId}"]`);
+                    if (targetRow) {
+                        targetRow.classList.add('selected-row');
+                    }
+                } else {
+                    alert("Por favor, active 'Seleccionar Pista-CMS' para ver los contactos.");
+                }
+            });
+        });
+
+        // Cerrar modal
+        closeModalBtn.addEventListener('click', function() {
+            contactModal.classList.remove('show');
+        });
+
+        // Cerrar modal al hacer clic fuera
+        contactModal.addEventListener('click', function(event) {
+            if (event.target === contactModal) {
+                contactModal.classList.remove('show');
+            }
+        });
+    } else {
+        console.error("Error (MODAL CONTACTOS): No se encontraron todos los elementos necesarios para el modal de contactos.");
+        console.log("contactModal:", contactModal);
+        console.log("closeModalBtn:", closeModalBtn);
+        console.log("selectPistaCMSCheckbox:", selectPistaCMSCheckbox);
+    }
+
+    // ----------------------------------------------------------------------
+    // LÓGICA PARA ANIMAR LOS GAUGES (ROTACIÓN Y ELEVACIÓN)
+    // ----------------------------------------------------------------------
+    const rotationPointer = document.querySelector('.gauge-container:nth-of-type(1) .rotation-pointer');
+    const rotationValueText = document.getElementById('rotationValue');
+    const elevationValueText = document.getElementById('elevationValue');
+    const elevationPointerGroup = document.querySelector('.gauge-container:nth-of-type(2) .rotation-pointer');
+
+    let currentRotation = 0; // Grados
+    let currentElevation = 0; // Grados
+
+    function updateGauges() {
+        if (rotationPointer && rotationValueText && elevationValueText && elevationPointerGroup) {
+            currentRotation = (currentRotation + (Math.random() * 20 - 10)) % 360;
+            if (currentRotation < 0) currentRotation += 360;
+
+            currentElevation = (currentElevation + (Math.random() * 5 - 2.5));
+            if (currentElevation > 90) currentElevation = 90;
+            if (currentElevation < -90) currentElevation = -90;
+
+            rotationPointer.setAttribute('transform', `rotate(${currentRotation} 100 100)`);
+            rotationValueText.textContent = Math.round(currentRotation);
+
+            const mappedElevationAngle = (currentElevation + 90) * 1;
+            elevationPointerGroup.setAttribute('transform', `rotate(${mappedElevationAngle} 100 100)`);
+            elevationValueText.textContent = Math.round(currentElevation);
+        } else {
+            console.warn("Advertencia: No se encontraron todos los elementos para animar los gauges.");
+        }
+        requestAnimationFrame(updateGauges); // Descomentar para activar la animación de los gauges
+    }
+
+    // Iniciar la animación si se encuentran los elementos
+    // Descomenta la siguiente línea para iniciar la animación:
+    // requestAnimationFrame(updateGauges); 
+
+}); // CIERRE DEL ÚNICO document.addEventListener('DOMContentLoaded'
+</script>
+</body>
+</html>

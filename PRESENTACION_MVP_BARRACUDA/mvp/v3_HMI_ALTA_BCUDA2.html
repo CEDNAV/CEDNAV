@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BARRACUDA 2.0 – Réplica</title>
+    <style>
+        :root{
+            --bg:#000B19;            /* fondo principal */
+            --panel:#12202b;         /* paneles */
+            --panel-2:#0e1a24;       /* panel oscuro */
+            --border:#1dd3d8;        /* cian brillante para bordes principales */
+            --text:#c7f5ff;          /* texto principal */
+            --muted:#6db9c1;         /* texto tenue */
+            --accent:#13a5af;        /* acento */
+            --green:#33ff7a;         /* estados ok */
+            --yellow:#ffd34d;        /* advertencia */
+            --red:#ff5e6e;           /* error */
+            --panel-dark-contrast: #141F2E;
+            --subtle-border: #566e9e;
+
+            /* Nuevas variables para los colores del botón */
+            --btn-normal-bg: #2B6CB0; /* Azul del estado Normal */
+            --btn-normal-border: #2C5282; /* Borde del estado Normal */
+            --btn-normal-text: #FFFFFF; /* Texto blanco para todos los estados activos */
+
+            --btn-hover-bg: #3182CE; /* Azul más claro para Hover */
+            --btn-hover-border: #3182CE; /* Borde igual que el fondo para Hover */
+
+            --btn-active-bg: #2B6CB0; /* Fondo del estado Active (puede ser igual al normal o un poco más oscuro) */
+            --btn-active-border: #1B4B8A; /* Borde más oscuro para Active */
+
+            --btn-focus-border: #A7C7ED; /* Borde azul claro para Focus */
+            --btn-focus-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5); /* Sombra para Focus */
+
+            --btn-disabled-bg: #4A5568; /* Gris oscuro para Disabled */
+            --btn-disabled-border: #4A5568; /* Borde igual que el fondo para Disabled */
+            --btn-disabled-text: #A0AEC0; /* Texto gris claro para Disabled */
+        }
+        *{box-sizing:border-box}
+        html,body{height:100%}
+        body{
+            margin:0; background:var(--bg); color:var(--text);
+            font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+            letter-spacing:.3px;
+        }
+        .topbar{
+            position:sticky; top:0; z-index:10;
+            display:flex; align-items:center; gap:24px;
+            padding:14px 18px; border-bottom:1px solid #0c1319;
+            background:linear-gradient(180deg, #10202b 0%, #0f1a23 100%);
+        }
+        .brand{display:flex; align-items:center; gap:10px; font-weight:800}
+        .brand .logo{width:26px; height:26px; border:2px solid var(--border); border-radius:50%; display:grid; place-items:center}
+        .brand .logo::after{content:""; width:10px; height:10px; border:2px solid var(--border); border-radius:50%}
+        .brand .name{font-size:20px}
+        .brand .ver{opacity:.8; margin-left:6px}
+        .title{opacity:.75}
+        .spacer{flex:1}
+        .clock{margin-right:6px; font-weight:700}
+        .tabs{display:flex; gap:8px}
+        .pill{padding:6px 12px; border:1px solid var(--border); color:var(--text); border-radius:6px; background:transparent; cursor:pointer}
+        .pill.active{background:#0c2b35}
+
+        .wrap{display:grid; grid-template-columns: 270px 1fr 380px; gap:20px; padding:18px}
+
+        /* Panel base */
+        .card{background:var(--panel-dark-contrast); border:1px solid var(--subtle-border); border-radius:8px; padding:14px}
+        .card h4{margin:0 0 12px; color:var(--muted); font-size:14px; letter-spacing:.8px}
+
+        .left .group{margin-bottom:16px}
+        .left label, .left .row{display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:13px}
+        .left select{width:100%; background:var(--panel-2); border:1px solid #183948; color:var(--text); padding:8px; border-radius:6px}
+        
+        /* Estilos del botón basados en la imagen "Estados Visuales" */
+        .btn{
+            background: var(--btn-normal-bg);
+            color: var(--btn-normal-text);
+            border: 1px solid var(--btn-normal-border);
+            padding: 8px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500; /* Ajuste para que se parezca más */
+            transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+        }
+        .btn:hover{
+            background: var(--btn-hover-bg);
+            border-color: var(--btn-hover-border);
+        }
+        .btn:active{
+            background: var(--btn-active-bg);
+            border-color: var(--btn-active-border);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); /* Ligera sombra interior para simular presión */
+        }
+        .btn:focus-visible{ /* Para accesibilidad con teclado */
+            outline: none;
+            border-color: var(--btn-focus-border);
+            box-shadow: var(--btn-focus-shadow);
+        }
+        /* Para el estado disabled, si se implementa */
+        .btn:disabled, .btn.disabled {
+            background: var(--btn-disabled-bg);
+            border-color: var(--btn-disabled-border);
+            color: var(--btn-disabled-text);
+            cursor: not-allowed;
+            opacity: 0.8; /* Ligeramente transparente */
+            box-shadow: none;
+        }
+
+        .btn.secondary{border-color:#2a6a79} /* Mantener por si se usa en otro lugar */
+        .btn.red{border-color:var(--red); color:var(--red); font-weight:800} /* Mantener por si se usa en otro lugar */
+        .switch{display:inline-grid; grid-template-columns:1fr auto; align-items:center; gap:10px}
+        .chip{display:inline-flex; align-items:center; justify-content:center; min-width:40px; padding:4px 8px; border-radius:4px; font-weight:700; border:1px solid #2a6a79; background:#0d2430}
+        .chip.on{color:#75f7ff; border-color:var(--border)}
+        .chip.off{color:#90a6ad}
+        
+        /* Estilo para el indicador operacional (como definido anteriormente) */
+        .operational-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 16px; /* px-4 py-2 */
+            border-radius: 9999px; /* rounded-full */
+            color: #E2E8F0; /* Color del texto de la imagen */
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 8px;
+            cursor: default;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .operational-indicator.active {
+            background: #4C516E; /* Fondo azul grisáceo exacto de la imagen */
+            border: 1px solid #5C6285; /* Borde más claro para cuando está activo */
+        }
+        .operational-indicator.active .status-dot {
+            background-color: #5EEAD4; /* Punto verde cian de la imagen */
+            box-shadow: 0 0 5px #5EEAD4;
+        }
+
+        .operational-indicator.inactive {
+            background: #2e0e12; /* Color oscuro/rojo para inactivo */
+            border: 1px solid var(--red);
+            color: var(--red);
+        }
+        .operational-indicator.inactive .status-dot {
+            background-color: var(--red); /* Punto rojo para inactivo */
+            box-shadow: 0 0 5px var(--red);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: currentColor;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Estilos para la sección CONDICIONES DE TIRO y ESTADO DEL SISTEMA */
+        .status-item {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+        }
+        .fire-condition-item {
+            margin-bottom: 8px; 
+        }
+        .fire-condition-item:last-child {
+            margin-bottom: 0;
+        }
+        .status-item .icon {
+            margin-right: 8px;
+            width: 12px;
+            height: 12px;
+            flex-shrink: 0;
+        }
+        .status-item .status-text {
+            flex-grow: 1;
+            text-align: left;
+        }
+        .fire-condition-item .value {
+            margin-left: auto;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* Colores de los iconos (SVGs) */
+        .icon.ok svg { stroke: var(--green); fill: none; }
+        .icon.warn svg { stroke: var(--yellow); fill: none; }
+        .icon.bad svg { stroke: var(--red); fill: none; }
+
+        /* Colores de los valores */
+        .value.ok { color: var(--green); }
+        .value.warn { color: var(--yellow); }
+        .value.bad { color: var(--red); }
+        
+        /* ESTILOS DEL RADAR CENTRAL */
+        .radar-card {
+            position: relative;
+            background: var(--panel-dark-contrast);
+            border: 1px solid var(--subtle-border);
+            border-radius: 8px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            
+            background-image:
+                linear-gradient(0deg, transparent 9%, #122738 10%, #122738 11%, transparent 12%),
+                linear-gradient(90deg, transparent 9%, #122738 10%, #122738 11%, transparent 12%);
+            background-size: 100px 100px;
+        }
+
+        .radar-circle {
+            position: relative;
+            aspect-ratio: 1/1;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: rgba(20, 31, 46, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Anillos concéntricos dentro del círculo */
+        .radar-circle::before,
+        .radar-circle::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            border: 1px dashed rgba(29, 211, 216, 0.3);
+        }
+        .radar-circle::before { width: 50%; height: 50%; }
+        .radar-circle::after { width: 75%; height: 75%; }
+
+        /* Marcas y números de grados */
+        .degree-text {
+            position: absolute;
+            color: var(--border);
+            font-size: 12px;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+        }
+        
+        .degree-text.d0 { top: 5%; left: 50%; transform: translateX(-50%); }
+        .degree-text.d30 { top: 12%; right: 15%; }
+        .degree-text.d60 { top: 25%; right: 6%; }
+        .degree-text.d90 { top: 50%; right: 5%; transform: translateY(-50%); }
+        .degree-text.d120 { bottom: 25%; right: 6%; }
+        .degree-text.d150 { bottom: 12%; right: 15%; }
+        .degree-text.d180 { bottom: 5%; left: 50%; transform: translateX(-50%); }
+        .degree-text.d210 { bottom: 12%; left: 15%; }
+        .degree-text.d240 { bottom: 25%; left: 6%; }
+        .degree-text.d270 { top: 50%; left: 5%; transform: translateY(-50%); }
+        .degree-text.d300 { top: 25%; left: 6%; }
+        .degree-text.d330 { top: 12%; left: 15%; }
+
+        /* Estilo de la punta de flecha */
+        .center-arrow {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 20px solid var(--border);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 4;
+        }
+
+        .status-line{margin-top:8px; text-align:center; color:#7ae9f2; font-size:12px; letter-spacing:1.5px}
+
+        /* Indicadores de rotación e inclinación */
+        .indicators-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .indicator-card {
+            background: var(--panel-dark-contrast);
+            border: 1px solid var(--subtle-border);
+            border-radius: 8px;
+            padding: 14px;
+            text-align: center;
+        }
+        
+        .indicator-card h4 {
+            margin: 0 0 10px;
+            color: var(--muted);
+            font-size: 14px;
+            letter-spacing: .8px;
+        }
+
+        .indicator-gauge {
+            width: 100%;
+            height: 120px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Indicador de rotación (azimut) */
+        .azimut-gauge {
+            background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg width="100%25" height="100%25" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3e%3cline x1="100" y1="10" x2="100" y2="20" stroke="%231dd3d8" stroke-width="2" /%3e%3cline x1="100" y1="180" x2="100" y2="190" stroke="%231dd3d8" stroke-width="2" /%3e%3cline x1="10" y1="100" x2="20" y2="100" stroke="%231dd3d8" stroke-width="2" /%3e%3cline x1="180" y1="100" x2="190" y2="100" stroke="%231dd3d8" stroke-width="2" /%3e%3cpath d="M 100 10 A 90 90 0 1 0 100 190 A 90 90 0 1 0 100 10" fill="none" stroke="%231dd3d8" stroke-width="1" /%3e%3c/svg%3e');
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        /* Puntero del azimut */
+        .azimut-pointer {
+            width: 4px;
+            height: 70%;
+            background-color: var(--border);
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform-origin: center bottom;
+            transform: translateX(-50%) rotate(0deg);
+        }
+        
+        .azimut-pointer::before {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 12px solid var(--border);
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Indicador de inclinación (elevación) */
+        .elevation-gauge {
+            width: 100%;
+            height: 100px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            position: relative;
+        }
+
+        .elevation-bar {
+            width: 80%;
+            height: 10px;
+            background: rgba(86, 110, 158, 0.4);
+            border-radius: 5px;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .elevation-marker {
+            width: 2px;
+            height: 15px;
+            background: var(--subtle-border);
+            position: relative;
+            top: -5px;
+        }
+
+        .elevation-marker:nth-child(2) { height: 20px; top: -7.5px; }
+        
+        .elevation-pointer {
+            width: 12px;
+            height: 12px;
+            background: var(--border);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .elevation-value {
+            position: absolute;
+            bottom: -20px;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        /* Estilos generales para las líneas de meteorología y posición */
+        .info-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .info-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-item .icon {
+            width: 12px;
+            height: 12px;
+            flex-shrink: 0;
+            stroke: var(--text);
+            fill: currentColor;
+            margin-right: 8px;
+        }
+        
+        .info-item .label-text {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            color: var(--text);
+        }
+
+        /* Estilos del "Label de Solo Lectura" para los valores de info */
+        .info-item .value-container {
+            width: 96px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(68, 68, 68, 0.7);
+            backdrop-filter: blur(2px);
+            border: 1px solid #5a594b;
+            border-radius: 5px;
+            color: var(--text);
+            font-size: 14px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .info-item .value-container .unit {
+            color: var(--muted);
+            margin-left: 4px;
+        }
+
+        /* Ajustes para el tamaño de fuente y espacio en valores de lat/lon si son largos */
+        .info-item .value-container.compact {
+            font-size: 12px;
+            padding: 0 4px;
+        }
+
+
+        .list-grid{
+            display:grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 6px 10px;
+        }
+        .list-grid .item{
+            display:flex; align-items:center; gap:8px; padding:6px 8px; 
+            border:1px solid #1a3a49; border-radius:6px; background:#0e1f28;
+            font-size: 13px;
+        }
+        .list-grid .item .icon {
+            margin-right: 0px; 
+            width: 12px;
+            height: 12px;
+            flex-shrink: 0;
+        }
+
+        .footer-note{margin-top:10px; text-align:center; color:#66c9d3; font-size:12px; opacity:.9}
+
+        /* Botón de emergencia ancho */
+        .emergency{display:block; width:100%; background:#2e0e12; border:1px solid var(--red); color:var(--red); padding:10px 12px; border-radius:6px; font-weight:900; letter-spacing:1px}
+
+        @media (max-width:1200px){
+            .wrap{grid-template-columns:1fr;}
+            .radar-circle{max-width:100%}
+        }
+    </style>
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand">
+            <div class="logo"></div>
+            <div class="name">BARRACUDA <span class="ver">2.0</span></div>
+        </div>
+        <div class="title">SISTEMA DE CONTROL DE TIRO</div>
+        <div class="spacer"></div>
+        <div class="clock">14:17:51</div>
+        <div class="muted">HORA LOCAL</div>
+        <nav class="tabs">
+            <button class="pill active">TÁCTICA</button>
+            <button class="pill">LISTA DE EVENTOS</button>
+            <button class="pill">SENSORES</button>
+        </nav>
+    </header>
+
+    <main class="wrap">
+        <section class="left">
+            <div class="card group">
+                <h4>CONTROL DE ESTACIÓN</h4>
+                    <select>
+                        <option>Estación (Estribor)</option>
+                        <option>Estación (Babor)</option>
+                    </select>
+                </label>
+                <div style="display:auto; gap:8px; margin-top:8px;">
+                    <button class="btn" id="enEstacionBtn">EN ESTACIÓN</button>
+                </div>
+                <div id="operationalInfo" class="operational-indicator inactive">
+                    <span class="status-dot"></span>
+                    <span id="operationalText">Estacion 1 DESCONECTADA</span>
+                </div>
+            </div>
+
+            <div class="card group">
+                <h4>ASIGNAR MODO DE TRABAJO</h4>
+                <div class="row"><span>● Seleccionar Optro.</span><span class="chip off">OFF</span></div>
+                <div class="row"><span>● Seleccionar RWS</span><span class="chip off">OFF</span></div>
+                <div class="row"><span>● Seleccionar Pista-CMS</span><span class="chip off">OFF</span></div>
+                <div class="row"><span>● Seleccionar Pista-RWS</span><span class="chip off">OFF</span></div>
+            </div>
+
+            <div class="card group">
+                <h4>CONDICIONES DE TIRO</h4>
+                <div class="status-item fire-condition-item">
+                    <span class="icon ok">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </span>
+                    <span class="status-text">Sistema Asignado</span>
+                    <span class="value ok">ACTIVO</span>
+                </div>
+                <div class="status-item fire-condition-item">
+                    <span class="icon warn">
+                        <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                    </span>
+                    <span class="status-text">Arma en Fase</span>
+                    <span class="value warn">ESPERA</span>
+                </div>
+                <div class="status-item fire-condition-item">
+                    <span class="icon ok">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </span>
+                    <span class="status-text">Arma Segura</span>
+                    <span class="value ok">ACTIVO</span>
+                </div>
+                <div class="status-item fire-condition-item">
+                    <span class="icon ok">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </span>
+                    <span class="status-text">Límite Libre</span>
+                    <span class="value ok">ACTIVO</span>
+                </div>
+                <div class="status-item fire-condition-item">
+                    <span class="icon bad">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="15" y1="9" x2="9" y2="15"></line>
+                            <line x1="9" y1="9" x2="15" y2="15"></line>
+                        </svg>
+                    </span>
+                    <span class="status-text">No Tiro RWS</span>
+                    <span class="value bad">INACTIVO</span>
+                </div>
+                <button class="emergency" style="margin-top:10px">PARADA DE EMERGENCIA</button>
+            </div>
+
+            <div class="card group">
+                <h4>METEOROLOGÍA</h4>
+                <div class="info-item">
+                    <span class="label-text">
+                        <span class="icon">
+                            <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="2" x2="12" y2="6"></line>
+                                <line x1="12" y1="18" x2="12" y2="22"></line>
+                                <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                                <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                                <line x1="2" y1="12" x2="6" y2="12"></line>
+                                <line x1="18" y1="12" x2="22" y2="12"></line>
+                                <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                                <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+                            </svg>
+                        </span>
+                        <span>Temperatura</span>
+                    </span>
+                    <div class="value-container">
+                        <span>18</span>
+                        <span class="unit">°C</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="label-text">
+                        <span class="icon">
+                            <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21.5 2.5l-19 19m0-19l19 19"></path>
+                            </svg>
+                        </span>
+                        <span>Vel. Viento</span>
+                    </span>
+                    <div class="value-container">
+                        <span>12</span>
+                        <span class="unit">kts</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="label-text">
+                        <span class="icon">
+                            <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2v20M18 16l-6 6-6-6"></path>
+                            </svg>
+                        </span>
+                        <span>Dir. Viento</span>
+                    </span>
+                    <div class="value-container">
+                        <span>NW</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="label-text">
+                        <span class="icon">
+                            <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2a7 7 0 0 0-7 7c0 5.5 7 13 7 13s7-7.5 7-13a7 7 0 0 0-7-7z"></path>
+                                <polyline points="12 12 12 7"></polyline>
+                                <polyline points="12 12 15 10"></polyline>
+                            </svg>
+                        </span>
+                        <span>Humedad</span>
+                    </span>
+                    <div class="value-container">
+                        <span>75</span>
+                        <span class="unit">%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card group">
+                <h4>POSICIÓN</h4>
+                <div class="info-item">
+                    <span class="label-text">
+                        <span class="icon">
+                            <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21.5 2.5l-19 19m0-19l19 19"></path>
+                            </svg>
+                        </span>
+                        <span>Latitud</span>
+                    </span>
+                    <div class="value-container compact">
+                        <span>4°35'56"</span>
+                        <span class="unit">N</span>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <span class="label-text">
+                        <span class="icon">
+                            <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21.5 2.5l-19 19m0-19l19 19"></path>
+                            </svg>
+                        </span>
+                        <span>Longitud</span>
+                    </span>
+                    <div class="value-container compact">
+                        <span>74°04'51"</span>
+                        <span class="unit">W</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card radar-card">
+            <div class="radar-circle">
+                <span class="degree-text d0">0</span>
+                <span class="degree-text d30">30</span>
+                <span class="degree-text d60">60</span>
+                <span class="degree-text d90">90</span>
+                <span class="degree-text d120">120</span>
+                <span class="degree-text d150">150</span>
+                <span class="degree-text d180">180</span>
+                <span class="degree-text d210">210</span>
+                <span class="degree-text d240">240</span>
+                <span class="degree-text d270">270</span>
+                <span class="degree-text d300">300</span>
+                <span class="degree-text d330">330</span>
+                
+                <div class="center-arrow"></div>
+            </div>
+            <div class="status-line">ESTACIÓN OPERANDO</div>
+        </section>
+
+        <aside class="right">
+            <div class="indicators-container">
+                <div class="indicator-card">
+                    <h4>ROTACIÓN</h4>
+                    <div class="indicator-gauge">
+                        <div class="azimut-gauge"></div>
+                        <div class="azimut-pointer"></div>
+                    </div>
+                    <div style="font-size:13px; margin-top:10px">
+                        Azimut: <b style="color:#95faff">0.00°</b>
+                    </div>
+                </div>
+
+                <div class="indicator-card">
+                    <h4>INCLINACIÓN</h4>
+                    <div class="indicator-gauge">
+                        <div class="elevation-gauge">
+                            <div class="elevation-bar">
+                                <span class="elevation-marker"></span>
+                                <span class="elevation-marker"></span>
+                                <span class="elevation-marker"></span>
+                                <span class="elevation-marker"></span>
+                                <span class="elevation-marker"></span>
+                            </div>
+                            <div class="elevation-pointer"></div>
+                        </div>
+                        <div style="font-size:13px; margin-top:10px">
+                            Elevación: <b style="color:#95faff">0.00°</b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4>ESTADO DEL SISTEMA</h4>
+                <div class="list-grid">
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Estado IC</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Com. DDU</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Com. datos IC</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Disp. Entrada/Salida</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Datos CMS</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon warn">
+                            <svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                <line x1="12" y1="9" x2="12" y2="13"></line>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                        </span>
+                        <span>Límite de ángulo</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon bad">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="15" y1="9" x2="9" y2="15"></line>
+                                <line x1="9" y1="9" x2="15" y2="15"></line>
+                            </svg>
+                        </span>
+                        <span>Com. Nport.</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Tiro On/Off</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>RWS</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Cámaras</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Video CCV</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Video B-Hot</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Video IR</span>
+                    </div>
+                    <div class="item status-item">
+                        <span class="icon ok">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </span>
+                        <span>Video W-Hot</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4>SISTEMAS DE ARMAMENTO</h4>
+                <div class="kv">
+                    <div>Estado del arma: <b>MECÁNICA</b></div>
+                    <div>...</div>
+                </div>
+            </div>
+
+            <div class="footer-note">Hecho en Bolt</div>
+        </aside>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const enEstacionBtn = document.getElementById('enEstacionBtn');
+            const operationalInfo = document.getElementById('operationalInfo');
+            const operationalText = document.getElementById('operationalText');
+            let isOperational = false; // Estado inicial
+
+            enEstacionBtn.addEventListener('click', function() {
+                isOperational = !isOperational; // Alternar estado
+                if (isOperational) {
+                    operationalInfo.classList.remove('inactive');
+                    operationalInfo.classList.add('active');
+                    operationalText.textContent = 'Estacion 1 CONECTADA';
+                } else {
+                    operationalInfo.classList.remove('active');
+                    operationalInfo.classList.add('inactive');
+                    operationalText.textContent = 'Estacion 1 DESCONECTADA';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

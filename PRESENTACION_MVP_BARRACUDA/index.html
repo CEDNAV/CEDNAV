@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MVP: Diseño, Desarrollo e Implementación de un Ecosistema de Software Concurrente para la Integración
+        Multi-Protocolo, Procesamiento Lógico en Tiempo Real y Visualización Táctica de Datos en Sistemas Navales de
+        Control de Armas</title>
+    <!-- Google Fonts for Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>CEDNAV</h2>
+                <p>Presentación MVP</p>
+                <div class="version-tag">SW CONSOLA BARRACUDA V2.0</div>
+            </div>
+            <ul class="nav-links">
+                <li><button class="nav-btn active" data-target="intro">1. Introducción y Problema</button></li>
+                <li><button class="nav-btn" data-target="objetivos">2. Objetivos y Alcance</button></li>
+                <li><button class="nav-btn" data-target="metodologia">3. Metodología y Avance</button></li>
+                <li><button class="nav-btn" data-target="arquitectura">4. Arquitectura y Capas</button></li>
+                <li><button class="nav-btn" data-target="logica">5. Lógica de Procesamiento</button></li>
+                <li><button class="nav-btn" data-target="requisitos">6. Requisitos y Pruebas</button></li>
+                <li><button class="nav-btn" data-target="diagramas">7. Diagramas del Proyecto</button></li>
+                <li><button class="nav-btn" data-target="despliegue">8. Despliegue y Enlaces</button></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- SECCION: INTRODUCCION Y PROBLEMA -->
+            <section id="intro" class="page-section active">
+                <div class="content-header">
+                    <h1 style="font-size: 1.8rem; line-height: 1.3;">Diseño, Desarrollo e Implementación de un
+                        Ecosistema de Software Concurrente para la Integración Multi-Protocolo, Procesamiento Lógico en
+                        Tiempo Real y Visualización Táctica de Datos en Sistemas Navales de Control de Armas</h1>
+                    <p class="subtitle">Centro de Desarrollo Tecnológico Naval - Porgrama Sistemas de Armas (MVP SW CONSOLA BARRACUDA
+                        V2.0)</p>
+                </div>
+                <div class="card-grid">
+                    <div class="card">
+                        <h3>Planteamiento de la Problemática</h3>
+                        <p>A partir del análisis del Sistema de Control de Armas Naval FFS-RWS v2.0, se identificaron
+                            problemáticas clave que motivaron el desarrollo:
+                        </p>
+                        <ul class="stats-list">
+                            <li><strong>Obsolescencia de FPGA (BARRACUDA V1.0):</strong> Arquitectura rígida limitando la modernización.
+                            </li>
+                            <li><strong>Fragmentación de Protocolos:</strong> Inexistencia de un Digital Bridge
+                                centralizado para convergencia TCP, UDP y NMEA.</li>
+                            <li><strong>Carencia de HMI Táctico Moderno:</strong> Ausencia de simbología militar
+                                (MIL-STD-2525) y falta de feedback loop visual claro para el operador.</li>
+                            <li><strong>Falta de Soberanía:</strong> Dependencia de proveedores internacionales
+                                limitando el mantenimiento autónomo y exponiendo la seguridad naval.</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3>Introducción</h3>
+                        <p>El proyecto BARRACUDA V2.0 moderniza el sistema naval FFS-RWS reemplazando hardware propietario obsoleto por un ecosistema de software soberano y 
+                            concurrente que integra TCP, UDP y WebSocket para conectar operador y hardware crítico con latencias menores a 33 ms. Implementa validación de tramas, 
+                            filtrado de joystick y una máquina de estados para controlar modos RWS, EOT y CMS con seguridad operacional, además de una HMI reactiva con radar táctico, 
+                            telemetría y video en tiempo real. Desarrollado con metodología Scrum y tecnologías open-source, manteniendo la integridad de datos, 
+                            baja latencia y bajo consumo de CPU, fortaleciendo la independencia tecnológica naval colombiana.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCION: OBJETIVOS Y ALCANCE -->
+            <section id="objetivos" class="page-section">
+                <div class="content-header">
+                    <h1>Objetivos, Justificación y Alcance</h1>
+                    <p class="subtitle">Métricas de Diseño y Dimensionamiento del Sistema</p>
+                </div>
+                <div class="content-body">
+                    <div class="grid-2-cols">
+                        <div class="card">
+                            <h3>Objetivo General</h3>
+                            <p><strong>Objetivo:</strong> Desarrollar un ecosistema de software concurrente de alta fidelidad para consolas navales, actuando como nodo central de procesamiento, 
+                                integración visual y Gateway de comunicaciones (UDP/TCP) vía LAN; orquestando en tiempo real tramas de datos Ethernet de diversos sistemas y 
+                                sensores integrados en sincronización directa con el Gabinete de Interfaz (IC).</p>
+                            <br>
+                        </div>
+                        <div class="card">
+                            <h3>Objetivos Específicos</h3>
+                            <ul class="feature-list">
+                                <li>Desarrollar un motor de comunicaciones concurrente en Node.js que orqueste la ingesta multi-protocolo de datos periféricos y gestione el enlace persistente y 
+                                    determinístico con el Gabinete de interfaz (IC) vía TCP.</li>
+                                <li>Implementar una ingeniería de lógica y cálculo encargada de la validación de integridad (XOR), 
+                                    máquinas de estado para modos de trabajo y algoritmos matemáticos de transformación de variables físicas en datos tácticos.</li>
+                                <li>EConstruir una interfaz de misión crítica mediante Svelte y Vite que traduzca la complejidad de los procesos de servidor en una representación visual reactiva y controlable, 
+                                    permitiendo la interacción bidireccional del operador.</li>
+                            </ul>
+                        </div>
+
+                        <div class="card" style="margin-top: 1.5rem;">
+                            <h3>Alcance General del Proyecto</h3>
+                            <p>El proyecto aborda el procesamiento integral desde la lectura de periféricos hasta el frente
+                                visual:</p>
+                            <ul class="stats-list">
+                                <li><strong>Funcional:</strong> Construcción de Backend concurrente TCP/UDP, HMI Svelte/Vite
+                                    con SVG Radar (PPI) estabilizado. Incorporación de StationManager y Deadzone ±5.</li>
+                                <li><strong>Tecnológico:</strong> Stack de JavaScript puro/Node.js, WebSocket en tiempo
+                                    real. Empaquetado industrial mediante Electron v30. Distribución final .deb.</li>
+                                <li><strong>Excluido:</strong> Ninguna modificación del Firmware FPGA (Desvinculación del
+                                    proveedor), ni fabricación de componentes físicos o gabinetes.</li>
+                            </ul>
+                        </div>
+
+                        <div class="card">
+                            <h3>Justificación</h3>
+                            <p> EL aplicativo de Software CONSOLA BARRACUDA V2.0 se justifica como una solución de ingeniería que desacopla la lógica de control del hardware mediante tecnologías 
+                                web modernas, permitiendo integrar comunicaciones UDP, TCP y WebSocket con alto rendimiento y cálculos en milisegundos bajo estándares militares. Su arquitectura 
+                                concurrente basada en eventos sustituye sistemas rígidos con FPGA por plataformas flexibles y actualizables, reduciendo dependencia extranjera y costos al usar 
+                                hardware comercial. Operacionalmente mejora la conciencia situacional y reduce errores humanos con una interfaz táctica unificada y baja latencia, mientras que a 
+                                nivel institucional fortalece la soberanía tecnológica del CEDNAV y la Armada al mantener conocimiento e IP en el país. Además, aporta valor académico al generar 
+                                documentación y aplicar patrones de diseño y metodologías ágiles en un entorno real de defensa naval.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCION: METODOLOGIA -->
+            <section id="metodologia" class="page-section">
+                <div class="content-header">
+                    <h1>Metodología de Desarrollo</h1>
+                    <p class="subtitle">Scrum Ágil - Criterios y Trazabilidad</p>
+                </div>
+                <div class="content-body">
+                    <div class="info-panel">
+                        <h3>Scrum - Ingeniería de Desarrollo Iterativo</h3>
+                        <p>Se integró una adaptación rigurosa de metodologías ágiles dividiendo la construcción del MVP
+                            en ciclos iterativos (Sprints).</p>
+
+                        <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div>
+                                <strong>El Backlog de Producto englobó:</strong>
+                                <ul class="stats-list">
+                                    <li>18 Historias de Usuario (HU).</li>
+                                    <li><a href="Avance_Tareas _ Metodología.xlsx" target="_blank"
+                                            style="text-decoration: none;"
+                                            style="padding: 0.5rem 1rem; font-size: 0.85rem;">65 Tareas de ingeniería
+                                            detalladas.</a></li>
+                                    <li>Documentadas con criterios BDD Gherkin.(Desarrollo Guiado por el Comportamiento)
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <strong>Ejecución y Avances (Sprints):</strong>
+                                <ul class="stats-list">
+                                    <li><strong>Sprint 1:</strong> Análisis, Requisitos y Arquitectura (Completado).
+                                    </li>
+                                    <li><strong>Sprint 2:</strong> Desarrollo Backend y HMI Core (Completado).</li>
+                                    <li><strong>Sprint 3:</strong> Integración y Funcionalidades Completas (En
+                                        progreso).</li>
+                                    <li><strong>Sprint 4:</strong> Testing, Despliegue y Documentación (Planeado).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="iframe-container">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <h3>Diagrama de Gantt</h3>
+                            <a href="../CRONOGRAMA_GANTT.html" target="_blank" class="deploy-button"
+                                style="padding: 0.5rem 1rem; font-size: 0.85rem;">Abrir Cronograma Completo</a>
+                        </div>
+                        <iframe src="../CRONOGRAMA_GANTT.html" frameborder="0" width="100%" height="450px"
+                            style="background:#fff; border-radius: 8px; border: 1px solid #ccc;"></iframe>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCION: ARQUITECTURA -->
+            <section id="arquitectura" class="page-section">
+                <div class="content-header">
+                    <h1>Arquitectura y Patrones de Diseño</h1>
+                    <p class="subtitle">Ingeniería de Software Aplicada</p>
+                </div>
+                <div class="content-body">
+                    <div class="grid-2-cols">
+                        <div class="card">
+                            <h3>Capas de Software</h3>
+                            <ul class="feature-list">
+                                <li><strong>Capa Presentación (HMI):</strong> Svelte JS, renderizado SVG, Video Canvas.
+                                </li>
+                                <li><strong>Capa Aplicación:</strong> Node.js `server.js` (Event Bus/Heartbeat) que
+                                    orquesta WebSockets.</li>
+                                <li><strong>Capa Dominio:</strong> Lógica central de Control Naval, Máquina de Estados
+                                    (FSM) y Decodificador Binario (Protocolos/LRC).</li>
+                                <li><strong>Capa Infraestructura:</strong> Drivers Sockets UDP y TCP para IC y
+                                    periféricos. Motor de Video H.264 (FFmpeg).</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h3>Patrones de Diseño Integrados</h3>
+                            <ul class="feature-list">
+                                <li><strong>Modelo-Vista-Contralor (MVVM):</strong> Binding bi-direccional directo sin
+                                    saturar con Virtual DOM, ideal para equipos navales limitados.</li>
+                                <li><strong>Patrón Observer y Event-Driven:</strong> Emisor de eventos Node.js y
+                                    WebSocket para actualizar Pistas CMS y Sensores sin cuellos de botella jerárquicos.
+                                </li>
+                                <li><strong>Patrón Singleton:</strong> Utilizado en la interfaz de Puerto Serial TCP y
+                                    StationManager para no replicar recursos críticos.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="alert-box security">
+                        <strong>Nota de Nomenclatura IP:</strong> Los nodos funcionan sobre segmentos restringidos como
+                        `192.168.1.XX` y `10.0.0.XX`. Los puertos de red (e.g. `80XX`, `375XX`) y binding (`0.0.0.0`) se
+                        gestionan mediante políticas de red estrictamente cerradas.
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCION: LOGICA DE PROCESAMIENTO -->
+            <section id="logica" class="page-section">
+                <div class="content-header">
+                    <h1>Lógica de Procesamiento y Flujo de Datos</h1>
+                    <p class="subtitle">Detalle Exhaustivo Paso a Paso desde la Infraestructura al Frontend</p>
+                </div>
+                <div class="content-body" style="overflow-y: auto; max-height: 70vh;">
+                    <div class="grid-2-cols" style="gap: 15px;">
+                        <div class="card">
+                            <h3>1. Motores de Lógica</h3>
+                            <ul class="stats-list" style="font-size: 0.85rem;">
+                                <li><strong>server.js:</strong> Coordina los 5 microservicios (Backend Bridge).</li>
+                                <li><strong>BinaryProtocolService:</strong> Compilador binario (generateFrame,
+                                    parseFrame, Checksum XOR).</li>
+                                <li><strong>Motores de Red:</strong> UDPService y TCPService (Gestor industrial de
+                                    sockets).</li>
+                                <li><strong>Radar.svelte:</strong> Motor Matemático y SVG (Transformaciones polares y
+                                    rotación).</li>
+                            </ul>
+                            <h3 style="margin-top: 15px;">2. Protocolos de Conexión</h3>
+                            <ul class="stats-list" style="font-size: 0.85rem;">
+                                <li><strong>Fase 1 (Watchdog):</strong> Desconexión forzada si el IC Gabinete de Interfaz pierde el
+                                    pulso (1200ms -> "SEÑAL IC PERDIDA").</li>
+                                <li><strong>Fase 2 (IP Learning):</strong> Detección automática y enganche de IP
+                                    operativa operativa desde Broadcast (255.255.255.255).</li>
+                                <li><strong>Fase 3 (XOR Integridad):</strong> Validación bit a bit en TX/RX para
+                                    prevenir datos basura.</li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h3>3. Procesamiento y Renderizado</h3>
+                            <ul class="stats-list" style="font-size: 0.85rem;">
+                                <li><strong>Joystick (Deadzone):</strong> Suprime ruido mecánico filtrando valores abs
+                                    <= 5.</li>
+                                <li><strong>Máquina de Estados Finitos (FSM) de Trabajo:</strong> Máquina que evalúa OPTRO, RWS y CMS para generar el
+                                    código Hex correcto para servomotores.</li>
+                                <li><strong>Precisión Matemática (SVG):</strong> Ángulo PPI = normalizeAngle(target +
+                                    shipHeading). Distancia = (range / max) * 50.</li>
+                                <li><strong>Compensación de Rumbo:</strong> Contenedor 'radar-circle' rota inversamente
+                                    usando la telemetría Gyro de NMEA.</li>
+                                <li><strong>Simbología :</strong> Rotación inversa compensada para mantener la
+                                    verticalidad ("simbología derecha").</li>
+                            </ul>
+                            <h3 style="margin-top: 15px;">4. Motores de Concurrencia</h3>
+                            <ul class="stats-list" style="font-size: 0.85rem;">
+                                <li><strong>Video Táctico:</strong> Orquesta FFmpeg por UDP en base al ConsoleNum (Ej:
+                                    37511).</li>
+                                <li><strong>CMS:</strong> Pistas tácticas inyectadas instantáneamente dibujadas por
+                                    Svelte stores (buffers de 42 bytes).</li>
+                                <li><strong>Feedback Físico:</strong> UDP 5501 para encender colores físicos de LEDs de
+                                    hardware.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCION: REQUISITOS Y PRUEBAS -->
+            <section id="requisitos" class="page-section">
+                <div class="content-header">
+                    <h1>Requisitos y Fase de Pruebas MVP</h1>
+                    <p class="subtitle">Validación Exhaustiva del Producto Mínimo Viable</p>
+                </div>
+                <div class="content-body">
+                    <div class="grid-2-cols">
+                        <div class="card">
+                            <h3>Requerimientos</h3>
+                            <p><strong>Funcionales (RF):</strong></p>
+                            <ul class="feature-list" style="font-size: 0.85rem;">
+                                <li><strong>RF1:</strong> Adquisición de datos en tiempo real desde puertos UDP (45xx,
+                                    55xx, 80xx).</li>
+                                <li><strong>RF2:</strong> Sincronización bidireccional con el Gabinete de Interfaz (IC)
+                                    vía TCP.</li>
+                                <li><strong>RF3:</strong> Serialización de comandos en tramas binarias de 29 bytes (TX).
+                                </li>
+                                <li><strong>RF4:</strong> Deserialización de telemetría desde tramas de 31/33 bytes
+                                    (RX).</li>
+                                <li><strong>RF5:</strong> Gestión dinámica de estaciones (Estribor, Babor, Popa).</li>
+                                <li><strong>RF6:</strong> Control de energización de sistemas externos (EOT/RWS).</li>
+                                <li><strong>RF7:</strong> Procesamiento de NMEA (GPS, Gyro, Pitch/Roll).</li>
+                                <li><strong>RF8:</strong> Visualización de video streaming UDP/H.264.</li>
+                            </ul>
+                            <br>
+                            <p><strong>No Funcionales (RNF):</strong></p>
+                            <ul class="feature-list" style="font-size: 0.85rem;">
+                                <li><strong>RNF1 (Determinismo):</strong> Ciclo de envío de latido (Heartbeat) constante
+                                    cada 100ms.</li>
+                                <li><strong>RNF2 (Latencia):</strong> Procesamiento interno &lt; 10ms; Latencia punta a
+                                    punta &lt; 33ms.</li>
+                                <li><strong>RNF3 (Seguridad):</strong> Validación de integridad XOR en cada trama de
+                                    comunicación.</li>
+                                <li><strong>RNF4 (Disponibilidad):</strong> Reconexión automática (Watchdog) para
+                                    enlaces caídos.</li>
+                                <li><strong>RNF5 (Interfaz):</strong> Diseño HMI militar (MIL-STD-2525) para tácticas.
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card">
+                            <h3>Resultado de Pruebas MVP</h3>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Criterio de Evaluación</th>
+                                        <th>Valor Esperado</th>
+                                        <th>Obtenido</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Latencia TX/RX Punta-Punta</td>
+                                        <td>&lt; 33ms</td>
+                                        <td>24-33ms</td>
+                                        <td><span class="status success">Éxito</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Integridad de Tramas Binarias</td>
+                                        <td>100% (XOR OK)</td>
+                                        <td>100%</td>
+                                        <td><span class="status success">Éxito</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Ciclo de Heartbeat TCP</td>
+                                        <td>100ms ± 10ms</td>
+                                        <td>100ms ± 2ms</td>
+                                        <td><span class="status success">Éxito</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Reconexión de Red Tras Falla</td>
+                                        <td>&lt; 5 segundos</td>
+                                        <td>2.5 segundos</td>
+                                        <td><span class="status success">Éxito</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Consumo de CPU (Node.js)</td>
+                                        <td>&lt; 40%</td>
+                                        <td>15%</td>
+                                        <td><span class="status success">Éxito</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p class="info-text" style="font-size: 0.8rem; margin-top: 15px;">* Documentación granular
+                                del Testing RESERVADA - ARMADA NACIONAL.</p> <br><a href="mvp/pruebas_funcionamiento.png" target="_blank"
+                                class="cyber-link">» ver - Captura de pruebas de funcionamiento</a><br><br><a href="mvp/pruebas_trafico_tcp_udp.png" target="_blank"
+                                class="cyber-link">» ver - Captura de pruebas de tráfico de TCP/IP - UDP</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCION: DIAGRAMAS -->
+            <section id="diagramas" class="page-section">
+                <div class="content-header">
+                    <h1>Diagramas de Modelado y Arquitectura UML</h1>
+                    <p class="subtitle">Especificación Formal del Software</p>
+                </div>
+                <div class="content-body">
+                    <p class="section-desc">Seleccione el diagrama visual renderizado a partir de los archivos del
+                        proyecto o acceda a la versión estática en nube / local.</p>
+
+                    <div class="diagram-tabs">
+                        <button class="diagram-btn active" data-diagram="../DIAGRAMA_COMPONENTES_BARRACUDA.html">Flujo
+                            Componentes</button>
+                        <button class="diagram-btn"
+                            data-diagram="../Diagrama de Clases de software de consola BARRACUDA V2.0.html">Diagrama
+                            Clases</button>
+                        <button class="diagram-btn"
+                            data-diagram="../DIAGRAMA_SECUENCIA_STACK TECNOLOGICO_INDICADORES_RENDIMIENTO MVP_PATRONES_DISEÑO_PROTOCOLO__BARRACUDA.html">Secuencia/Tecnológico</button>
+                        <button class="diagram-btn" data-diagram="../FLUJO_DEFINITIVO_PROYECTO.html">Flujo
+                            Proyecto</button>
+                    </div>
+
+                    <div class="diagram-viewer">
+                        <iframe id="diagramIframe" src="../DIAGRAMA_COMPONENTES_BARRACUDA.html" frameborder="0"
+                            width="100%" height="550px"></iframe>
+                    </div>
+
+                    <div class="cloud-links card">
+                        <h3>Imágenes e Históricos (Repositorios de Referencia)</h3>
+                        <p>Puede abrir los siguientes enlaces oficiales del proyecto que complementan este reporte:</p>
+                        <br>
+                        <ul>
+                            <li><a href="ACTIVIDAD 3 PRACTICAS Informe de avance del Producto Mínimo Viable (MVP).docx" target="_blank"
+                                    class="cyber-link">» Abrir Documento Técnico Completo (Reporte del MVP Original)</a>
+                            </li><br>
+                            <li><a href="https://www.figma.com/board/Lod7H9BMbUMyT3XXbSaUKX/Sin-t%C3%ADtulo?node-id=0-1&t=c01Jl038hgCflzLB-1" target="_blank" class="cyber-link">» 
+                                Diagrama componentes - https://www.figma.com/</a></li><br>
+                            <li><a href="MAPA_STAKEHOLDERS_BARRACUDA.html" target="_blank" class="cyber-link">» 
+                                    Mapa MAPA_STAKEHOLDERS_BARRACUDA</a></li><br>
+                            <li><a href="https://miro.com/welcomeonboard/UkxHQzdwQ29rSkJwY2Nvb0lSWXlYdHRCNmhLcG1aOE84KzNqbk1ZK01ublVKWDBSdUtMcHl0VWRuK05PR3dUNXJaU0FmOWlFZXpmY1k3aFpGeEdDM0RmUVN3ZitHYTNsWk1CVUVxcW5qblNHdGpKU2Q5MUc3emlIRExseVVxMGVyVmtkMG5hNDA3dVlncnBvRVB2ZXBnPT0hdjE=?share_link_id=568013229364" target="_blank" class="cyber-link">» 
+                                        Diagrama Flujo Sw Consoloa Barracuda v2.- https://www.miro.com/</a></li><br>
+                            <li><a href="https://miro.com/welcomeonboard/YlNqaXVXdE40WEdEYzVOYjJhL0dvYXh0bWIzU0l3WmVZdnRBMkRMT1AvVDBrbDVUSjhkQU5veHJpSjgrbkZ0R2hTNWprOVpyRUhIVzlGM2tVYkpUR1RmUVN3ZitHYTNsWk1CVUVxcW5qblRMblJuemw1NDY1aXNTYWlJRVNETHZzVXVvMm53MW9OWFg5bkJoVXZxdFhRPT0hdjE=?share_link_id=511239534200" target="_blank" class="cyber-link">» 
+                                    Diagrama Clases - https://www.miro.com/</a></li><br>
+                            <li><a href="https://miro.com/welcomeonboard/REhqR3JEVm15UE5vZU8wVlo4ck9Qb215Mkh3QW5JV3E0ZHA1RFlzSnlWaUkvTElzOVhDdDJ3TnFnTmx5dTZEd2IxeHpMd3ZjSjI3YmUxZ2RIdk9DMXpmUVN3ZitHYTNsWk1CVUVxcW5qblJHcXVyclNLV0VyQlA2VklGcUNrOG13VHhHVHd5UWtSM1BidUtUYmxycDRnPT0hdjE=?share_link_id=708655972986" target="_blank" class="cyber-link">» 
+                                        Diagrama Arquitectura - https://www.miro.com/</a></li><br>
+                            <li><a href="https://miro.com/welcomeonboard/QVhHdGlQTGpQRVc3QmsvWUI1RXBULzl0b2dUd0QvUHlPRXlSN25mNjVZNkN6S0lpemFGSlJ5eDduajU4dDd2SjZLR2FNOVplbFQrL2xNeFFzUkNKWlRmUVN3ZitHYTNsWk1CVUVxcW5qblIxZDRWTGg2OWlhRFZGclNXTU9uRDVBd044SHFHaVlWYWk0d3NxeHNmeG9BPT0hdjE=?share_link_id=627538606269" target="_blank" class="cyber-link">» 
+                                            Diagrama Despliegue - https://www.miro.com/</a></li>
+
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCION: DESPLIEGUE -->
+            <section id="despliegue" class="page-section">
+                <div class="content-header">
+                    <h1>Despliegue y MVP Online</h1>
+                    <p class="subtitle">Entornos de Producción y Ejecución</p>
+                </div>
+                <div class="content-body center-div">
+                    <div class="deploy-card">
+                        <h3>Ambiente de Verificación</h3>
+                        <p>El producto puede ser operado formalmente en terminales industriales (Estribor, Popa, Babor)
+                            empaquetado bajo Electron v30.</p>
+                        <div class="ip-display">
+                            <strong>Servidor Consola Principal IP:</strong> <span>10.0.0.XX</span> /
+                            <span>192.168.1.XX</span> <br>
+                            <strong>Concesión Backend TCP:</strong> <span>60XX</span><br>
+                            <strong>Demultiplexor de Video:</strong> <span>375XX</span><br>
+                            <strong>Gateway WebSocket:</strong> <span>80XX</span>
+                        </div>
+                        <a href="mvp/diseño_baja_fideliad.png"  style="text-decoration: none; color:black" title="Este ambiente es de demostración.">-Acceder a diseño baja fidelidad
+                            </a> <br><br>
+                        <a href="mvp/Diseño_alta.png" style="text-decoration: none;color:black" title="Este ambiente es de demostración.">-Acceder a diseño alta fidelidad
+                            </a> <br><br>
+                        <a href="mvp/v3_HMI_ALTA_BCUDA2.html"  style="text-decoration: none;color:black" title="Este ambiente es de demostración.">-Acceder a diseño intermedio
+                                Demo del MVP</a> <br><br>
+                        <a href="mvp/v5_DIEÑO_ALTA_BDA_2025.html"  style="text-decoration: none;color:rgb(13, 2, 112)" title="Este ambiente es de demostración.">-Acceder a Terminal
+                            Demo del MVP</a> <br>  <br>
+                        <a href="mvp/vista_diseño_final.png"  style="text-decoration: none;color:black" title="Este ambiente es de demostración.">-Acceder a diseño actual acuerdo parametros de integración</a>    <br>  <br>
+                        <a href="mvp/vista_estructura_proyecto.png"  style="text-decoration: none;color:black" title="Este ambiente es de demostración.">-Acceder a vista de estructura del proyecto</a> <br>  <br>                   
+                        <a href="mvp/MIL_STD_2525E_E3353387FDAF4F828F4907BE29423FD6.pdf"  style="text-decoration: none;color:black" title="Este ambiente es de demostración.">-Acceder a MIL_STD_2525E.pdf</a> <br>  <br> 
+                                            
+
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>
