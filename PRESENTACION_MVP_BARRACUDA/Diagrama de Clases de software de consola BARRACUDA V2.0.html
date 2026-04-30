@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sincronización CONSOLA BARRACUDA V2.0 - Diagrama de clases</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#1f6feb',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#30363d',
+                lineColor: '#58a6ff',
+                secondaryColor: '#238636',
+                tertiaryColor: '#d29922'
+            }
+        });
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #58a6ff;
+        }
+
+        .diagram-section {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            border-left: 4px solid #f0883e;
+            padding-left: 15px;
+            margin-top: 0;
+        }
+
+        .description {
+            font-style: italic;
+            color: #8b949e;
+            margin-bottom: 20px;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            background-color: #0d1117;
+            /* Fondo oscuro para contraste */
+            border: 1px solid #30363d;
+            border-radius: 4px;
+            padding: 20px;
+        }
+
+        /* Colores Académicos para Capas */
+        .node.capa-fisica rect {
+            fill: #333;
+            stroke: #fff;
+        }
+
+        .node.capa-infra rect {
+            fill: #238636;
+            stroke: #fff;
+        }
+
+        .node.capa-dominio rect {
+            fill: #1f6feb;
+            stroke: #fff;
+        }
+
+        .node.capa-aplicacion rect {
+            fill: #d29922;
+            stroke: #fff;
+        }
+
+        .node.capa-presentacion rect {
+            fill: #da3633;
+            stroke: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Diagrama de Clases de software de consola BARRACUDA V2.0</h1>
+            <p>Diseño, Desarrollo e Implementación de un Ecosistema de Software Concurrente para la Integración
+                Multi-Protocolo, Procesamiento Lógico en Tiempo Real y Visualización Táctica de Datos en Sistemas
+                Navales de Control de Armas</p>
+        </header>
+
+        <section class="diagram-section">
+            <h2>Información General de Comunicación</h2>
+            <div class="description" style="font-style: normal; color: #c9d1d9;">
+                <p>El sistema BARRACUDA V2.0 opera como un <strong>Nodo de Integración (Gateway)</strong> que orquesta
+                    tres dominios de red distintos para garantizar la sincronización operativa entre el hardware
+                    periférico y el núcleo de Gabinete de interfas (IC).</p>
+                <ul>
+                    <li><strong>Dominio UDP (Recepción Periférica):</strong> Comunicación no orientada a conexión
+                        utilizada para la ingesta de datos de alta frecuencia desde Joysticks, Teclados y el Sistema de
+                        Gestión de Combate (CMS).</li>
+                    <li><strong>Dominio TCP (Sincronización Crítica):</strong> Enlace punto a punto persistente y fiable
+                        con el Gabinete Interfas IC. Utiliza el puerto 60XX para transmitir tramas binarias de control
+                        de 29
+                        bytes con verificación de integridad.</li>
+                    <li><strong>Dominio WebSocket (Visualización Realtime):</strong> Canal Full-Duplex para la
+                        actualización reactiva de la interfaz de usuario en el navegador del operador.</li>
+                </ul>
+            </div>
+        </section>
+
+
+
+        <section class="diagram-section">
+            <h2>Diagrama de Clases de software de consola BARRACUDA V2.0</h2>
+            <p class="description">Representación detallada de todos los servicios, sus responsabilidades y relaciones
+                en el sistema.</p>
+            <pre class="mermaid">
+classDiagram
+    class Servidor {
+        +wss: WebSocketServer
+        +sensorsService: ServicioSensores
+        +tcpService: ServicioTCP
+        +binaryProtocol: ServicioProtocoloBinario
+        +feedbackService: ServicioFeedback
+        +stationManager: GestorEstaciones
+        +iniciar()
+        +manejarWS()
+    }
+
+    class ServicioSensores {
+        +sockets: Map
+        +udpService: ServicioUDP
+        +handleMessage(msg)
+        +emit('data')
+    }
+
+    class ServicioUDP {
+        +socket: dgram
+        +bind(port)
+        +send(msg, host, port)
+    }
+
+    class ServicioProtocoloBinario {
+        +consoleId: String
+        +state: Object
+        +generateFrame(options)
+        +parseFrame(data)
+        +updateField(field, value)
+        +calculateChecksum(buffer)
+        +interpret(buffer)
+    }
+
+    class ServicioTCP {
+        +client: net.Socket
+        +connected: Boolean
+        +connect(stationId, host, port)
+        +send(buffer)
+        +disconnect()
+    }
+
+    class GestorEstaciones {
+        +activeStations: Map
+        +assignStation(client, id)
+        +getStationConfig(id)
+        +validateHandshake()
+    }
+
+    class ServicioCMS {
+        +parseStatus(buffer)
+        +processCommand(cmd)
+        +syncPanel()
+    }
+
+    class ServicioFeedback {
+        +startHeartbeat()
+        +sendFeedback(data)
+        +stop()
+    }
+
+    class ServicioPanel {
+        +parseKeyboard(str)
+        +emit('panel_update')
+    }
+
+    class ServicioNMEA {
+        +parseSentence(line)
+        +extractGPSData()
+    }
+
+    class ServicioEventos {
+        +log(type, module, msg)
+        +persistence: Array
+    }
+
+    class ServicioConfig {
+        +CONSOLE_ID: String
+        +IC_HOST: String
+        +PORTS: Object
+        +load()
+    }
+
+    %% Relaciones
+    Servidor o-- ServicioSensores
+    Servidor o-- ServicioTCP
+    Servidor o-- ServicioProtocoloBinario
+    Servidor o-- GestorEstaciones
+    Servidor o-- ServicioFeedback
+    Servidor o-- ServicioPanel
+    Servidor o-- ServicioEventos
+    
+    ServicioSensores *-- ServicioUDP
+    ServicioFeedback *-- ServicioUDP
+    ServicioSensores ..> ServicioCMS : Procesa datos CMS
+    ServicioSensores ..> ServicioNMEA : Parsea GPS/DDU
+    ServicioProtocoloBinario --> ServicioTCP : Alimenta tramas al
+    ServicioPanel ..> ServicioProtocoloBinario : Actualiza estado desde hardware
+            </pre>
+        </section>
+    </div>
+</body>
+
+</html>

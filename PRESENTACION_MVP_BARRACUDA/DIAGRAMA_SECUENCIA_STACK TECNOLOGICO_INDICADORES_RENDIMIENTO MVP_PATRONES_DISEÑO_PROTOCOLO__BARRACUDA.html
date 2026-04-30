@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SW CONSOLA BARRACUDA v2.0 – Diagrama de Arquitectura del Sistema</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true, theme: 'dark', themeVariables: {
+                primaryColor: '#fff', primaryTextColor: '#fffff', primaryBorderColor: '#fffff',
+                lineColor: '#ffffff', secondaryColor: '#ffff', tertiaryColor: '#ffff',
+                background: '#000000', mainBkg: '#000000', nodeBorder: '#ffff'
+            }
+        });
+    </script>
+    <style>
+        :root {
+            /* FONDOS */
+            --navy: #f6f8fc;
+            /* fondo general de la web */
+            --surface: #ffffff;
+            /* tarjetas */
+            --surface2: #f1f5f9;
+            /* tarjetas secundarias */
+            --border: #000;
+            /* bordes suaves */
+
+            /* COLORES PRINCIPALES (se mantienen) */
+            --accent-blue: #2563eb;
+            --accent-green: #059669;
+            --accent-orange: #ea580c;
+            --accent-red: #dc2626;
+            --accent-yellow: #ca8a04;
+            --gold: #ca8a04;
+
+            /* TEXTO */
+            --text: #0f172a;
+            /* texto principal oscuro */
+            --muted: #000;
+            /* texto secundario */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--navy);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .page-header {
+            background: linear-gradient(135deg, #0f172a 0%, #1a2744 50%, #0c1a3a 100%);
+            border-bottom: 2px solid var(--accent-blue);
+            padding: 40px 20px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(56, 189, 248, 0.12) 0%, transparent 65%);
+        }
+
+        .cednav-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            border-radius: 30px;
+            padding: 6px 20px;
+            margin-bottom: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--accent-blue);
+            text-transform: uppercase;
+        }
+
+        .cednav-badge::before {
+            content: '◉';
+            font-size: 0.9rem;
+            color: var(--accent-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: 0.4
+            }
+        }
+
+        h1.main-title {
+            font-size: clamp(1.6rem, 4vw, 2.8rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #38bdf8, #818cf8, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: white;
+            max-width: 720px;
+            margin: 0 auto 20px;
+            line-height: 1.6;
+        }
+
+        .meta-row {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        .meta-item {
+            font-size: 0.72rem;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .meta-item strong {
+            color: var(--accent-blue);
+            font-size: 0.8rem;
+        }
+
+        /* LAYOUT */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .section-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-left: auto;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 28px;
+            margin-bottom: 36px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        .mermaid {
+            background: var(--navy);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 4px;
+        }
+
+        /* LAYER ARCH VISUAL */
+        .arch-layers {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .arch-layer {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            border-bottom: 1px solid var(--border);
+            transition: opacity 0.2s;
+        }
+
+        .arch-layer:last-child {
+            border-bottom: none;
+        }
+
+        .arch-layer:hover {
+            opacity: 0.92;
+        }
+
+        .layer-label {
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            text-align: center;
+            border-right: 1px solid var(--border);
+        }
+
+        .layer-label .layer-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            opacity: 0.7;
+        }
+
+        .layer-label .layer-name {
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .layer-label .layer-sub {
+            font-size: 0.7rem;
+            color: var(--muted);
+        }
+
+        .layer-content {
+            padding: 16px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .comp-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid currentColor;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 0.78rem;
+            font-weight: 600;
+        }
+
+        .comp-icon {
+            font-size: 1rem;
+        }
+
+        .comp-detail {
+            font-size: 0.65rem;
+            color: white;
+            display: block;
+            font-weight: 400;
+        }
+
+        /* L5 - physical */
+        .l-physical {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+        }
+
+        .l-physical .layer-label {
+            background: rgba(71, 85, 105, 0.5);
+            color: #94a3b8;
+        }
+
+        .l-physical .comp-chip {
+            color: #64748b;
+        }
+
+        /* L4 - infra */
+        .l-infra {
+            background: linear-gradient(135deg, #052e16, #14532d);
+        }
+
+        .l-infra .layer-label {
+            background: rgba(5, 150, 105, 0.3);
+            color: var(--accent-green);
+        }
+
+        .l-infra .comp-chip {
+            color: #34d399;
+        }
+
+        /* L3 - domain */
+        .l-domain {
+            background: linear-gradient(135deg, #0f2851, #1e3a5f);
+        }
+
+        .l-domain .layer-label {
+            background: rgba(37, 99, 235, 0.3);
+            color: var(--accent-blue);
+        }
+
+        .l-domain .comp-chip {
+            color: #60a5fa;
+        }
+
+        /* L2 - app */
+        .l-app {
+            background: linear-gradient(135deg, #451a03, #7c2d12);
+        }
+
+        .l-app .layer-label {
+            background: rgba(234, 88, 12, 0.3);
+            color: var(--accent-orange);
+        }
+
+        .l-app .comp-chip {
+            color: #fb923c;
+        }
+
+        /* L1 - pres */
+        .l-pres {
+            background: linear-gradient(135deg, #4a044e, #7e1d7e);
+        }
+
+        .l-pres .layer-label {
+            background: rgba(168, 85, 247, 0.3);
+            color: #c084fc;
+        }
+
+        .l-pres .comp-chip {
+            color: #c084fc;
+        }
+
+        /* PROTOCOL TABLE */
+        .proto-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .proto-card {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px;
+            border-top: 3px solid var(--accent-blue);
+        }
+
+        .proto-card h4 {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .proto-card p {
+            font-size: 0.75rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .proto-tag {
+            display: inline-block;
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--accent-blue);
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.68rem;
+            margin-bottom: 8px;
+        }
+
+        /* KPI TABLE */
+        .kpi-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+        }
+
+        .kpi-table th {
+            background: var(--surface2);
+            color: var(--muted);
+            font-weight: 600;
+            text-align: left;
+            padding: 10px 16px;
+            border-bottom: 2px solid var(--border);
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .kpi-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .kpi-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+        .badge.ok {
+            background: rgba(52, 211, 153, 0.15);
+            color: var(--accent-green);
+        }
+
+        .badge.warn {
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--accent-yellow);
+        }
+
+        .badge-port {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-blue);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.72rem;
+        }
+
+        /* PATTERNS */
+        .patterns-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .pattern-card {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+        .pattern-card h4 {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 6px;
+        }
+
+        .pattern-card p {
+            font-size: 0.73rem;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 0.75rem;
+        }
+
+        footer strong {
+            color: var(--accent-blue);
+        }
+
+        /* responsive */
+        @media(max-width:700px) {
+            .arch-layer {
+                grid-template-columns: 1fr;
+            }
+
+            .layer-label {
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                flex-direction: row;
+                text-align: left;
+            }
+
+            .meta-row {
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header class="page-header">
+        <div class="cednav-badge">Centro de Desarrollo Tecnológico Naval — CEDNAV · Armada Nacional de Colombia</div>
+        <h1 class="main-title">SW CONSOLA BARRACUDA v2.0<br>Diagrama de Secuencia del Sistema</h1>
+        <p class="subtitle">
+            Diseño, Desarrollo e Implementación de un Ecosistema de Software Concurrente para la Integración
+            Multi-Protocolo, Procesamiento Lógico en Tiempo Real y Visualización Táctica de Datos en Sistemas Navales de
+            Control de Armas
+        </p>
+        <div class="meta-row">
+            <div class="meta-item"><strong>Metodología</strong>Scrum / Ágil</div>
+            <div class="meta-item"><strong>Stack</strong>Node.js + Svelte + Electron</div>
+            <div class="meta-item"><strong>Latencia Operativa</strong>&lt; 33 ms</div>
+            <div class="meta-item"><strong>Estándar</strong>MIL-STD-2525 / STANAG 2442</div>
+            <div class="meta-item"><strong>Sprints</strong>4 / 15 Semanas</div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- 1. ARQUITECTURA POR CAPAS VISUAL -->
+        <div class="card">
+            <div class="section-title">
+                <div class="section-icon" style="background:rgba(56,189,248,0.15)"></div>
+                Arquitectura por Capas
+                <span class="section-num"> 6.1</span>
+            </div>
+            <div class="arch-layers">
+
+                <div class="arch-layer l-pres">
+                    <div class="layer-label">
+                        <span class="layer-num">CAPA 1</span>
+                        <span class="layer-name">Presentación</span>
+                        <span class="layer-sub">HMI Reactiva</span>
+                    </div>
+                    <div class="layer-content">
+                        <div class="comp-chip"><span class="comp-icon"></span><span>Radar PPI SVG<span
+                                    class="comp-detail">Monitor táctico polar vectorial</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>Gauges Telemetría<span
+                                    class="comp-detail">Ronza / Elevación ±0.1°</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>Video EOT H.264<span
+                                    class="comp-detail">Streaming UDP por estación</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>Dashboard Táctico<span
+                                    class="comp-detail">Svelte / Vite + CSS Deep Sea</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>Hacking View HEX<span
+                                    class="comp-detail">Auditoría de tramas en vivo</span></span></div>
+                    </div>
+                </div>
+
+                <div class="arch-layer l-app">
+                    <div class="layer-label">
+                        <span class="layer-num">CAPA 2</span>
+                        <span class="layer-name">Aplicación</span>
+                        <span class="layer-sub">Middleware / Bridge</span>
+                    </div>
+                    <div class="layer-content">
+                        <div class="comp-chip"><span class="comp-icon"></span><span>server.js — Orquestador<span
+                                    class="comp-detail">EventEmitter · Heartbeat 100 ms</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>WebSocket Server<span
+                                    class="comp-detail">Full-Duplex · Puerto 8001</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>StationManager<span
+                                    class="comp-detail">STA1/STA2/STA3 — Exclusividad</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>EventsService<span
+                                    class="comp-detail">Trazas y logs del sistema</span></span></div>
+                    </div>
+                </div>
+
+                <div class="arch-layer l-domain">
+                    <div class="layer-label">
+                        <span class="layer-num">CAPA 3</span>
+                        <span class="layer-name">Dominio</span>
+                        <span class="layer-sub">Lógica Naval</span>
+                    </div>
+                    <div class="layer-content">
+                        <div class="comp-chip"><span class="comp-icon"></span><span>BinaryProtocolService<span
+                                    class="comp-detail">TX 29 bytes · RX 31/33 bytes</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>XOR Checksum / LRC<span
+                                    class="comp-detail">Integridad trama 100%</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>FSM Modos Trabajo<span
+                                    class="comp-detail">RWS / EOT / CMS Pista</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>JoystickDecoder<span
+                                    class="comp-detail">Deadzone ±5 — signed int8</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>NMEAService<span
+                                    class="comp-detail">GPS · Gyro · Pitch/Roll</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>CMSService<span
+                                    class="comp-detail">Pistas tácticas 42 bytes</span></span></div>
+                    </div>
+                </div>
+
+                <div class="arch-layer l-infra">
+                    <div class="layer-label">
+                        <span class="layer-num">CAPA 4</span>
+                        <span class="layer-name">Infraestructura</span>
+                        <span class="layer-sub">Drivers de Red</span>
+                    </div>
+                    <div class="layer-content">
+                        <div class="comp-chip"><span class="comp-icon"></span><span>TCPService (net)<span
+                                    class="comp-detail">Puerto 6001 — IC Gateway</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>UDPService (dgram)<span
+                                    class="comp-detail">4531 · 5501 · 8000 · 70xx</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>Watchdog 1200 ms<span
+                                    class="comp-detail">Reconexión automática TCP</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>VideoService FFmpeg<span
+                                    class="comp-detail">H.264 UDP 37511-37513</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>FeedbackService<span
+                                    class="comp-detail">LEDs hardware UDP 5501</span></span></div>
+                    </div>
+                </div>
+
+                <div class="arch-layer l-physical">
+                    <div class="layer-label">
+                        <span class="layer-num">CAPA 5</span>
+                        <span class="layer-name">Hardware Físico</span>
+                        <span class="layer-sub">Red LAN Naval</span>
+                    </div>
+                    <div class="layer-content">
+                        <div class="comp-chip"><span class="comp-icon"></span><span>Joystick Táctico<span
+                                    class="comp-detail">3 ejes · 12 botones · UDP 4531</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon">⌨</span><span>Teclado Naval<span
+                                    class="comp-detail">36 teclas · UDP 5501</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>IC — Gabinete Interfaz<span
+                                    class="comp-detail">TCP 6001 · Protocolo propietario</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>Sensores NMEA<span
+                                    class="comp-detail">GPS · GYRO · Inclinómetro</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>Sistema EOT<span
+                                    class="comp-detail">Cámaras ópticas H.264</span></span></div>
+                        <div class="comp-chip"><span class="comp-icon"></span><span>CMS Gestión Combate<span
+                                    class="comp-detail">Pistas tácticas UDP multicast</span></span></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- 4. SECUENCIA TX/RX -->
+        <div class="card">
+            <div class="section-title">
+                <div class="section-icon" style="background:rgba(199,120,221,0.15)"></div>
+                Diagrama de Secuencia — Ciclo de Operación (100 ms)
+                <span class="section-num"> 7.2</span>
+            </div>
+            <div class="mermaid">
+                sequenceDiagram
+                autonumber
+                participant UI as Svelte HMI
+                participant BE as Node.js Backend
+                participant BP as BinaryProtocolSvc
+                participant TCP as TCPService
+                participant IC as IC Gabinete
+
+                Note over UI,IC: HANDSHAKE INICIAL
+                UI->>BE: SELECT_STATION (Estribor/Babor/Popa)
+                BE->>TCP: net.connect(host, 6001)
+                TCP-->>IC: SYN
+                IC-->>TCP: ACK — conexión establecida
+                BE->>BP: init Frame (consoleId, assign=0)
+                BP->>TCP: send(assignRequest[29b])
+
+                Note over UI,IC: CICLO DE TRABAJO CONTINUO (cada 100 ms)
+                loop Heartbeat 100 ms
+                BE->>BP: generateFrame(udpState)
+                Note over BP: Calcular XOR byte #29
+                BP-->>TCP: Buffer[29 bytes] TX
+                TCP->>IC: Trama binaria
+                IC-->>TCP: Respuesta RX [31-33 bytes]
+                TCP-->>BE: evento 'data'
+                BE->>BP: parseFrame(rxBuffer)
+                Note over BP: Validar XOR RX — descartar si falla
+                BP-->>BE: telemetría parsed
+                BE->>UI: broadcast(TCP_STATUS + IC_DATA)
+                UI-->>UI: Actualizar PPI / Gauges / Alertas
+                end
+
+                Note over TCP,IC: WATCHDOG (timeout > 1200 ms)
+                TCP--xIC: Sin respuesta
+                BE->>UI: broadcast(SEÑAL_IC_PERDIDA)
+                BE->>TCP: reconnect()
+            </div>
+        </div>
+
+
+        <!-- 6. PROTOCOLOS -->
+        <div class="card">
+            <div class="section-title">
+                <div class="section-icon" style="background:rgba(52,211,153,0.15)"></div>
+                Protocolos de Comunicación y Puertos
+                <span class="section-num"> RF1-RF8</span>
+            </div>
+            <div class="proto-grid">
+                <div class="proto-card" style="border-top-color:#60a5fa">
+                    <span class="proto-tag">TCP · Puerto 6001</span>
+                    <h4>Canal de Mando Crítico — IC Gateway</h4>
+                    <p>Enlace persistente bidireccional con el Gabinete de Interfaz. TX: tramas binarias de 29 bytes con
+                        checksum XOR. RX: telemetría de 31/33 bytes. Heartbeat cada 100 ms. Watchdog 1200 ms.</p>
+                </div>
+                <div class="proto-card" style="border-top-color:#34d399">
+                    <span class="proto-tag">UDP · Puerto 4531</span>
+                    <h4>Joystick Táctico</h4>
+                    <p>Recepción de frames binarios <code>$BPJ</code> con ejes X/Y/Z (signed int8) y 12 botones.
+                        Deadzone ±5 aplicada en backend para filtrar ruido mecánico.</p>
+                </div>
+                <div class="proto-card" style="border-top-color:#fbbf24">
+                    <span class="proto-tag">UDP · Puerto 5501</span>
+                    <h4>Teclado Naval / Panel Táctil</h4>
+                    <p>Comandos ASCII desde el panel de 36 teclas y feedback visual hacia LEDs físicos del hardware vía
+                        FeedbackService. <em>Bidireccional.</em></p>
+                </div>
+                <div class="proto-card" style="border-top-color:#f87171">
+                    <span class="proto-tag">UDP · Puerto 8000</span>
+                    <h4>CMS — Sistema Gestión Combate</h4>
+                    <p>Recepción de tramas de 42 bytes con datos de pistas tácticas (blancos). CMSService decodifica y
+                        actualiza el store reactivo del Radar PPI en tiempo real.</p>
+                </div>
+                <div class="proto-card" style="border-top-color:#a78bfa">
+                    <span class="proto-tag">UDP · Puertos 70xx</span>
+                    <h4>Sensores NMEA 0183</h4>
+                    <p>GPS ($GPGGA), Girocompás ($HEHDT), Inclinómetro Pitch/Roll. Usados para estabilizar el horizonte
+                        táctico del Radar PPI y calcular rumbo real del buque.</p>
+                </div>
+                <div class="proto-card" style="border-top-color:#fb923c">
+                    <span class="proto-tag">UDP · 37511 / 37512 / 37513</span>
+                    <h4>Video EOT H.264 — por Estación</h4>
+                    <p>Flujo H.264 segregado: <strong>Estribor</strong> :37511 · <strong>Babor</strong> :37512 ·
+                        <strong>Popa</strong> :37513. FFmpeg (unpacked ASAR) decodifica y transmite al frontend.
+                    </p>
+                </div>
+                <div class="proto-card" style="border-top-color:#38bdf8">
+                    <span class="proto-tag">WebSocket · Puerto 8001</span>
+                    <h4>Bus Interno Backend → Frontend</h4>
+                    <p>Canal Full-Duplex JSON entre Node.js y Svelte. Distribuye estados IC, telemetría, pistas CMS y
+                        comandos del operador sin bloquear el Event Loop.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. PATRONES DE DISEÑO -->
+        <div class="card">
+            <div class="section-title">
+                <div class="section-icon" style="background:rgba(251,191,36,0.15)"></div>
+                Patrones de Diseño Aplicados
+                <span class="section-num"> 2 / 6.2</span>
+            </div>
+            <div class="patterns-grid">
+                <div class="pattern-card">
+                    <h4>Observer / EDA</h4>
+                    <p>Arquitectura Orientada a Eventos mediante <code>EventEmitter</code>. El servidor reacciona
+                        asincrónicamente a la llegada de datos sin bloquear el hilo principal.</p>
+                </div>
+                <div class="pattern-card">
+                    <h4>State — FSM</h4>
+                    <p><code>BinaryProtocolService</code> actúa como Máquina de Estados Finita. Mantiene la "verdad
+                        única" de la consola y gestiona transiciones RWS → EOT → CMS.</p>
+                </div>
+                <div class="pattern-card">
+                    <h4>Bridge (Puente)</h4>
+                    <p>Separa la abstracción lógica de la consola de su implementación física. Permite reemplazar
+                        hardware periférico sin alterar la lógica central de procesamiento.</p>
+                </div>
+                <div class="pattern-card">
+                    <h4>Singleton</h4>
+                    <p><code>StationManager</code> y <code>SensorsService</code> poseen instancia global única.
+                        Garantiza exclusividad en el acceso a sockets de red y evita colisiones de recursos.</p>
+                </div>
+                <div class="pattern-card">
+                    <h4>Layered Architecture</h4>
+                    <p>5 capas desacopladas: Infraestructura → Dominio → Aplicación → Presentación. Cada capa evoluciona
+                        de forma independiente sin afectar las demás.</p>
+                </div>
+                <div class="pattern-card">
+                    <h4>Reactive Stores</h4>
+                    <p>Svelte Stores como fuente de verdad reactiva en el frontend. Actualizados vía WebSocket,
+                        garantizan refresco selectivo y eficiente del HMI.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. KPIs -->
+        <div class="card">
+            <div class="section-title">
+                <div class="section-icon" style="background:rgba(52,211,153,0.15)"></div>
+                Indicadores de Rendimiento Validados (MVP)
+                <span class="section-num"> 8</span>
+            </div>
+            <table class="kpi-table">
+                <thead>
+                    <tr>
+                        <th>Criterio</th>
+                        <th>Requerimiento</th>
+                        <th>Valor Obtenido</th>
+                        <th>Referencia</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Latencia I/O extremo a extremo</td>
+                        <td>&lt; 33 ms</td>
+                        <td><strong>24 – 28 ms</strong></td>
+                        <td>RNF2 / ICD</td>
+                        <td><span class="badge ok">✓ ÉXITO</span></td>
+                    </tr>
+                    <tr>
+                        <td>Integridad de tramas XOR</td>
+                        <td>100 %</td>
+                        <td><strong>100 %</strong></td>
+                        <td>RNF3</td>
+                        <td><span class="badge ok">✓ ÉXITO</span></td>
+                    </tr>
+                    <tr>
+                        <td>Estabilidad Heartbeat TCP</td>
+                        <td>100 ms ± 10 ms</td>
+                        <td><strong>100 ms ± 2 ms</strong></td>
+                        <td>RNF1</td>
+                        <td><span class="badge ok">✓ ÉXITO</span></td>
+                    </tr>
+                    <tr>
+                        <td>Reconexión automática (Watchdog)</td>
+                        <td>&lt; 5 s</td>
+                        <td><strong>3 s</strong></td>
+                        <td>RNF4</td>
+                        <td><span class="badge ok">✓ ÉXITO</span></td>
+                    </tr>
+                    <tr>
+                        <td>Consumo CPU backend</td>
+                        <td>&lt; 40 %</td>
+                        <td><strong>12 – 18 %</strong></td>
+                        <td>RNF5</td>
+                        <td><span class="badge ok">✓ ÉXITO</span></td>
+                    </tr>
+                    <tr>
+                        <td>Jitter Joystick (deadzone)</td>
+                        <td>±0</td>
+                        <td><strong>±0 con DZ ±5</strong></td>
+                        <td>RF5</td>
+                        <td><span class="badge ok">✓ ÉXITO</span></td>
+                    </tr>
+                    <tr>
+                        <td>Backlog completado (Sprint 1-3)</td>
+                        <td>—</td>
+                        <td><strong>60 % del Total</strong></td>
+                        <td>HU-01 a HU-15</td>
+                        <td><span class="badge warn"> En Progreso</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 9. STACK TECNOLÓGICO -->
+        <div class="card">
+            <div class="section-title">
+                <div class="section-icon" style="background:rgba(168,85,247,0.15)">🛠️</div>
+                Stack Tecnológico del Ecosistema
+                <span class="section-num">4.2</span>
+            </div>
+            <div class="mermaid">
+                graph LR
+                subgraph FE [" Frontend"]
+                S["Svelte 4\nCompilación reactiva JS puro"]
+                V["Vite 5\nBundler + Dev Server"]
+                E["Electron v30\nEmpaquetado de escritorio"]
+                end
+                subgraph BE [" Backend"]
+                N["Node.js v20+\nEvent Loop EDA"]
+                NET["net module\nTCP socket persistente"]
+                DG["dgram module\nUDP sockets"]
+                WS["ws library\nWebSocket Server"]
+                end
+                subgraph SYS [" Sistema"]
+                LX["Linux Ubuntu\nPC Industrial"]
+                SD["Systemd\nArranque automático"]
+                FF["FFmpeg\nVideo H.264 decode"]
+                end
+
+                S --> V --> E
+                N --> NET & DG & WS
+                E --> LX --> SD
+                FF --> E
+
+                style S fill:#4a044e,stroke:#c084fc,color:#fff
+                style V fill:#4a044e,stroke:#c084fc,color:#fff
+                style E fill:#4a044e,stroke:#c084fc,color:#fff
+                style N fill:#7c2d12,stroke:#fb923c,color:#fff
+                style NET fill:#7c2d12,stroke:#fb923c,color:#fff
+                style DG fill:#7c2d12,stroke:#fb923c,color:#fff
+                style WS fill:#7c2d12,stroke:#fb923c,color:#fff
+                style LX fill:#1e293b,stroke:#475569,color:#94a3b8
+                style SD fill:#1e293b,stroke:#475569,color:#94a3b8
+                style FF fill:#1e293b,stroke:#475569,color:#94a3b8
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <strong>SW CONSOLA BARRACUDA V2.0</strong> — Proyecto de Grado · Ingeniería de Software<br>
+        Centro de Desarrollo Tecnológico Naval (CEDNAV) · Armada Nacional de Colombia<br>
+        <span style="opacity:0.5; font-size:0.68rem">MIL-STD-2525 · STANAG 2442 · Plan Estratégico Naval 2042 · Fecha:
+            28 Abril 2026</span>
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagrama de Componentes UML de software de consola BARRACUDA V2.0 </title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true, theme: 'dark', themeVariables: {
+                primaryColor: '#1a56db', primaryTextColor: '#e2e8f0', primaryBorderColor: '#2563eb',
+                lineColor: '#38bdf8', secondaryColor: '#059669', tertiaryColor: '#d97706',
+                background: '#0f172a', mainBkg: '#1e293b', nodeBorder: '#334155', fontSize: '13px'
+            }
+        });
+    </script>
+    <style>
+        :root {
+            --navy: #0f172a;
+            --surface: #1e293b;
+            --s2: #263248;
+            --border: #334155;
+            --blue: #38bdf8;
+            --green: #34d399;
+            --orange: #fb923c;
+            --red: #f87171;
+            --yellow: #fbbf24;
+            --purple: #c084fc;
+            --cyan: #22d3ee;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--navy);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #0f172a, #1a2744, #0c1a3a);
+            border-bottom: 2px solid var(--green);
+            padding: 44px 24px 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(52, 211, 153, .12), transparent 65%);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(52, 211, 153, .1);
+            border: 1px solid rgba(52, 211, 153, .4);
+            border-radius: 30px;
+            padding: 6px 20px;
+            margin-bottom: 18px;
+            font-size: .72rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--green);
+            text-transform: uppercase;
+        }
+
+        .badge::before {
+            content: '◉';
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .3
+            }
+        }
+
+        h1.main {
+            font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #34d399, #38bdf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .hero-sub {
+            font-size: .85rem;
+            color: var(--muted);
+            max-width: 750px;
+            margin: 0 auto;
+        }
+
+        .wrap {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 36px 24px;
+        }
+
+        .shdr {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sico {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .snum {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .68rem;
+            color: var(--muted);
+            margin-left: auto;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 26px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .4);
+        }
+
+        .mermaid {
+            background: var(--navy);
+            border-radius: 10px;
+            padding: 18px;
+            margin-top: 4px;
+            overflow-x: auto;
+        }
+
+        /* COMPONENT CARDS */
+        .comp-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .comp {
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 18px;
+            position: relative;
+            transition: border-color .3s, transform .2s;
+        }
+
+        .comp:hover {
+            border-color: rgba(56, 189, 248, .4);
+            transform: translateY(-2px);
+        }
+
+        .comp-icon {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            font-size: 1.3rem;
+            opacity: .6;
+        }
+
+        .comp-type {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .62rem;
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            letter-spacing: .5px;
+        }
+
+        .comp h4 {
+            font-size: .88rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .comp p {
+            font-size: .72rem;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        .comp .interfaces {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .iface {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .62rem;
+            background: rgba(0, 0, 0, .3);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 3px 8px;
+            color: var(--text);
+        }
+
+        .iface-p {
+            border-color: rgba(52, 211, 153, .4);
+            color: var(--green);
+        }
+
+        .iface-r {
+            border-color: rgba(56, 189, 248, .4);
+            color: var(--blue);
+        }
+
+        .t-svc {
+            background: rgba(251, 146, 60, .12);
+            color: var(--orange);
+        }
+
+        .t-front {
+            background: rgba(192, 132, 252, .12);
+            color: var(--purple);
+        }
+
+        .t-infra {
+            background: rgba(52, 211, 153, .12);
+            color: var(--green);
+        }
+
+        .t-ext {
+            background: rgba(248, 113, 113, .12);
+            color: var(--red);
+        }
+
+        .t-util {
+            background: rgba(56, 189, 248, .12);
+            color: var(--blue);
+        }
+
+        /* DEPENDENCY TABLE */
+        .dep-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .74rem;
+        }
+
+        .dep-table th {
+            background: var(--s2);
+            color: var(--muted);
+            text-align: left;
+            padding: 9px 14px;
+            border-bottom: 2px solid var(--border);
+            font-size: .66rem;
+            text-transform: uppercase;
+            letter-spacing: .6px;
+        }
+
+        .dep-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .dep-table tr:hover td {
+            background: rgba(255, 255, 255, .015);
+        }
+
+        .rel-type {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .66rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .rel-uses {
+            background: rgba(56, 189, 248, .12);
+            color: var(--blue);
+        }
+
+        .rel-emits {
+            background: rgba(52, 211, 153, .12);
+            color: var(--green);
+        }
+
+        .rel-spawns {
+            background: rgba(251, 146, 60, .12);
+            color: var(--orange);
+        }
+
+        .rel-ws {
+            background: rgba(192, 132, 252, .12);
+            color: var(--purple);
+        }
+
+        footer {
+            text-align: center;
+            padding: 36px 20px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: .72rem;
+        }
+
+        footer strong {
+            color: var(--green);
+        }
+
+        @media(max-width:700px) {
+            .comp-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="hero">
+        <div class="badge">CEDNAV · Armada Nacional de Colombia · Ingeniería de Software</div>
+        <h1 class="main">BARRACUDA SVELT<br>Diagrama de Componentes UML</h1>
+        <p class="hero-sub">Descomposición modular del ecosistema: interfaces proporcionadas/requeridas, dependencias
+            entre componentes y mecanismos de comunicación inter-componente</p>
+    </header>
+
+    <div class="wrap">
+
+        <!-- ══════════════════════════════════════════
+     1. DIAGRAMA DE COMPONENTES UML GENERAL
+══════════════════════════════════════════ -->
+        <div class="card">
+            <div class="shdr">
+                <div class="sico" style="background:rgba(52,211,153,.15)"></div>
+                1. Diagrama de Componentes UML — Visión General
+                <span class="snum">§ Component Diagram</span>
+            </div>
+            <div class="mermaid">
+                graph TB
+                subgraph BACKEND[" PAQUETE: BACKEND NODE.JS (server.js)"]
+                direction TB
+                subgraph INFRA["CAPA INFRAESTRUCTURA — Drivers de Red"]
+                TCP["«componente»\nTCPService\n──────────\nnet.Socket :6001\nReconexión automática\nWatchdog 1200ms"]
+                UDP_JOY["«componente»\nJoystickDriver\n──────────\ndgram :4531\n$BPJ frame parser"]
+                UDP_KBD["«componente»\nKeyboardDriver\n──────────\ndgram :5501\nBidireccional"]
+                UDP_NMEA["«componente»\nNMEADriver\n──────────\ndgram :70xx\nGPS/Gyro/DDU"]
+                UDP_CMS["«componente»\nCMSDriver\n──────────\ndgram :8000\n42-byte tracks"]
+                VIDEO["«componente»\nVideoService\n──────────\nchild_process.spawn\nFFmpeg H.264"]
+                end
+
+                subgraph DOMAIN["CAPA DOMINIO — Lógica Naval"]
+                BPS["«componente»\nBinaryProtocolService\n──────────\ngenerateFrame() 29B TX\nparseFrame() 31B
+                RX\ncalculateChecksum() XOR"]
+                FSM["«componente»\nFSM WorkMode\n──────────\nRWS ↔ EOT ↔ CMS\nGuard Clauses\nTransición segura"]
+                JOY_DEC["«componente»\nJoystickDecoder\n──────────\nDeadzone ±5\nEjes X/Y/Z signed\n12 botones map"]
+                NMEA_SVC["«componente»\nNMEAService\n──────────\n$GPGGA → Lat/Lon\n$HEHDT → Heading\nPitch/Roll
+                BigEndian"]
+                CMS_SVC["«componente»\nCMSService\n──────────\nParseo pistas 42B\nBearing/Range/Class\ncmsEnabled flag"]
+                FEED["«componente»\nFeedbackService\n──────────\nLED state → 5 bytes\nHardware-confirmed UI\nPanel
+                sync"]
+                end
+
+                subgraph APP["CAPA APLICACIÓN — Orquestador"]
+                SRV["«componente»\nserver.js\n──────────\nEventEmitter Hub\nHeartbeat Loop 100ms\nPipeline coordinador"]
+                SM["«componente»\nStationManager\n──────────\nExclusividad mando\nC1/C2/C3
+                assignment\nvalidateExclusivity()"]
+                WS["«componente»\nWebSocketServer\n──────────\nws :8001\nJSON Full-Duplex\nBroadcast a Renderer"]
+                end
+                end
+
+                subgraph FRONTEND[" PAQUETE: FRONTEND SVELTE (Chromium Renderer)"]
+                direction TB
+                subgraph STORES["CAPA ESTADO — Svelte Stores"]
+                ST_IC["«store»\nicData\nTelemetría IC"]
+                ST_STA["«store»\nstationStatus\nEstado estación"]
+                ST_GYRO["«store»\ngyroData\nHeading buque"]
+                ST_CMS["«store»\ncmsTracks\nPistas tácticas"]
+                end
+                subgraph VIEWS["CAPA PRESENTACIÓN — Componentes UI"]
+                RADAR["«componente»\nRadar.svelte\n──────────\nPPI SVG vectorial\nBearing RWS/EOT\nCMS tracks overlay"]
+                GAUGE["«componente»\nGaugePanel.svelte\n──────────\nRonza / Elevación\nEstado IC realtime"]
+                VID_C["«componente»\nVideoEOT.svelte\n──────────\nCanvas H.264\nStream segregado"]
+                HACK["«componente»\nHackingView.svelte\n──────────\nAuditoría HEX live\nTX/RX frames raw"]
+                SET["«componente»\nSettings.svelte\n──────────\nSelección estación\nConfiguración IP"]
+                end
+                end
+
+                subgraph EXTERNAL["🔌 COMPONENTES EXTERNOS"]
+                IC_EXT["«externo»\nIC Gabinete\nFFS-RWS Controller"]
+                HW["«externo»\nHardware Arma\nServomotores/Sensores"]
+                JOY_HW["«externo»\nJoystick Táctico"]
+                KBD_HW["«externo»\nTeclado Naval"]
+                NMEA_HW["«externo»\nGPS / Gyro / DDU"]
+                CMS_HW["«externo»\nSistema CMS"]
+                CAM_HW["«externo»\nCámaras EOT"]
+                end
+
+                %% Infraestructura → Dominio (Dependencias de Interfaz)
+                TCP -.->|"«use»"| I_BPS(("I_Protocol"))
+                I_BPS --- BPS
+
+                UDP_JOY -.->|"«use»"| I_JOY(("I_Joystick"))
+                I_JOY --- JOY_DEC
+
+                UDP_NMEA -.->|"«use»"| I_NMEA(("I_NMEA"))
+                I_NMEA --- NMEA_SVC
+
+                UDP_CMS -.->|"«use»"| I_CMS(("I_CMS"))
+                I_CMS --- CMS_SVC
+
+                UDP_KBD -.->|"«use»"| I_FEED(("I_Feedback"))
+                I_FEED --- FEED
+
+                %% Dominio → Aplicación (Consumo de Interfaz)
+                BPS -.->|"«event»"| I_SRV(("I_Control"))
+                FSM -.->|"«event»"| I_SRV
+                JOY_DEC -.->|"«event»"| I_SRV
+                NMEA_SVC -.->|"«event»"| I_SRV
+                CMS_SVC -.->|"«event»"| I_SRV
+                FEED -.->|"«event»"| I_SRV
+                I_SRV --- SRV
+
+                SM -.->|"«call»"| I_SRV
+
+                SRV -.->|"«call»"| I_BPS
+
+                SRV -.->|"«call»"| I_FSM(("I_WorkMode"))
+                I_FSM --- FSM
+
+                %% Aplicación → Frontend (Broadcasting / WebSockets)
+                WS -.->|"«transmit»"| I_ST_IC(("I_Store_IC"))
+                WS -.->|"«transmit»"| I_ST_STA(("I_Store_STA"))
+                WS -.->|"«transmit»"| I_ST_GYRO(("I_Store_GYRO"))
+                WS -.->|"«transmit»"| I_ST_CMS(("I_Store_CMS"))
+
+                I_ST_IC --- ST_IC
+                I_ST_STA --- ST_STA
+                I_ST_GYRO --- ST_GYRO
+                I_ST_CMS --- ST_CMS
+
+                %% Stores → Views (Suscripción e Interfaces Web)
+                ST_IC -.->|"«bind»"| I_RADAR(("I_Radar_View"))
+                ST_GYRO -.->|"«bind»"| I_RADAR
+                ST_CMS -.->|"«bind»"| I_RADAR
+                I_RADAR --- RADAR
+
+                ST_IC -.->|"«bind»"| I_GAUGE(("I_Gauge_View"))
+                I_GAUGE --- GAUGE
+
+                ST_IC -.->|"«bind»"| I_HACK(("I_Hacking_View"))
+                I_HACK --- HACK
+
+                ST_STA -.->|"«bind»"| I_SET(("I_Settings_View"))
+                I_SET --- SET
+
+                %% Externos (Interfaces Físicas)
+                IC_EXT <-->|"«protocol» TCP :6001"| TCP
+                    JOY_HW -.->|"«interface» UDP :4531"| UDP_JOY
+                    KBD_HW <-->|"«interface» UDP :5501"| UDP_KBD
+                        NMEA_HW -.->|"«interface» UDP :70xx"| UDP_NMEA
+                        CMS_HW -.->|"«interface» UDP :8000"| UDP_CMS
+                        CAM_HW -.->|"«interface» UDP :3751x"| VIDEO
+                        IC_EXT -.->|"«hardware»"| HW
+
+                        style TCP fill:#052e16,stroke:#34d399,color:#fff
+                        style UDP_JOY fill:#052e16,stroke:#34d399,color:#fff
+                        style UDP_KBD fill:#052e16,stroke:#34d399,color:#fff
+                        style UDP_NMEA fill:#052e16,stroke:#34d399,color:#fff
+                        style UDP_CMS fill:#052e16,stroke:#34d399,color:#fff
+                        style VIDEO fill:#052e16,stroke:#34d399,color:#fff
+                        style BPS fill:#1e3a5f,stroke:#38bdf8,color:#fff
+                        style FSM fill:#1e3a5f,stroke:#38bdf8,color:#fff
+                        style JOY_DEC fill:#1e3a5f,stroke:#38bdf8,color:#fff
+                        style NMEA_SVC fill:#1e3a5f,stroke:#38bdf8,color:#fff
+                        style CMS_SVC fill:#1e3a5f,stroke:#38bdf8,color:#fff
+                        style FEED fill:#1e3a5f,stroke:#38bdf8,color:#fff
+                        style SRV fill:#7c2d12,stroke:#fb923c,color:#fff
+                        style SM fill:#7c2d12,stroke:#fb923c,color:#fff
+                        style WS fill:#7c2d12,stroke:#fb923c,color:#fff
+                        style ST_IC fill:#4a044e,stroke:#c084fc,color:#fff
+                        style ST_STA fill:#4a044e,stroke:#c084fc,color:#fff
+                        style ST_GYRO fill:#4a044e,stroke:#c084fc,color:#fff
+                        style ST_CMS fill:#4a044e,stroke:#c084fc,color:#fff
+                        style RADAR fill:#4a044e,stroke:#a78bfa,color:#fff
+                        style GAUGE fill:#4a044e,stroke:#a78bfa,color:#fff
+                        style VID_C fill:#4a044e,stroke:#a78bfa,color:#fff
+                        style HACK fill:#4a044e,stroke:#a78bfa,color:#fff
+                        style SET fill:#4a044e,stroke:#a78bfa,color:#fff
+                        style IC_EXT fill:#1a1a2e,stroke:#64748b,color:#94a3b8
+                        style HW fill:#1a1a2e,stroke:#64748b,color:#94a3b8
+                        style JOY_HW fill:#1a1a2e,stroke:#64748b,color:#94a3b8
+                        style KBD_HW fill:#1a1a2e,stroke:#64748b,color:#94a3b8
+                        style NMEA_HW fill:#1a1a2e,stroke:#64748b,color:#94a3b8
+                        style CMS_HW fill:#1a1a2e,stroke:#64748b,color:#94a3b8
+                        style CAM_HW fill:#1a1a2e,stroke:#64748b,color:#94a3b8
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+     2. COMPONENTES BACKEND — CAPA INFRAESTRUCTURA
+══════════════════════════════════════════ -->
+        <div class="card">
+            <div class="shdr">
+                <div class="sico" style="background:rgba(52,211,153,.15)">🔌</div>
+                2. Componentes Backend — Capa de Infraestructura (Drivers de Red)
+                <span class="snum">§ Infrastructure Layer</span>
+            </div>
+            <div class="comp-grid">
+                <div class="comp" style="border-top:3px solid var(--green)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-infra">DRIVER · TCP</span>
+                    <h4>TCPService</h4>
+                    <p><strong>Archivo:</strong> backend/src/services/tcp.service.js<br>
+                        <strong>Responsabilidad:</strong> Gestiona la conexión TCP persistente con el IC en el puerto
+                        6001. Implementa reconexión automática con backoff exponencial y el Watchdog de 1200ms que
+                        detecta la pérdida del enlace.<br>
+                        <strong>Patrón:</strong> Singleton — una única instancia activa en el proceso.
+                    </p>
+                    <div class="interfaces">
+                        <span class="iface iface-p">▸ Proporciona: onData(buffer)</span>
+                        <span class="iface iface-p">▸ Proporciona: sendFrame(buffer)</span>
+                        <span class="iface iface-r">◂ Requiere: IC_HOST, IC_PORT</span>
+                    </div>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--green)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-infra">DRIVER · UDP</span>
+                    <h4>JoystickDriver</h4>
+                    <p><strong>Puerto:</strong> UDP 4531<br>
+                        <strong>Responsabilidad:</strong> Recibe frames $BPJ del Joystick táctico a ~100 Hz. Deserializa
+                        los 3 ejes (signed int8) y mapea los 12 botones.<br>
+                        <strong>Dirección:</strong> Unidireccional (solo recepción).
+                    </p>
+                    <div class="interfaces">
+                        <span class="iface iface-p">▸ Proporciona: onJoystickFrame(axes, buttons)</span>
+                        <span class="iface iface-r">◂ Requiere: dgram.createSocket('udp4')</span>
+                    </div>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--green)">
+                    <span class="comp-icon">⌨</span>
+                    <span class="comp-type t-infra">DRIVER · UDP BIDIRECCIONAL</span>
+                    <h4>KeyboardDriver</h4>
+                    <p><strong>Puerto:</strong> UDP 5501<br>
+                        <strong>Responsabilidad:</strong> Recibe comandos ASCII del Teclado Naval y envía tramas de
+                        feedback (5 bytes) para actualizar los LEDs físicos del panel.<br>
+                        <strong>Dirección:</strong> Bidireccional (RX comandos + TX LEDs).
+                    </p>
+                    <div class="interfaces">
+                        <span class="iface iface-p">▸ Proporciona: onKeyCommand(cmd)</span>
+                        <span class="iface iface-p">▸ Proporciona: sendLedFeedback(state)</span>
+                    </div>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--green)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-infra">DRIVER · UDP</span>
+                    <h4>NMEADriver</h4>
+                    <p><strong>Puerto:</strong> UDP 70xx (múltiples)<br>
+                        <strong>Responsabilidad:</strong> Recibe sentencias NMEA 0183 de GPS ($GPGGA), Girocompás
+                        ($HEHDT) e Inclinómetro (Pitch/Roll). Parsea según los estándares IEC 61162-1.<br>
+                        <strong>Corrección DEF-02:</strong> Lectura Big-Endian del inclinómetro.
+                    </p>
+                    <div class="interfaces">
+                        <span class="iface iface-p">▸ Proporciona: onNMEASentence(type, data)</span>
+                    </div>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--green)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-infra">DRIVER · UDP</span>
+                    <h4>CMSDriver</h4>
+                    <p><strong>Puerto:</strong> UDP 8000 (Multicast)<br>
+                        <strong>Responsabilidad:</strong> Recibe tramas de 42 bytes del CMS con pistas tácticas. Cada
+                        pista contiene bearing, range, clasificación NATO y el flag cmsEnabled.<br>
+                        <strong>Frecuencia:</strong> ~5 Hz por pista activa.
+                    </p>
+                    <div class="interfaces">
+                        <span class="iface iface-p">▸ Proporciona: onTrackUpdate(tracks[])</span>
+                        <span class="iface iface-p">▸ Proporciona: cmsEnabled: boolean</span>
+                    </div>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--green)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-infra">DRIVER · PROCESO HIJO</span>
+                    <h4>VideoService</h4>
+                    <p><strong>Puerto:</strong> UDP 37511 + (consoleNum - 1)<br>
+                        <strong>Responsabilidad:</strong> Lanza FFmpeg como proceso hijo aislado (child_process.spawn)
+                        para decodificar el stream H.264 de la cámara EOT. Genera un proceso independiente por
+                        consola.<br>
+                        <strong>Aislamiento:</strong> No compite con el Event Loop del backend.
+                    </p>
+                    <div class="interfaces">
+                        <span class="iface iface-p">▸ Proporciona: onVideoFrame(buffer)</span>
+                        <span class="iface iface-r">◂ Requiere: ffmpeg binary (asarUnpack)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+     3. COMPONENTES BACKEND — CAPA DOMINIO
+══════════════════════════════════════════ -->
+        <div class="card">
+            <div class="shdr">
+                <div class="sico" style="background:rgba(56,189,248,.15)">🧠</div>
+                3. Componentes Backend — Capa de Dominio (Lógica Naval)
+                <span class="snum">§ Domain Layer</span>
+            </div>
+            <div class="comp-grid">
+                <div class="comp" style="border-top:3px solid var(--blue)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-util">SERVICIO · CRÍTICO</span>
+                    <h4>BinaryProtocolService</h4>
+                    <p><strong>Archivo:</strong> backend/src/services/binary-protocol.service.js<br>
+                        <strong>Responsabilidad:</strong> Núcleo del protocolo binario ICD. Serializa tramas TX (29
+                        bytes) con campos de mando y checksum XOR, y deserializa tramas RX (31-33 bytes) con telemetría
+                        del IC.<br>
+                        <strong>Patrón:</strong> Singleton — único punto de mutación del estado de protocolo.
+                    </p>
+                    <div class="interfaces">
+                        <span class="iface iface-p">▸ generateFrame(): Buffer[29]</span>
+                        <span class="iface iface-p">▸ parseFrame(buf): Object</span>
+                        <span class="iface iface-p">▸ updateField(name, value): void</span>
+                        <span class="iface iface-p">▸ calculateChecksum(buf): uint8</span>
+                    </div>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--blue)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-util">SERVICIO · ESTADOS</span>
+                    <h4>FSM WorkMode</h4>
+                    <p><strong>Responsabilidad:</strong> Máquina de Estados Finita que gobierna las transiciones entre
+                        modos de trabajo: RWS (Remote Weapon Station), EOT (Electro-Optical Tracker) y CMS Pista
+                        (asignación de blanco).<br>
+                        <strong>Guard Clauses:</strong> No permite transición a CMS sin cmsEnabled=1.
+                    </p>
+                    <div class="interfaces">
+                        <span class="iface iface-p">▸ transition(targetMode): boolean</span>
+                        <span class="iface iface-p">▸ getCurrentMode(): string</span>
+                        <span class="iface iface-r">◂ Requiere: cmsEnabled (CMSService)</span>
+                    </div>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--blue)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-util">SERVICIO · PROCESAMIENTO</span>
+                    <h4>JoystickDecoder</h4>
+                    <p><strong>Responsabilidad:</strong> Aplica el algoritmo de Deadzone (±5) a los ejes X/Y/Z del
+                        Joystick para filtrar ruido mecánico. Mapea los 12 botones a acciones tácticas (energizar EOT,
+                        seleccionar modo, zoom).<br>
+                        <strong>Salida:</strong> Valores normalizados listos para inyectar en la trama TX.
+                    </p>
+                    <div class="interfaces">
+                        <span class="iface iface-p">▸ decode(rawAxes, rawButtons): JoystickState</span>
+                        <span class="iface iface-p">▸ applyDeadzone(value, threshold): int</span>
+                    </div>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--blue)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-util">SERVICIO · NAVEGACIÓN</span>
+                    <h4>NMEAService</h4>
+                    <p><strong>Responsabilidad:</strong> Parsea sentencias NMEA 0183 estandarizadas. Extrae posición GPS
+                        (Lat/Lon), heading verdadero del buque (girocompás) y datos de estabilidad (pitch/roll).<br>
+                        <strong>Corrección:</strong> Lectura Big-Endian para inclinómetro (DEF-02).
+                    </p>
+                    <div class="interfaces">
+                        <span class="iface iface-p">▸ parseGPGGA(sentence): Position</span>
+                        <span class="iface iface-p">▸ parseHEHDT(sentence): Heading</span>
+                        <span class="iface iface-p">▸ parseDDU(buffer): PitchRoll</span>
+                    </div>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--blue)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-util">SERVICIO · COMBATE</span>
+                    <h4>CMSService</h4>
+                    <p><strong>Responsabilidad:</strong> Procesa tramas de pistas tácticas del CMS (42 bytes cada una).
+                        Extrae bearing, range, clasificación NATO, y el flag crítico de habilitación de mando.<br>
+                        <strong>Impacto:</strong> cmsEnabled controla si el operador puede asignar mando de disparo.
+                    </p>
+                    <div class="interfaces">
+                        <span class="iface iface-p">▸ parseTrack(buf): CMSTrack</span>
+                        <span class="iface iface-p">▸ getTracks(): CMSTrack[]</span>
+                        <span class="iface iface-p">▸ isEnabled(): boolean</span>
+                    </div>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--blue)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-util">SERVICIO · FEEDBACK</span>
+                    <h4>FeedbackService</h4>
+                    <p><strong>Responsabilidad:</strong> Genera tramas de 5 bytes para actualizar los LEDs físicos del
+                        Teclado Naval. Solo refleja estados confirmados por el IC (Hardware-Driven UI), nunca estado
+                        optimista local.<br>
+                        <strong>Principio:</strong> Zero trust — LED encendido SOLO cuando el hardware confirma.
+                    </p>
+                    <div class="interfaces">
+                        <span class="iface iface-p">▸ buildFeedbackFrame(confirmedState): Buffer[5]</span>
+                        <span class="iface iface-r">◂ Requiere: parseFrame() confirmación</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+     4. COMPONENTES BACKEND — CAPA APLICACIÓN
+══════════════════════════════════════════ -->
+        <div class="card">
+            <div class="shdr">
+                <div class="sico" style="background:rgba(251,146,60,.15)">🎛️</div>
+                4. Componentes Backend — Capa de Aplicación (Orquestador)
+                <span class="snum">§ Application Layer</span>
+            </div>
+            <div class="comp-grid">
+                <div class="comp" style="border-top:3px solid var(--orange)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-svc">ORQUESTADOR · CENTRAL</span>
+                    <h4>server.js — EventEmitter Hub</h4>
+                    <p><strong>Archivo:</strong> backend/src/server.js<br>
+                        <strong>Responsabilidad:</strong> Punto de entrada del backend. Instancia todos los servicios,
+                        configura los listeners de eventos, ejecuta el Heartbeat Loop (100ms con compensación de drift)
+                        y coordina el pipeline de datos: Drivers → Dominio → WebSocket → Frontend.<br>
+                        <strong>Rol:</strong> Actúa como bus de eventos central (EventEmitter) del ecosistema.
+                    </p>
+                    <div class="interfaces">
+                        <span class="iface iface-p">▸ Proporciona: heartbeat() loop</span>
+                        <span class="iface iface-p">▸ Proporciona: emit('event', data)</span>
+                        <span class="iface iface-r">◂ Requiere: Todos los servicios</span>
+                    </div>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--orange)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-svc">SERVICIO · GESTIÓN</span>
+                    <h4>StationManager</h4>
+                    <p><strong>Archivo:</strong> backend/src/services/station-manager.service.js<br>
+                        <strong>Responsabilidad:</strong> Gestiona la asignación de hasta 3 consolas (C1 Estribor, C2
+                        Babor, C3 Popa). Implementa el patrón de exclusividad de mando: solo una consola puede tener el
+                        mando activo a la vez.<br>
+                        <strong>Patrón:</strong> Singleton — garantiza consistencia global.
+                    </p>
+                    <div class="interfaces">
+                        <span class="iface iface-p">▸ assignStation(consoleId): boolean</span>
+                        <span class="iface iface-p">▸ validateExclusivity(): boolean</span>
+                        <span class="iface iface-p">▸ getActiveStation(): string</span>
+                    </div>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--orange)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-svc">COMUNICACIÓN · WS</span>
+                    <h4>WebSocketServer</h4>
+                    <p><strong>Puerto:</strong> ws://localhost:8001<br>
+                        <strong>Responsabilidad:</strong> Servidor WebSocket Full-Duplex que distribuye actualizaciones
+                        JSON al frontend (broadcast) y recibe comandos del operador (SELECT_STATION, MODE_CHANGE,
+                        SETTINGS).<br>
+                        <strong>Frecuencia:</strong> ~10 Hz de broadcast (sincronizado con Heartbeat).
+                    </p>
+                    <div class="interfaces">
+                        <span class="iface iface-p">▸ broadcast(type, payload): void</span>
+                        <span class="iface iface-p">▸ onMessage(ws, data): void</span>
+                        <span class="iface iface-r">◂ Requiere: ws npm package</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+     5. COMPONENTES FRONTEND — SVELTE
+══════════════════════════════════════════ -->
+        <div class="card">
+            <div class="shdr">
+                <div class="sico" style="background:rgba(192,132,252,.15)">🎨</div>
+                5. Componentes Frontend — Svelte 4 (Chromium Renderer)
+                <span class="snum">§ Frontend Components</span>
+            </div>
+            <div class="comp-grid">
+                <div class="comp" style="border-top:3px solid var(--purple)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-front">STORE · REACTIVO</span>
+                    <h4>Svelte Stores (Estado Global)</h4>
+                    <p><strong>Archivo:</strong> app/src/lib/stores.js<br>
+                        <strong>Stores:</strong><br>
+                        • <strong>icData</strong> — Telemetría del IC (ronza, elevación, estado)<br>
+                        • <strong>stationStatus</strong> — Consola activa, modo trabajo, conexión<br>
+                        • <strong>gyroData</strong> — Heading del buque (girocompás)<br>
+                        • <strong>cmsTracks</strong> — Array de pistas tácticas activas<br>
+                        <strong>Reactividad:</strong> writable() → suscripción automática en componentes.
+                    </p>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--purple)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-front">COMPONENTE · RADAR</span>
+                    <h4>Radar.svelte — PPI Display</h4>
+                    <p><strong>Responsabilidad:</strong> Renderiza el Plan Position Indicator (PPI) usando SVG vectorial
+                        puro. Calcula transformaciones polares a cartesianas para posicionar los indicadores de bearing
+                        (RWS/EOT) y las pistas CMS. Rota el displayen modo "Course Up" según el heading del
+                        girocompás.<br>
+                        <strong>Renderizado:</strong> requestAnimationFrame → ≥30 FPS.
+                    </p>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--purple)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-front">COMPONENTE · GAUGES</span>
+                    <h4>GaugePanel.svelte — Telemetría</h4>
+                    <p><strong>Responsabilidad:</strong> Muestra en tiempo real los valores de ronza (bearing),
+                        elevación, estado del IC (encendido/apagado), modo de trabajo activo y nivel de señal TCP.<br>
+                        <strong>Actualización:</strong> Reactiva via $icData store (~10 Hz).
+                    </p>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--purple)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-front">COMPONENTE · VIDEO</span>
+                    <h4>VideoEOT.svelte — Stream Óptico</h4>
+                    <p><strong>Responsabilidad:</strong> Renderiza el video H.264 decodificado de la cámara EOT sobre un
+                        Canvas HTML5. El stream es segregado por estación (C1→:37511, C2→:37512, C3→:37513).</p>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--purple)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-front">COMPONENTE · DEBUG</span>
+                    <h4>HackingView.svelte — Auditoría HEX</h4>
+                    <p><strong>Responsabilidad:</strong> Vista de depuración que muestra las tramas TX/RX en formato
+                        hexadecimal crudo en tiempo real. Permite auditar cada byte del protocolo binario para
+                        validación de integridad.<br>
+                        <strong>Uso:</strong> Pruebas, diagnóstico y auditoría operativa.
+                    </p>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--purple)">
+                    <span class="comp-icon"></span>
+                    <span class="comp-type t-front">COMPONENTE · CONFIG</span>
+                    <h4>Settings.svelte — Configuración</h4>
+                    <p><strong>Responsabilidad:</strong> Panel de selección de estación (C1/C2/C3), configuración de IP
+                        del IC, y parámetros operativos. Envía comandos SELECT_STATION al backend via WebSocket.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+     6. COMPONENTES EXTERNOS
+══════════════════════════════════════════ -->
+        <div class="card">
+            <div class="shdr">
+                <div class="sico" style="background:rgba(248,113,113,.15)">🔌</div>
+                6. Componentes Externos (Fuera del Ecosistema de Software)
+                <span class="snum">§ External Components</span>
+            </div>
+            <div class="comp-grid">
+                <div class="comp" style="border-top:3px solid var(--red)">
+                    <span class="comp-type t-ext">EXTERNO · HARDWARE</span>
+                    <h4>🔋 IC — Gabinete de Interfaz</h4>
+                    <p>Controlador hardware del FFS-RWS. Traduce los comandos digitales de BARRACUDA SVELT en señales de
+                        control para servomotores, relés e instrumentación óptica. Protocolo binario propietario ICD
+                        sobre TCP :6001.</p>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--red)">
+                    <span class="comp-type t-ext">EXTERNO · PERIFÉRICO</span>
+                    <h4>🕹️ Joystick Táctico + ⌨️ Teclado Naval</h4>
+                    <p>Dispositivos de entrada del operador. El Joystick provee 3 ejes de mando y 12 botones tácticos
+                        (UDP :4531). El Teclado Naval provee 36 teclas con LEDs de feedback (UDP :5501 bidireccional).
+                    </p>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--red)">
+                    <span class="comp-type t-ext">EXTERNO · SENSORES</span>
+                    <h4>🛰️ GPS / 🧭 Girocompás / 📐 Inclinómetro</h4>
+                    <p>Sensores de navegación del buque que emiten sentencias NMEA 0183 por UDP :70xx. Proveen posición,
+                        heading y estabilidad para el PPI y la compensación de horizontes.</p>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--red)">
+                    <span class="comp-type t-ext">EXTERNO · COMBATE</span>
+                    <h4>⚔️ CMS — Sistema de Gestión de Combate</h4>
+                    <p>Provee pistas tácticas (42 bytes/pista) y el flag de habilitación de asignación de mando. Sin
+                        cmsEnabled=1, el operador no puede asumir el control de disparo. UDP :8000 multicast.</p>
+                </div>
+                <div class="comp" style="border-top:3px solid var(--red)">
+                    <span class="comp-type t-ext">EXTERNO · VIDEO</span>
+                    <h4>📷 Cámaras EOT</h4>
+                    <p>3 cámaras del sistema Electro-Optical Tracker que emiten streams H.264/AVC por UDP RTP,
+                        segregados por estación (:37511/:37512/:37513). Decodificado por FFmpeg en cada PC consola.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+     7. MATRIZ DE DEPENDENCIAS ENTRE COMPONENTES
+══════════════════════════════════════════ -->
+        <div class="card">
+            <div class="shdr">
+                <div class="sico" style="background:rgba(251,191,36,.15)">📋</div>
+                7. Matriz de Dependencias Inter-Componente
+                <span class="snum">§ Dependency Matrix</span>
+            </div>
+            <div style="overflow-x:auto">
+                <table class="dep-table">
+                    <thead>
+                        <tr>
+                            <th>Componente Origen</th>
+                            <th>Relación</th>
+                            <th>Componente Destino</th>
+                            <th>Mecanismo</th>
+                            <th>Datos Intercambiados</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>TCPService</td>
+                            <td><span class="rel-type rel-emits">emite</span></td>
+                            <td>BinaryProtocolService</td>
+                            <td>EventEmitter ('tcp:data')</td>
+                            <td>Buffer binario RX 31-33 bytes</td>
+                        </tr>
+                        <tr>
+                            <td>BinaryProtocolService</td>
+                            <td><span class="rel-type rel-uses">usa</span></td>
+                            <td>TCPService</td>
+                            <td>sendFrame(buffer)</td>
+                            <td>Buffer binario TX 29 bytes + XOR</td>
+                        </tr>
+                        <tr>
+                            <td>JoystickDriver</td>
+                            <td><span class="rel-type rel-emits">emite</span></td>
+                            <td>JoystickDecoder</td>
+                            <td>EventEmitter ('joy:frame')</td>
+                            <td>Ejes X/Y/Z raw + 12 botones</td>
+                        </tr>
+                        <tr>
+                            <td>JoystickDecoder</td>
+                            <td><span class="rel-type rel-uses">usa</span></td>
+                            <td>BinaryProtocolService</td>
+                            <td>updateField()</td>
+                            <td>Valores con deadzone aplicada</td>
+                        </tr>
+                        <tr>
+                            <td>NMEADriver</td>
+                            <td><span class="rel-type rel-emits">emite</span></td>
+                            <td>NMEAService</td>
+                            <td>EventEmitter ('nmea:sentence')</td>
+                            <td>Sentencias NMEA 0183 crudas</td>
+                        </tr>
+                        <tr>
+                            <td>CMSDriver</td>
+                            <td><span class="rel-type rel-emits">emite</span></td>
+                            <td>CMSService</td>
+                            <td>EventEmitter ('cms:track')</td>
+                            <td>Buffer 42 bytes por pista</td>
+                        </tr>
+                        <tr>
+                            <td>CMSService</td>
+                            <td><span class="rel-type rel-uses">usa</span></td>
+                            <td>FSM WorkMode</td>
+                            <td>cmsEnabled flag</td>
+                            <td>Habilitación de mando de disparo</td>
+                        </tr>
+                        <tr>
+                            <td>FSM WorkMode</td>
+                            <td><span class="rel-type rel-uses">usa</span></td>
+                            <td>BinaryProtocolService</td>
+                            <td>updateField('workMode')</td>
+                            <td>RWS=0x01, EOT=0x02, CMS=0x03</td>
+                        </tr>
+                        <tr>
+                            <td>server.js</td>
+                            <td><span class="rel-type rel-uses">usa</span></td>
+                            <td>Todos los servicios</td>
+                            <td>Instanciación directa</td>
+                            <td>Configuración desde console.config.json</td>
+                        </tr>
+                        <tr>
+                            <td>StationManager</td>
+                            <td><span class="rel-type rel-uses">usa</span></td>
+                            <td>server.js</td>
+                            <td>validateExclusivity()</td>
+                            <td>ConsoleId de la estación activa</td>
+                        </tr>
+                        <tr>
+                            <td>server.js</td>
+                            <td><span class="rel-type rel-spawns">spawn</span></td>
+                            <td>VideoService</td>
+                            <td>child_process.spawn()</td>
+                            <td>Puerto UDP dinámico por consola</td>
+                        </tr>
+                        <tr>
+                            <td>WebSocketServer</td>
+                            <td><span class="rel-type rel-ws">ws</span></td>
+                            <td>Svelte Stores</td>
+                            <td>JSON broadcast ws://localhost:8001</td>
+                            <td>IC_DATA, STATION_STATUS, NAV_DATA, CMS_TRACKS</td>
+                        </tr>
+                        <tr>
+                            <td>Svelte Stores</td>
+                            <td><span class="rel-type rel-ws">ws</span></td>
+                            <td>WebSocketServer</td>
+                            <td>JSON command ws://localhost:8001</td>
+                            <td>SELECT_STATION, MODE_CHANGE, SETTINGS</td>
+                        </tr>
+                        <tr>
+                            <td>icData Store</td>
+                            <td><span class="rel-type rel-uses">suscribe</span></td>
+                            <td>Radar.svelte</td>
+                            <td>Svelte reactive $icData</td>
+                            <td>Bearing RWS/EOT, telemetría</td>
+                        </tr>
+                        <tr>
+                            <td>icData Store</td>
+                            <td><span class="rel-type rel-uses">suscribe</span></td>
+                            <td>GaugePanel.svelte</td>
+                            <td>Svelte reactive $icData</td>
+                            <td>Ronza, elevación, estado IC</td>
+                        </tr>
+                        <tr>
+                            <td>gyroData Store</td>
+                            <td><span class="rel-type rel-uses">suscribe</span></td>
+                            <td>Radar.svelte</td>
+                            <td>Svelte reactive $gyroData</td>
+                            <td>Heading del buque (Course Up)</td>
+                        </tr>
+                        <tr>
+                            <td>cmsTracks Store</td>
+                            <td><span class="rel-type rel-uses">suscribe</span></td>
+                            <td>Radar.svelte</td>
+                            <td>Svelte reactive $cmsTracks</td>
+                            <td>Array de pistas tácticas CMS</td>
+                        </tr>
+                        <tr>
+                            <td>FeedbackService</td>
+                            <td><span class="rel-type rel-uses">usa</span></td>
+                            <td>KeyboardDriver</td>
+                            <td>sendLedFeedback(state)</td>
+                            <td>5 bytes de estado LED confirmado</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+     8. DIAGRAMA DE INTERFACES PROPORCIONADAS / REQUERIDAS
+══════════════════════════════════════════ -->
+
+    </div><!-- /wrap -->
+
+    <footer>
+        <strong>BARRACUDA SVELT</strong> — Diagrama de Componentes UML · Proyecto de Grado · Ingeniería de Software<br>
+        Centro de Desarrollo Tecnológico Naval (CEDNAV) · Armada Nacional de Colombia<br>
+        <span style="opacity:.5;font-size:.65rem">MIL-STD-2525 · STANAG 2442 · Plan Estratégico Naval 2042 · Abril
+            2026</span>
+    </footer>
+
+</body>
+
+</html>

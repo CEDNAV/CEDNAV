@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BARRACUDA SVELT – Diagrama de Despliegue del Sistema</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true, theme: 'dark', themeVariables: {
+                primaryColor: '#1a56db', primaryTextColor: '#e2e8f0', primaryBorderColor: '#2563eb',
+                lineColor: '#38bdf8', secondaryColor: '#059669', tertiaryColor: '#d97706',
+                background: '#0f172a', mainBkg: '#1e293b', nodeBorder: '#334155'
+            }
+        });
+    </script>
+    <style>
+        :root {
+            --navy: #0f172a;
+            --surface: #1e293b;
+            --s2: #263248;
+            --border: #334155;
+            --blue: #38bdf8;
+            --green: #34d399;
+            --orange: #fb923c;
+            --red: #f87171;
+            --yellow: #fbbf24;
+            --purple: #c084fc;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--navy);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, #0f172a, #1a2744, #0c1a3a);
+            border-bottom: 2px solid var(--blue);
+            padding: 44px 24px 32px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(56, 189, 248, .12), transparent 65%);
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(56, 189, 248, .1);
+            border: 1px solid rgba(56, 189, 248, .4);
+            border-radius: 30px;
+            padding: 6px 20px;
+            margin-bottom: 18px;
+            font-size: .72rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--blue);
+            text-transform: uppercase;
+        }
+
+        .badge::before {
+            content: '◉';
+            color: var(--green);
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .3
+            }
+        }
+
+        h1.main {
+            font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #38bdf8, #818cf8, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .hero-sub {
+            font-size: .85rem;
+            color: var(--muted);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .meta-row {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            flex-wrap: wrap;
+            margin-top: 16px;
+        }
+
+        .meta-item {
+            font-size: .7rem;
+            color: var(--muted);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .meta-item strong {
+            color: var(--blue);
+            font-size: .76rem;
+        }
+
+        /* LAYOUT */
+        .wrap {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 36px 24px;
+        }
+
+        .shdr {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sico {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .snum {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .68rem;
+            color: var(--muted);
+            margin-left: auto;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 26px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .4);
+        }
+
+        .mermaid {
+            background: var(--navy);
+            border-radius: 10px;
+            padding: 18px;
+            margin-top: 4px;
+            overflow-x: auto;
+        }
+
+        /* DEPLOY VISUAL */
+        .deploy-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+
+        .deploy-zone {
+            border: 2px dashed var(--border);
+            border-radius: 14px;
+            padding: 22px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .deploy-zone:hover {
+            border-color: rgba(56, 189, 248, .4);
+            transition: .3s;
+        }
+
+        .zone-label {
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--navy);
+            padding: 0 12px;
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .zone-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 8px;
+        }
+
+        /* NODE */
+        .node {
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            min-width: 200px;
+            flex: 1;
+            max-width: 340px;
+            border-top: 3px solid var(--blue);
+        }
+
+        .node h4 {
+            font-size: .82rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .node p {
+            font-size: .72rem;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .node-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .62rem;
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .tag-tcp {
+            background: rgba(56, 189, 248, .15);
+            color: var(--blue);
+        }
+
+        .tag-udp {
+            background: rgba(52, 211, 153, .15);
+            color: var(--green);
+        }
+
+        .tag-ws {
+            background: rgba(192, 132, 252, .15);
+            color: var(--purple);
+        }
+
+        .tag-sys {
+            background: rgba(148, 163, 184, .15);
+            color: var(--muted);
+        }
+
+        .tag-hw {
+            background: rgba(251, 146, 60, .15);
+            color: var(--orange);
+        }
+
+        .tag-vid {
+            background: rgba(248, 113, 113, .15);
+            color: var(--red);
+        }
+
+        /* SOFTWARE STACK */
+        .sw-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            margin-top: 12px;
+        }
+
+        .sw-layer {
+            display: flex;
+            align-items: stretch;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .sw-layer:last-child {
+            border-bottom: none;
+        }
+
+        .sw-lbl {
+            width: 120px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-right: 1px solid var(--border);
+            font-size: .7rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .sw-content {
+            padding: 10px 14px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            flex: 1;
+        }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(0, 0, 0, .3);
+            border: 1px solid currentColor;
+            border-radius: 6px;
+            padding: 5px 10px;
+            font-size: .7rem;
+            font-weight: 600;
+        }
+
+        .chip small {
+            font-size: .58rem;
+            color: var(--muted);
+            display: block;
+            font-weight: 400;
+        }
+
+        /* CONN TABLE */
+        .conn-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .76rem;
+        }
+
+        .conn-table th {
+            background: var(--s2);
+            color: var(--muted);
+            text-align: left;
+            padding: 9px 14px;
+            border-bottom: 2px solid var(--border);
+            font-size: .68rem;
+            text-transform: uppercase;
+            letter-spacing: .6px;
+        }
+
+        .conn-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .conn-table tr:hover td {
+            background: rgba(255, 255, 255, .015);
+        }
+
+        .dir {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .68rem;
+            font-weight: 600;
+        }
+
+        .dir-out {
+            color: var(--orange);
+        }
+
+        .dir-in {
+            color: var(--green);
+        }
+
+        .dir-bi {
+            color: var(--purple);
+        }
+
+        /* FILE TREE */
+        .ftree {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .72rem;
+            line-height: 2;
+            background: rgba(0, 0, 0, .3);
+            border-radius: 8px;
+            padding: 16px 20px;
+            color: var(--muted);
+            overflow-x: auto;
+        }
+
+        .ftree .dir-name {
+            color: var(--blue);
+            font-weight: 600;
+        }
+
+        .ftree .file-name {
+            color: var(--text);
+        }
+
+        .ftree .comment {
+            color: #475569;
+            font-style: italic;
+        }
+
+        /* PROCESS TABLE */
+        .proc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        .proc-card {
+            background: var(--s2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            border-left: 3px solid var(--green);
+        }
+
+        .proc-card h4 {
+            font-size: .8rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .proc-card p {
+            font-size: .72rem;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        footer {
+            text-align: center;
+            padding: 36px 20px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: .72rem;
+        }
+
+        footer strong {
+            color: var(--blue);
+        }
+
+        @media(max-width:700px) {
+            .zone-content {
+                flex-direction: column;
+            }
+
+            .node {
+                max-width: 100%;
+            }
+
+            .sw-layer {
+                flex-direction: column;
+            }
+
+            .sw-lbl {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="hero">
+        <div class="badge">CEDNAV · Armada Nacional de Colombia · Ingeniería de Software</div>
+        <h1 class="main">BARRACUDA SVELT<br>Diagrama de Despliegue del Sistema</h1>
+        <p class="hero-sub">Modelo de despliegue físico y lógico del ecosistema de software concurrente sobre
+            infraestructura naval de misión crítica — FFS-RWS v2.0</p>
+        <div class="meta-row">
+            <div class="meta-item"><strong>Nodos Físicos</strong>5 zonas de red</div>
+            <div class="meta-item"><strong>Protocolos</strong>TCP · UDP · WS · IPC</div>
+            <div class="meta-item"><strong>Consolas</strong>3 estaciones</div>
+            <div class="meta-item"><strong>S.O.</strong>Linux Ubuntu LTS</div>
+            <div class="meta-item"><strong>Empaquetado</strong>Electron .deb</div>
+        </div>
+    </header>
+
+    <div class="wrap">
+
+        <!-- ══════════════════════════════════════════
+     1. DIAGRAMA UML DE DESPLIEGUE (MERMAID)
+══════════════════════════════════════════ -->
+        <div class="card">
+            <div class="shdr">
+                <div class="sico" style="background:rgba(56,189,248,.15)">📦</div>
+                1. Diagrama UML de Despliegue — Visión General del Sistema
+                <span class="snum">§ Deployment Diagram</span>
+            </div>
+            <div class="mermaid">
+                graph TB
+                subgraph BUQUE["🚢 BUQUE DE GUERRA — RED LAN NAVAL 192.168.xx.0/24"]
+                direction TB
+
+                subgraph CONSOLA_1["🖥️ PC CONSOLA C1 — ESTRIBOR"]
+                direction TB
+                E1["🖥️ Electron v30\nMain Process\nbarracuda.service (Systemd)"]
+                B1["⚙️ Node.js Backend\nserver.js\nEvent Loop EDA"]
+                F1["🎨 Svelte Frontend\nChromium Renderer\nRadar PPI + Gauges"]
+                FF1["🎬 FFmpeg Process\nchild_process.spawn\nH.264 Decode :37511"]
+                E1 -->|"IPC Main↔Renderer"| F1
+                E1 -->|"spawn()"| B1
+                E1 -->|"spawn()"| FF1
+                B1 <-->|"WebSocket :8001\nJSON Full-Duplex"| F1
+                    end
+
+                    subgraph CONSOLA_2["🖥️ PC CONSOLA C2 — BABOR"]
+                    E2["🖥️ Electron v30\n+ Backend + Frontend\nFFmpeg :37512"]
+                    end
+
+                    subgraph CONSOLA_3["🖥️ PC CONSOLA C3 — POPA"]
+                    E3["🖥️ Electron v30\n+ Backend + Frontend\nFFmpeg :37513"]
+                    end
+
+                    subgraph IC_NODE["🔋 GABINETE DE INTERFAZ (IC)"]
+                    IC["🔋 IC Controller\nFFS-RWS Core\nProtocolo Binario Propietario"]
+                    HW_ARMA["⚔️ Hardware del Arma\nServomotores\nÓptica / Sensores"]
+                    IC --> HW_ARMA
+                    end
+
+                    subgraph PERIFERICOS["🕹️ HARDWARE PERIFÉRICO"]
+                    JOY["🕹️ Joystick Táctico\n3 Ejes + 12 Botones\nUDP :4531"]
+                    KBD["⌨️ Teclado Naval\n36 Teclas + LEDs\nUDP :5501 Bidireccional"]
+                    end
+
+                    subgraph SENSORES["🛰️ SENSORES NAVEGACIÓN"]
+                    GPS["📍 GPS\n$GPGGA\nUDP :70xx"]
+                    GYRO["🧭 Girocompás\n$HEHDT\nUDP :70xx"]
+                    INCL["📐 Inclinómetro\nPitch / Roll\nUDP :70xx"]
+                    end
+
+                    subgraph CMS_NODE["⚔️ SISTEMA GESTIÓN COMBATE"]
+                    CMS["⚔️ CMS\nPistas Tácticas 42 bytes\nUDP :8000 Multicast"]
+                    end
+
+                    subgraph VIDEO_SRC["📷 SISTEMA EOT"]
+                    CAM_1["📷 Cámara Estribor\nH.264 Stream\nUDP :37511"]
+                    CAM_2["📷 Cámara Babor\nH.264 Stream\nUDP :37512"]
+                    CAM_3["📷 Cámara Popa\nH.264 Stream\nUDP :37513"]
+                    end
+                    end
+
+                    B1 <-->|"TCP :6001\nTX 29B / RX 31-33B\nHeartbeat 100ms"| IC
+                        JOY -->|"UDP :4531\n$BPJ frames"| B1
+                        KBD <-->|"UDP :5501\nComandos + Feedback"| B1
+                            GPS -->|"UDP :70xx\nNMEA 0183"| B1
+                            GYRO -->|"UDP :70xx\nNMEA 0183"| B1
+                            INCL -->|"UDP :70xx\nNMEA 0183"| B1
+                            CMS -->|"UDP :8000\n42 bytes/pista"| B1
+                            CAM_1 -->|"UDP :37511\nH.264 RTP"| FF1
+
+                            style E1 fill:#1e293b,stroke:#c084fc,color:#e2e8f0
+                            style B1 fill:#7c2d12,stroke:#fb923c,color:#fff
+                            style F1 fill:#4a044e,stroke:#c084fc,color:#fff
+                            style FF1 fill:#1a1a2e,stroke:#64748b,color:#94a3b8
+                            style IC fill:#1e3a5f,stroke:#38bdf8,color:#fff
+                            style HW_ARMA fill:#1e3a5f,stroke:#38bdf8,color:#fff
+                            style E2 fill:#1e293b,stroke:#475569,color:#94a3b8
+                            style E3 fill:#1e293b,stroke:#475569,color:#94a3b8
+                            style JOY fill:#052e16,stroke:#34d399,color:#fff
+                            style KBD fill:#052e16,stroke:#34d399,color:#fff
+                            style GPS fill:#451a03,stroke:#fbbf24,color:#fff
+                            style GYRO fill:#451a03,stroke:#fbbf24,color:#fff
+                            style INCL fill:#451a03,stroke:#fbbf24,color:#fff
+                            style CMS fill:#4a0d0d,stroke:#f87171,color:#fff
+                            style CAM_1 fill:#1a0830,stroke:#a78bfa,color:#fff
+                            style CAM_2 fill:#1a0830,stroke:#a78bfa,color:#fff
+                            style CAM_3 fill:#1a0830,stroke:#a78bfa,color:#fff
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+     2. NODOS FÍSICOS DETALLADOS
+══════════════════════════════════════════ -->
+        <div class="card">
+            <div class="shdr">
+                <div class="sico" style="background:rgba(52,211,153,.15)">🖥️</div>
+                2. Nodos Físicos del Despliegue — Detalle por Zona
+                <span class="snum">§ Physical Nodes</span>
+            </div>
+
+            <!-- ZONA: CONSOLAS -->
+            <div class="deploy-zone" style="margin-top:14px;">
+                <span class="zone-label" style="color:var(--purple)">ZONA A — PC CONSOLAS NAVALES (×3)</span>
+                <div class="zone-content">
+                    <div class="node" style="border-top-color:var(--purple)">
+                        <span class="node-tag tag-sys">HARDWARE</span>
+                        <h4>🖥️ PC Industrial C1 / C2 / C3</h4>
+                        <p><strong>Tipo:</strong> PC industrial COTS (Commercial Off-The-Shelf)<br>
+                            <strong>S.O.:</strong> Linux Ubuntu LTS 22.04+<br>
+                            <strong>NIC 1:</strong> 192.168.xx.xxx — Control y telemetría<br>
+                            <strong>NIC 2:</strong> 192.168.xx.xx — Video EOT segregado<br>
+                            <strong>Ubicación:</strong> Puesto de combate del buque (Estribor / Babor / Popa)<br>
+                            <strong>Arranque:</strong> Systemd → barracuda.service (RestartPolicy=always)
+                        </p>
+                    </div>
+                    <div class="node" style="border-top-color:var(--orange)">
+                        <span class="node-tag tag-hw">PROCESO: ELECTRON MAIN</span>
+                        <h4>⚙️ Electron v30 — Main Process</h4>
+                        <p><strong>Ejecutable:</strong> barracuda-svelt (paquete .deb)<br>
+                            <strong>Rol:</strong> Orquestador del ciclo de vida, lanza backend Node.js como proceso hijo
+                            y configura la ventana Chromium del frontend.<br>
+                            <strong>IPC:</strong> ipcMain ↔ ipcRenderer para comunicación Main/Renderer<br>
+                            <strong>ASAR:</strong> asarUnpack para FFmpeg binario
+                        </p>
+                    </div>
+                    <div class="node" style="border-top-color:var(--orange)">
+                        <span class="node-tag tag-tcp">PROCESO: BACKEND NODE.JS</span>
+                        <h4>⚙️ server.js — Event Loop EDA</h4>
+                        <p><strong>Runtime:</strong> Node.js v20+ (V8 Engine)<br>
+                            <strong>Puertos escucha:</strong> TCP 6001 (IC), UDP 4531/5501/8000/70xx, WS 8001<br>
+                            <strong>Heartbeat:</strong> setInterval 100ms con drift compensation<br>
+                            <strong>Servicios:</strong> BinaryProtocolService, TCPService, SensorsService,
+                            StationManager, FeedbackService, CMSService, NMEAService<br>
+                            <strong>PID:</strong> Proceso hijo de Electron Main
+                        </p>
+                    </div>
+                    <div class="node" style="border-top-color:var(--purple)">
+                        <span class="node-tag tag-ws">PROCESO: FRONTEND SVELTE</span>
+                        <h4>🎨 Chromium Renderer — HMI</h4>
+                        <p><strong>Framework:</strong> Svelte 4 compilado por Vite 5<br>
+                            <strong>Conexión:</strong> WebSocket ws://localhost:8001<br>
+                            <strong>Componentes:</strong> Radar PPI (SVG), Gauges, Video EOT, Hacking View, Settings
+                            Panel<br>
+                            <strong>Estado:</strong> Svelte Stores reactivos (telemetría, gyro, pistas CMS)<br>
+                            <strong>Renderizado:</strong> Chromium sandboxed dentro de Electron
+                        </p>
+                    </div>
+                    <div class="node" style="border-top-color:#64748b">
+                        <span class="node-tag tag-vid">PROCESO: FFMPEG</span>
+                        <h4>🎬 FFmpeg — Decodificador H.264</h4>
+                        <p><strong>Binario:</strong> ffmpeg-static (asar.unpacked)<br>
+                            <strong>Lanzamiento:</strong> child_process.spawn() desde backend<br>
+                            <strong>Puerto entrada:</strong> UDP 37511 (C1) / 37512 (C2) / 37513 (C3)<br>
+                            <strong>Salida:</strong> Frames decodificados → pipe IPC al Renderer<br>
+                            <strong>Aislamiento:</strong> Proceso independiente del Event Loop
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ZONA: IC -->
+            <div class="deploy-zone">
+                <span class="zone-label" style="color:var(--blue)">ZONA B — GABINETE DE INTERFAZ (IC)</span>
+                <div class="zone-content">
+                    <div class="node" style="border-top-color:var(--blue)">
+                        <span class="node-tag tag-tcp">NODO: IC CONTROLLER</span>
+                        <h4>🔋 Gabinete de Interfaz — FFS-RWS Core</h4>
+                        <p><strong>IP:</strong> 192.168.xx.xxx<br>
+                            <strong>Puerto:</strong> TCP 6001 (server socket, espera conexión)<br>
+                            <strong>Protocolo:</strong> Binario propietario ICD<br>
+                            <strong>RX desde BARRACUDA:</strong> Tramas TX de 29 bytes con XOR checksum<br>
+                            <strong>TX hacia BARRACUDA:</strong> Respuestas RX de 31/33 bytes con telemetría<br>
+                            <strong>Función:</strong> Traduce comandos de software a señales de control del hardware de
+                            armas (servomotores, relés, sensores de posición)
+                        </p>
+                    </div>
+                    <div class="node" style="border-top-color:var(--blue)">
+                        <span class="node-tag tag-hw">HARDWARE CONTROLADO</span>
+                        <h4>⚔️ Hardware del Sistema de Armas</h4>
+                        <p><strong>Servomotores:</strong> Control de ronza (bearing) y elevación<br>
+                            <strong>Sistema EOT:</strong> Cámaras ópticas con tracking<br>
+                            <strong>Sensores:</strong> Encoders de posición angular<br>
+                            <strong>Seguridad:</strong> Relés de habilitación de disparo (gated por CMS)
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ZONA: PERIFÉRICOS -->
+            <div class="deploy-zone">
+                <span class="zone-label" style="color:var(--green)">ZONA C — PERIFÉRICOS DE ENTRADA</span>
+                <div class="zone-content">
+                    <div class="node" style="border-top-color:var(--green)">
+                        <span class="node-tag tag-udp">UDP :4531</span>
+                        <h4>🕹️ Joystick Táctico</h4>
+                        <p><strong>3 ejes:</strong> X (ronza), Y (elevación), Z (zoom)<br>
+                            <strong>12 botones:</strong> Funciones tácticas configurables<br>
+                            <strong>Formato frame:</strong> $BPJ + datos binarios (signed int8)<br>
+                            <strong>Frecuencia:</strong> ~100 Hz<br>
+                            <strong>Procesamiento:</strong> Deadzone ±5 aplicada en backend
+                        </p>
+                    </div>
+                    <div class="node" style="border-top-color:var(--green)">
+                        <span class="node-tag tag-udp">UDP :5501 — BIDIRECCIONAL</span>
+                        <h4>⌨️ Teclado Naval / Panel Táctil</h4>
+                        <p><strong>36 teclas:</strong> Funciones de mando tácticas<br>
+                            <strong>Entrada:</strong> Comandos ASCII (ENERGIZE_EOT, FIRE_ENABLE, etc.)<br>
+                            <strong>Salida:</strong> Feedback 5 bytes → LEDs físicos del panel<br>
+                            <strong>Lógica:</strong> LEDs SOLO se encienden cuando el IC confirma el estado
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ZONA: SENSORES -->
+            <div class="deploy-zone">
+                <span class="zone-label" style="color:var(--yellow)">ZONA D — SENSORES DE NAVEGACIÓN (NMEA 0183)</span>
+                <div class="zone-content">
+                    <div class="node" style="border-top-color:var(--yellow)">
+                        <span class="node-tag tag-udp">UDP :70xx</span>
+                        <h4>📍 GPS — $GPGGA</h4>
+                        <p>Posición geográfica del buque (Lat/Lon). Usado para overlay en carta náutica del Radar PPI.
+                        </p>
+                    </div>
+                    <div class="node" style="border-top-color:var(--yellow)">
+                        <span class="node-tag tag-udp">UDP :70xx</span>
+                        <h4>🧭 Girocompás — $HEHDT</h4>
+                        <p>Heading verdadero del buque. Controla la rotación del PPI en modo "Course Up" y compensa la
+                            orientación de las estaciones.</p>
+                    </div>
+                    <div class="node" style="border-top-color:var(--yellow)">
+                        <span class="node-tag tag-udp">UDP :70xx</span>
+                        <h4>📐 Inclinómetro — Pitch/Roll</h4>
+                        <p>Datos de estabilidad del buque. Lectura en Big-Endian (corrección DEF-02). Usado para
+                            compensación de horizonte.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ZONA: CMS + VIDEO -->
+            <div class="deploy-zone">
+                <span class="zone-label" style="color:var(--red)">ZONA E — SISTEMAS EXTERNOS (CMS + VIDEO)</span>
+                <div class="zone-content">
+                    <div class="node" style="border-top-color:var(--red)">
+                        <span class="node-tag tag-udp">UDP :8000 — MULTICAST</span>
+                        <h4>⚔️ CMS — Sistema Gestión de Combate</h4>
+                        <p><strong>Tramas:</strong> 42 bytes por pista táctica<br>
+                            <strong>Contenido:</strong> Blancos (targets), bearing, range, clasificación NATO<br>
+                            <strong>Frecuencia:</strong> ~5 Hz (actualización de pistas cada 200ms)<br>
+                            <strong>Función crítica:</strong> Habilitación de asignación de mando (cmsEnabled)
+                        </p>
+                    </div>
+                    <div class="node" style="border-top-color:var(--red)">
+                        <span class="node-tag tag-vid">UDP :37511 / :37512 / :37513</span>
+                        <h4>📷 Cámaras EOT — H.264 Stream</h4>
+                        <p><strong>Segregación:</strong> Un puerto por estación<br>
+                            C1 Estribor → :37511<br>
+                            C2 Babor → :37512<br>
+                            C3 Popa → :37513<br>
+                            <strong>Codec:</strong> H.264/AVC sobre UDP RTP<br>
+                            <strong>Decodificación:</strong> FFmpeg spawn en cada PC consola
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+     3. STACK DE SOFTWARE POR NODO CONSOLA
+══════════════════════════════════════════ -->
+        <div class="card">
+            <div class="shdr">
+                <div class="sico" style="background:rgba(192,132,252,.15)">🏗️</div>
+                3. Stack de Software Desplegado en cada PC Consola
+                <span class="snum">§ Software Stack</span>
+            </div>
+            <div class="sw-stack">
+                <div class="sw-layer" style="background:linear-gradient(135deg,#0f1a2e,#162036)">
+                    <div class="sw-lbl" style="color:#64748b;background:rgba(71,85,105,.2)">CAPA
+                        S.O.<br><small>Linux</small></div>
+                    <div class="sw-content">
+                        <span class="chip" style="color:#64748b">Ubuntu LTS 22.04+<small>Kernel Linux
+                                5.15+</small></span>
+                        <span class="chip" style="color:#64748b">Systemd<small>barracuda.service</small></span>
+                        <span class="chip" style="color:#64748b">instalar-red.sh<small>Alias IP por NIC</small></span>
+                        <span class="chip"
+                            style="color:#64748b">/etc/barracuda2/<small>console.config.json</small></span>
+                        <span class="chip" style="color:#64748b">dpkg / apt<small>Gestión de paquete .deb</small></span>
+                    </div>
+                </div>
+                <div class="sw-layer" style="background:linear-gradient(135deg,#1a1a1a,#252525)">
+                    <div class="sw-lbl" style="color:var(--muted);background:rgba(100,116,139,.2)">CAPA
+                        RUNTIME<br><small>Electron</small></div>
+                    <div class="sw-content">
+                        <span class="chip" style="color:var(--muted)">Electron v30<small>Main Process</small></span>
+                        <span class="chip" style="color:var(--muted)">Chromium<small>Renderer Process</small></span>
+                        <span class="chip" style="color:var(--muted)">Node.js v20+<small>V8 Engine
+                                integrado</small></span>
+                        <span class="chip" style="color:var(--muted)">IPC Bridge<small>ipcMain ↔
+                                ipcRenderer</small></span>
+                        <span class="chip" style="color:var(--muted)">ASAR Bundle<small>+ asarUnpack
+                                FFmpeg</small></span>
+                    </div>
+                </div>
+                <div class="sw-layer" style="background:linear-gradient(135deg,#052e16,#0a3d20)">
+                    <div class="sw-lbl" style="color:var(--green);background:rgba(5,150,105,.2)">CAPA
+                        INFRA<br><small>Drivers</small></div>
+                    <div class="sw-content">
+                        <span class="chip" style="color:var(--green)">net.Socket<small>TCP :6001 → IC</small></span>
+                        <span class="chip" style="color:var(--green)">dgram ×5<small>UDP multisocket</small></span>
+                        <span class="chip" style="color:var(--green)">Watchdog<small>1200ms reconexión</small></span>
+                        <span class="chip" style="color:var(--green)">FFmpeg spawn<small>H.264 decode</small></span>
+                        <span class="chip" style="color:var(--green)">FeedbackSvc<small>LEDs UDP 5501</small></span>
+                    </div>
+                </div>
+                <div class="sw-layer" style="background:linear-gradient(135deg,#0f2851,#163560)">
+                    <div class="sw-lbl" style="color:var(--blue);background:rgba(37,99,235,.2)">CAPA
+                        DOMINIO<br><small>Lógica Naval</small></div>
+                    <div class="sw-content">
+                        <span class="chip" style="color:var(--blue)">BinaryProtocolSvc<small>TX 29B / RX
+                                31-33B</small></span>
+                        <span class="chip" style="color:var(--blue)">XOR Checksum<small>Integridad 100%</small></span>
+                        <span class="chip" style="color:var(--blue)">FSM WorkMode<small>RWS / EOT / CMS</small></span>
+                        <span class="chip" style="color:var(--blue)">JoystickDecoder<small>Deadzone ±5</small></span>
+                        <span class="chip" style="color:var(--blue)">NMEAService<small>GPS / Gyro / DDU</small></span>
+                        <span class="chip" style="color:var(--blue)">CMSService<small>Pistas tácticas</small></span>
+                    </div>
+                </div>
+                <div class="sw-layer" style="background:linear-gradient(135deg,#451a03,#5c2008)">
+                    <div class="sw-lbl" style="color:var(--orange);background:rgba(234,88,12,.2)">CAPA
+                        APP<br><small>Orquestador</small></div>
+                    <div class="sw-content">
+                        <span class="chip" style="color:var(--orange)">server.js<small>EventEmitter Hub</small></span>
+                        <span class="chip" style="color:var(--orange)">WebSocket Srv<small>ws :8001
+                                Full-Duplex</small></span>
+                        <span class="chip" style="color:var(--orange)">StationManager<small>Exclusividad
+                                mando</small></span>
+                        <span class="chip" style="color:var(--orange)">Heartbeat Loop<small>100ms
+                                determinístico</small></span>
+                    </div>
+                </div>
+                <div class="sw-layer" style="background:linear-gradient(135deg,#4a044e,#5c0a5c)">
+                    <div class="sw-lbl" style="color:var(--purple);background:rgba(168,85,247,.2)">CAPA
+                        HMI<br><small>Presentación</small></div>
+                    <div class="sw-content">
+                        <span class="chip" style="color:var(--purple)">Svelte 4<small>Compilado, zero
+                                runtime</small></span>
+                        <span class="chip" style="color:var(--purple)">Vite 5<small>Bundle Rollup prod</small></span>
+                        <span class="chip" style="color:var(--purple)">Radar PPI SVG<small>Vectorial + CMS
+                                tracks</small></span>
+                        <span class="chip" style="color:var(--purple)">Gauges Panel<small>Ronza /
+                                Elevación</small></span>
+                        <span class="chip" style="color:var(--purple)">Video EOT<small>Canvas H.264</small></span>
+                        <span class="chip" style="color:var(--purple)">Hacking View<small>Auditoría HEX
+                                live</small></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+     4. TABLA DE CONEXIONES ENTRE NODOS
+══════════════════════════════════════════ -->
+        <div class="card">
+            <div class="shdr">
+                <div class="sico" style="background:rgba(251,146,60,.15)">🔗</div>
+                4. Matriz de Conexiones entre Nodos de Despliegue
+                <span class="snum">§ Connection Matrix</span>
+            </div>
+            <div style="overflow-x:auto;">
+                <table class="conn-table">
+                    <thead>
+                        <tr>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                            <th>Protocolo</th>
+                            <th>Puerto</th>
+                            <th>Dirección</th>
+                            <th>Payload</th>
+                            <th>Frecuencia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Backend Node.js</td>
+                            <td>IC Gabinete</td>
+                            <td>TCP</td>
+                            <td>6001</td>
+                            <td><span class="dir dir-bi">↔ Bidireccional</span></td>
+                            <td>TX: 29 bytes binario + XOR<br>RX: 31-33 bytes telemetría</td>
+                            <td>100 ms</td>
+                        </tr>
+                        <tr>
+                            <td>Joystick Táctico</td>
+                            <td>Backend Node.js</td>
+                            <td>UDP</td>
+                            <td>4531</td>
+                            <td><span class="dir dir-in">→ Entrada</span></td>
+                            <td>$BPJ frame: X,Y,Z (int8) + 12 botones</td>
+                            <td>~100 Hz</td>
+                        </tr>
+                        <tr>
+                            <td>Teclado Naval</td>
+                            <td>Backend Node.js</td>
+                            <td>UDP</td>
+                            <td>5501</td>
+                            <td><span class="dir dir-bi">↔ Bidireccional</span></td>
+                            <td>IN: Comandos ASCII / OUT: Feedback 5 bytes LEDs</td>
+                            <td>Evento</td>
+                        </tr>
+                        <tr>
+                            <td>CMS</td>
+                            <td>Backend Node.js</td>
+                            <td>UDP</td>
+                            <td>8000</td>
+                            <td><span class="dir dir-in">→ Entrada</span></td>
+                            <td>Pistas tácticas 42 bytes (bearing, range, class)</td>
+                            <td>~5 Hz</td>
+                        </tr>
+                        <tr>
+                            <td>GPS / Gyro / DDU</td>
+                            <td>Backend Node.js</td>
+                            <td>UDP</td>
+                            <td>70xx</td>
+                            <td><span class="dir dir-in">→ Entrada</span></td>
+                            <td>Sentencias NMEA 0183 ($GPGGA, $HEHDT, Pitch/Roll)</td>
+                            <td>~10 Hz</td>
+                        </tr>
+                        <tr>
+                            <td>Cámaras EOT</td>
+                            <td>FFmpeg Process</td>
+                            <td>UDP RTP</td>
+                            <td>37511-13</td>
+                            <td><span class="dir dir-in">→ Entrada</span></td>
+                            <td>Stream H.264/AVC segregado por estación</td>
+                            <td>Continuo</td>
+                        </tr>
+                        <tr>
+                            <td>Backend Node.js</td>
+                            <td>Frontend Svelte</td>
+                            <td>WebSocket</td>
+                            <td>8001</td>
+                            <td><span class="dir dir-bi">↔ Full-Duplex</span></td>
+                            <td>JSON: TCP_STATUS, IC_DATA, STATION_STATUS, comandos</td>
+                            <td>~10 Hz</td>
+                        </tr>
+                        <tr>
+                            <td>Electron Main</td>
+                            <td>Renderer</td>
+                            <td>IPC</td>
+                            <td>—</td>
+                            <td><span class="dir dir-bi">↔ Bidireccional</span></td>
+                            <td>Ciclo de vida app, configuración, errores</td>
+                            <td>Evento</td>
+                        </tr>
+                        <tr>
+                            <td>Electron Main</td>
+                            <td>Backend / FFmpeg</td>
+                            <td>Spawn</td>
+                            <td>—</td>
+                            <td><span class="dir dir-out">← Control</span></td>
+                            <td>child_process.spawn() — inicio/terminación procesos</td>
+                            <td>Inicio</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+     5. ESTRUCTURA DE ARCHIVOS DESPLEGADOS
+══════════════════════════════════════════ -->
+        <div class="card">
+            <div class="shdr">
+                <div class="sico" style="background:rgba(56,189,248,.15)">📁</div>
+                5. Estructura de Archivos Desplegados en Producción
+                <span class="snum">§ File Tree</span>
+            </div>
+            <div class="ftree">
+                <span class="dir-name">/opt/barracuda-svelt/</span> <span class="comment">← Raíz de instalación
+                    (.deb)</span>
+                ├── <span class="dir-name">resources/</span>
+                │ ├── <span class="file-name">app.asar</span> <span class="comment">← Bundle comprimido Electron</span>
+                │ └── <span class="dir-name">app.asar.unpacked/</span>
+                │ └── <span class="dir-name">node_modules/ffmpeg-static/</span>
+                │ └── <span class="file-name">ffmpeg</span> <span class="comment">← Binario FFmpeg ejecutable</span>
+                ├── <span class="file-name">barracuda-svelt</span> <span class="comment">← Ejecutable Electron
+                    principal</span>
+                ├── <span class="file-name">chrome-sandbox</span> <span class="comment">← Sandbox Chromium</span>
+                └── <span class="dir-name">locales/</span> <span class="comment">← Localización Chromium</span>
+
+                <span class="dir-name">/etc/barracuda2/</span> <span class="comment">← Configuración protegida
+                    (root)</span>
+                ├── <span class="file-name">console.config.json</span> <span class="comment">← CONSOLE_ID, IC_HOST,
+                    puertos</span>
+                └── <span class="file-name">network.conf</span> <span class="comment">← Alias IP por NIC</span>
+
+                <span class="dir-name">/etc/systemd/system/</span>
+                └── <span class="file-name">barracuda.service</span> <span class="comment">← Unit Systemd
+                    (RestartPolicy=always)</span>
+
+                <span class="dir-name">/usr/local/bin/</span>
+                └── <span class="file-name">instalar-red.sh</span> <span class="comment">← Script configuración de
+                    red</span>
+
+                <span class="dir-name">/var/log/barracuda/</span> <span class="comment">← Logs del sistema</span>
+                ├── <span class="file-name">backend.log</span> <span class="comment">← Traza del servidor Node.js</span>
+                └── <span class="file-name">backend_real.log</span> <span class="comment">← Log de operación real
+                    (IC)</span>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+     6. PROCESOS EN EJECUCIÓN
+══════════════════════════════════════════ -->
+        <div class="card">
+            <div class="shdr">
+                <div class="sico" style="background:rgba(52,211,153,.15)">🔄</div>
+                6. Procesos en Ejecución por Nodo Consola
+                <span class="snum">§ Runtime Processes</span>
+            </div>
+            <div class="proc-grid">
+                <div class="proc-card" style="border-left-color:var(--purple)">
+                    <h4>🖥️ PID 1 — Electron Main</h4>
+                    <p><strong>Comando:</strong> /opt/barracuda-svelt/barracuda-svelt<br>
+                        <strong>Lanzado por:</strong> Systemd (barracuda.service)<br>
+                        <strong>Rol:</strong> Orquestador del ciclo de vida, crea la ventana Chromium y spawns los
+                        procesos hijos.<br>
+                        <strong>Restart:</strong> Automático ante fallo (RestartPolicy=always)
+                    </p>
+                </div>
+                <div class="proc-card" style="border-left-color:var(--orange)">
+                    <h4>⚙️ PID 2 — Node.js Backend</h4>
+                    <p><strong>Comando:</strong> node backend/src/server.js<br>
+                        <strong>Lanzado por:</strong> Electron Main (fork/spawn)<br>
+                        <strong>Puertos:</strong> TCP 6001, UDP 4531/5501/8000/70xx, WS 8001<br>
+                        <strong>Event Loop:</strong> Heartbeat 100ms + listeners UDP + TCP data handler
+                    </p>
+                </div>
+                <div class="proc-card" style="border-left-color:var(--blue)">
+                    <h4>🎨 PID 3 — Chromium Renderer</h4>
+                    <p><strong>Proceso:</strong> Chromium GPU + Renderer (sandboxed)<br>
+                        <strong>Lanzado por:</strong> Electron Main (BrowserWindow)<br>
+                        <strong>Contenido:</strong> Bundle Svelte compilado (index.html + app.js + app.css)<br>
+                        <strong>WebSocket:</strong> Cliente ws://localhost:8001
+                    </p>
+                </div>
+                <div class="proc-card" style="border-left-color:#64748b">
+                    <h4>🎬 PID 4 — FFmpeg Decode</h4>
+                    <p><strong>Comando:</strong> ffmpeg -i udp://@:3751X -f rawvideo ...<br>
+                        <strong>Lanzado por:</strong> Backend (child_process.spawn)<br>
+                        <strong>Puerto UDP:</strong> 37511 (C1) / 37512 (C2) / 37513 (C3)<br>
+                        <strong>Salida:</strong> Frames descomprimidos vía pipe stdout
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+     7. SECUENCIA DE ARRANQUE
+══════════════════════════════════════════ -->
+        <div class="card">
+            <div class="shdr">
+                <div class="sico" style="background:rgba(251,191,36,.15)">🚀</div>
+                7. Secuencia de Arranque del Sistema (Boot Sequence)
+                <span class="snum">§ Startup</span>
+            </div>
+            <div class="mermaid">
+                sequenceDiagram
+                autonumber
+                participant BIOS as 🖥️ PC Naval Boot
+                participant OS as 🐧 Linux Ubuntu
+                participant SD as ⚙️ Systemd
+                participant NET as 🌐 instalar-red.sh
+                participant EL as 🖥️ Electron Main
+                participant BE as ⚙️ Node.js Backend
+                participant FE as 🎨 Svelte HMI
+                participant FF as 🎬 FFmpeg
+                participant IC as 🔋 IC Gabinete
+
+                Note over BIOS,IC: SECUENCIA DE ARRANQUE AUTOMÁTICO (sin intervención del operador)
+
+                BIOS->>OS: POST → Boot Loader → Kernel Linux
+                OS->>SD: systemd init (multi-user.target)
+                SD->>NET: instalar-red.sh (alias IP NIC1 + NIC2)
+                NET-->>SD: ✓ Red configurada
+
+                SD->>EL: systemctl start barracuda.service
+                EL->>BE: spawn("node backend/src/server.js")
+                BE->>BE: Leer /etc/barracuda2/console.config.json
+                BE->>BE: Crear sockets UDP (4531, 5501, 8000, 70xx)
+                BE->>BE: Crear WebSocket Server :8001
+
+                EL->>FE: new BrowserWindow() → cargar index.html
+                FE->>BE: WebSocket connect ws://localhost:8001
+                BE-->>FE: SYNC: estado inicial del sistema
+
+                Note over BE,IC: CONEXIÓN CON IC (bajo demanda del operador)
+                FE->>BE: SELECT_STATION → "STA1" (Estribor)
+                BE->>IC: net.connect(IC_HOST, 6001)
+                IC-->>BE: TCP ACK — enlace establecido
+                BE->>BE: Iniciar Heartbeat 100ms
+                BE->>FF: spawn FFmpeg → UDP :37511
+
+                Note over FE,IC: ✓ SISTEMA OPERATIVO — LISTO PARA OPERACIÓN
+            </div>
+        </div>
+
+        <!-- ══════════════════════════════════════════
+     8. CONFIGURACIÓN SYSTEMD
+══════════════════════════════════════════ -->
+        <div class="card">
+            <div class="shdr">
+                <div class="sico" style="background:rgba(148,163,184,.15)">🛡️</div>
+                8. Configuración de Alta Disponibilidad — Systemd Service Unit
+                <span class="snum">§ HA Config</span>
+            </div>
+            <div class="ftree" style="font-size:.74rem;line-height:1.9;">
+                <span class="comment"># /etc/systemd/system/barracuda.service</span>
+
+                <span class="dir-name">[Unit]</span>
+                Description=BARRACUDA SVELT — Sistema de Control de Armas Naval
+                After=network-online.target
+                Wants=network-online.target
+                Documentation=man:barracuda(1)
+
+                <span class="dir-name">[Service]</span>
+                Type=simple
+                ExecStartPre=/usr/local/bin/instalar-red.sh <span class="comment"># Configurar alias IP antes de
+                    iniciar</span>
+                ExecStart=/opt/barracuda-svelt/barracuda-svelt <span class="comment"># Ejecutable Electron</span>
+                Environment=DISPLAY=:0 <span class="comment"># Display X11 para GUI</span>
+                Environment=NODE_ENV=production
+                Restart=always <span class="comment"># ← ALTA DISPONIBILIDAD</span>
+                RestartSec=3 <span class="comment"># Esperar 3s antes de reiniciar</span>
+                StartLimitBurst=5 <span class="comment"># Máximo 5 reinicios</span>
+                StartLimitIntervalSec=60 <span class="comment"># En ventana de 60 segundos</span>
+                StandardOutput=append:/var/log/barracuda/backend.log
+                StandardError=append:/var/log/barracuda/backend.log
+
+                <span class="dir-name">[Install]</span>
+                WantedBy=multi-user.target <span class="comment"># Arranque automático</span>
+            </div>
+        </div>
+
+    </div><!-- /wrap -->
+
+    <footer>
+        <strong>BARRACUDA SVELT</strong> — Diagrama de Despliegue · Proyecto de Grado · Ingeniería de Software<br>
+        Centro de Desarrollo Tecnológico Naval (CEDNAV) · Armada Nacional de Colombia<br>
+        <span style="opacity:.5;font-size:.65rem">MIL-STD-2525 · STANAG 2442 · Plan Estratégico Naval 2042 · Abril
+            2026</span>
+    </footer>
+
+</body>
+
+</html>

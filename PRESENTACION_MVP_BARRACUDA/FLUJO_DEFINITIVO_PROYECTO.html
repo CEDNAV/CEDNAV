@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flujograma Técnico de Ingeniería - SW CONSOLA BARRACUDA V2.0</title>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            },
+            themeVariables: {
+                primaryColor: '#1f6feb',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#30363d',
+                lineColor: '#58a6ff',
+                secondaryColor: '#238636',
+                tertiaryColor: '#d29922',
+                mainBkg: '#0d1117',
+                nodeBorder: '#30363d'
+            }
+        });
+    </script>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --header-color: #58a6ff;
+            --accent-green: #238636;
+            --accent-orange: #d29922;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: #c9d1d9;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 2px solid #30363d;
+            padding-bottom: 30px;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            color: var(--header-color);
+            font-size: 2.8rem;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #8b949e;
+        }
+
+        .diagram-box {
+            background-color: var(--card-bg);
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            font-size: 0.9rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .color-box {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            color: #484f58;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Flujograma Funcional de Ingeniería</h1>
+            <p class="subtitle">Ecosistema SW CONSOLA BARRACUDA 2.0: Lógica de Negocio y Procesamiento Concurrente <br>
+                <br>Diseño, Desarrollo e Implementación de un Ecosistema de Software Concurrente para la Integración
+                Multi-Protocolo, Procesamiento Lógico en Tiempo Real y Visualización Táctica de Datos en Sistemas
+                Navales de Control de Armas</p>
+        </header>
+
+        <div class="diagram-box">
+            <pre class="mermaid">
+graph TD
+    %% --- SECCIÓN A: BOOTSTRAP ---
+    subgraph STARTUP ["Fase de Inicialización"]
+        A1(["<b>INICIO</b><br/>Arranque Application"]) --> A2["Carga Configuración<br/><i>/etc/barracuda2/*.json</i>"]
+        A2 --> A3["Vínculo Interfaces Red<br/><i>Resilient Binding 0.0.0.0</i>"]
+        A3 --> A4["Apertura Sockets UDP<br/>70XX, 45XX, 55XX, 120X"]
+    end
+
+    %% --- SECCIÓN B: HANDSHAKE ---
+    subgraph HANDSHAKE ["Handshake y Gestión de Estación"]
+        A4 --> B1{"Selección de<br/>Estación HMI"}
+        B1 --> B2["<b>StationManager</b><br/>Validar Disponibilidad STA"]
+        B2 --> B3{"¿STA Ocupada?"}
+        B3 -- SI --> B4["Notificar Conflicto<br/>Consola Bloqueada"]
+        B3 -- NO --> B5["Reserva Lógica de STA<br/>Registro WS Client"]
+        B5 --> B6["<b>Discovery Ping</b><br/>UDP NMEA $STA_SEL"]
+        B6 --> B7["Establecer Puente TCP<br/>Puerto 600X"]
+    end
+
+    %% --- SECCIÓN C: PIPELINE TX ---
+    subgraph TX_PIPELINE ["Pipeline de Procesamiento (TX Latido 100ms)"]
+        B7 --> C1{"Ingesta Global<br/>de Periféricos"}
+        
+        C1 --> C2["<b>Joystick Decoder</b><br/>UDP 45XX Ingest"]
+        C2 --> C2A["<i>Filtro de Zona Muerta</i><br/>Ignorar Drift de ±5"]
+        
+        C1 --> C3["<b>Panel Parser</b><br/>UDP 55XX Commands"]
+        C3 --> C3A["Mapeo Hexadecimal<br/>de Pulsadores"]
+        
+        C1 --> C4["<b>CMS Monitor</b><br/>Seguimiento de Pistas"]
+        C4 --> C4A["Priorización de<br/>Blancos HOSTILES"]
+
+        C2A --> C5["<b>ProtocolService</b><br/>Update FSM State"]
+        C3A --> C5
+        C4A --> C5
+
+        C5 --> C6["<b>Reglas de Negocio (FSM)</b>"]
+        
+        C6 --> C7{"¿Energizado?"}
+        C7 -- NO --> C8["Forzar <b>ASSIGN=0</b><br/>Bloqueo Seguridad"]
+        C7 -- SI --> C9["Cálculo de <b>WorkMode</b><br/>0x01-0x05"]
+
+        C8 --> C10["Compilar Frame TX<br/>29 Bytes Binary"]
+        C9 --> C10
+        
+        C10 --> C11["<b>Algoritmo XOR</b><br/>Integridad Bytes 1-26"]
+        C11 --> C12["Inserción Checksum<br/>Byte 28"]
+        C12 --> C13["Emisión TCP al GIC<br/>Socket Persistente"]
+    end
+
+    %% --- SECCIÓN D: PIPELINE RX ---
+    subgraph RX_PIPELINE ["Pipeline de Telemetría (RX Feedback)"]
+        C13 --> D1["Recepción del GIC<br/>RX: 31/33 Bytes"]
+        D1 --> D2["Validación de Estructura<br/>Asterisco y Checksum RX"]
+        D2 --> D3["<b>Deserialización</b><br/>Float BE (Motorola)"]
+        
+        D3 --> D4["Actualización de<br/><b>FeedbackService</b>"]
+        D4 --> D5{"¿ACK OK?"}
+        D5 -- NO --> D6["Retry / Log Error"]
+        D5 -- SI --> D7["Broadcast WebSocket<br/>Update Reactive Store"]
+    end
+
+    %% --- SECCIÓN E: RENDERIZADO ---
+    subgraph PRESENTATION ["Capa de Visualización HMI"]
+        D7 --> E1["<b>Svelte Update</b>"]
+        E1 --> E2["Matemática SVG Radar<br/>Polar to XY Transf."]
+        E1 --> E3["Normalización Datos<br/>1 Decimal (Ronza/Elev)"]
+        E1 --> E4["<b>VideoService</b><br/>Orquestación H264"]
+        
+        E2 --> E5(["<b>PANTALLA OPERADOR</b><br/>Táctica en Tiempo Real"])
+        E3 --> E5
+        E4 --> E5
+    end
+
+    E5 --> C1
+
+    %% --- ESTILOS ---
+    style STARTUP fill:#161b22,stroke:#30363d
+    style HANDSHAKE fill:#161b22,stroke:#30363d
+    style TX_PIPELINE fill:#0d1117,stroke:#1f6feb,stroke-width:2px
+    style RX_PIPELINE fill:#0d1117,stroke:#238636,stroke-width:2px
+    
+    style A1 fill:#238636,stroke:#fff,color:#fff
+    style C11 fill:#da3633,stroke:#fff,color:#fff
+    style C12 fill:#da3633,stroke:#fff,color:#fff
+    style E5 fill:#1f6feb,stroke:#fff,color:#fff
+    style B6 fill:#d29922,stroke:#fff,color:#000
+        </pre>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="color-box" style="background:#238636"></div> Inicio / Éxito
+                </div>
+                <div class="legend-item">
+                    <div class="color-box" style="background:#1f6feb"></div> Flujo de Datos (TX)
+                </div>
+                <div class="legend-item">
+                    <div class="color-box" style="background:#238636"></div> Flujo de Telemetría (RX)
+                </div>
+                <div class="legend-item">
+                    <div class="color-box" style="background:#da3633"></div> Proceso Crítico (Integridad)
+                </div>
+                <div class="legend-item">
+                    <div class="color-box" style="background:#d29922"></div> Acción de Protocolo / NMEA
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Documentación Técnica Avanzada | BARRACUDA SVELT 2.0 | CEDNAV CDTN 2026
+        </div>
+</body>
+
+</html>
